@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Business Learn Studio | Year 12 HSC Business Studies Platform</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- =====================================================================
+         TOP COMMAND HEADER & TOPIC SWITCHER
+         ===================================================================== -->
+    <header class="studio-header">
+        <div class="header-top-row">
+            <div class="brand-group">
+                <div class="brand-logo">B</div>
+                <div class="brand-title">
+                    <h1>
+                        Business Learn Studio
+                        <span class="brand-badge">HSC NESA Calibrated</span>
+                    </h1>
+                    <div class="brand-subtitle">Year 12 Syllabus Note-Taking, Case Studies, Video Masterclasses &amp; Word/PDF Exporter</div>
+                </div>
+            </div>
+
+            <div class="header-meta-actions">
+                <div class="student-pill" onclick="openStudentModal()" title="Click to change student profile">
+                    <span class="dot-online"></span>
+                    <span id="activeStudentName">Student Profile</span>
+                    <span style="opacity:0.65;">▾</span>
+                </div>
+
+                <span class="save-indicator" id="saveStatusBadge">Auto-saved locally</span>
+
+                <a id="geminiNotebookBtn" href="https://notebook.google.com/notebook/96479e04-bdd6-457b-9cea-a1b3624e895e" target="_blank" rel="noopener" class="btn-action btn-notebook" title="Open Companion Gemini NotebookLM">
+                    ✨ Gemini Notebook
+                </a>
+
+                <button class="btn-action btn-word" onclick="exportToWord('all')" title="Download Complete Syllabus Notes as Microsoft Word (.doc)">
+                    📄 Download Word (.doc)
+                </button>
+
+                <button class="btn-action btn-pdf" onclick="exportToPDF('all')" title="Print or Save Complete Study Booklet as PDF">
+                    🖨️ Print / PDF
+                </button>
+
+                <button class="btn-action btn-sync" id="syncCloudBtn" onclick="syncToTeacherCloud()" title="Sync progress to Teacher Dashboard">
+                    ☁️ Sync to Teacher
+                </button>
+
+                <a href="teacher.html" class="btn-action btn-ghost" title="Open Teacher Dashboard">
+                    👩‍🏫 Teacher View
+                </a>
+            </div>
+        </div>
+
+        <!-- Topic Navigation Bar -->
+        <div class="header-tabs-row">
+            <div class="header-tabs-inner">
+                <nav class="topic-tabs" id="topicTabsNav">
+                    <button class="topic-tab active" data-topic="operations" onclick="switchTopic('operations')">
+                        ⚙️ Operations <span class="tab-progress-pill" id="tab-prog-operations">0%</span>
+                    </button>
+                    <button class="topic-tab" data-topic="marketing" onclick="switchTopic('marketing')">
+                        📣 Marketing <span class="tab-progress-pill" id="tab-prog-marketing">0%</span>
+                    </button>
+                    <button class="topic-tab" data-topic="finance" onclick="switchTopic('finance')">
+                        📊 Finance <span class="tab-progress-pill" id="tab-prog-finance">0%</span>
+                    </button>
+                    <button class="topic-tab" data-topic="hr" onclick="switchTopic('hr')">
+                        👥 Human Resources <span class="tab-progress-pill" id="tab-prog-hr">0%</span>
+                    </button>
+                    <button class="topic-tab" data-topic="media" onclick="switchTopic('media')">
+                        🎬 Video &amp; Visual Vault
+                    </button>
+                    <button class="topic-tab" data-topic="exam" onclick="switchTopic('exam')">
+                        ✍️ Band 6 Exam Studio
+                    </button>
+                </nav>
+
+                <div class="overall-progress-box">
+                    <span>Total Syllabus Mastery: <strong id="overallPctText">0%</strong></span>
+                    <div class="overall-bar-track">
+                        <div class="overall-bar-fill" id="overallBarFill"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- =====================================================================
+         MAIN WORKSPACE LAYOUT
+         ===================================================================== -->
+    <main class="studio-layout">
+        <!-- LEFT SIDEBAR: RIPS Navigator, Filters & Word/PDF Exports -->
+        <aside class="studio-sidebar">
+            <!-- RIPS Section Jump Card -->
+            <div class="sidebar-card" id="ripsSidebarCard">
+                <h3>
+                    <span>RIPS Syllabus Structure</span>
+                    <span id="sidebarTopicLabel" style="color:#2563eb;font-weight:800;">OPERATIONS</span>
+                </h3>
+                <div class="rips-nav-list" id="ripsNavContainer">
+                    <!-- Populated dynamically by app.js -->
+                </div>
+            </div>
+
+            <!-- Search & Mastery Status Filter -->
+            <div class="sidebar-card">
+                <h3>Filter Dot Points</h3>
+                <div class="search-input-wrap">
+                    <span class="search-icon">🔍</span>
+                    <input type="text" id="dotPointSearchInput" class="search-input" placeholder="Search dot points, terms, case..." oninput="handleSearchFilter()">
+                </div>
+                <div class="filter-pills">
+                    <button class="filter-pill active" data-filter="all" onclick="setMasteryFilter('all')">All Dot Points</button>
+                    <button class="filter-pill" data-filter="none" onclick="setMasteryFilter('none')">⚪ Not Started</button>
+                    <button class="filter-pill" data-filter="review" onclick="setMasteryFilter('review')">🟡 Reviewing</button>
+                    <button class="filter-pill" data-filter="mastered" onclick="setMasteryFilter('mastered')">🟢 Mastered</button>
+                </div>
+            </div>
+
+            <!-- Export & Download Center -->
+            <div class="sidebar-card">
+                <h3>Export &amp; Word Formats</h3>
+                <div class="export-stack">
+                    <button class="btn-sidebar-export primary-word" onclick="exportToWord('current')">
+                        <span>📘 Word (.doc) — Current Topic</span>
+                        <span>↓</span>
+                    </button>
+                    <button class="btn-sidebar-export primary-word" onclick="exportToWord('all')">
+                        <span>📚 Word (.doc) — All 4 Topics</span>
+                        <span>↓</span>
+                    </button>
+                    <button class="btn-sidebar-export" onclick="exportToWord('blank')">
+                        <span>📝 Blank Word Worksheet (.doc)</span>
+                        <span>↓</span>
+                    </button>
+                    <button class="btn-sidebar-export" onclick="exportToPDF('current')">
+                        <span>🖨️ Print / Save Topic as PDF</span>
+                        <span>↗</span>
+                    </button>
+                    <button class="btn-sidebar-export" onclick="exportJSONBackup()">
+                        <span>💾 Save JSON Backup File</span>
+                        <span>↓</span>
+                    </button>
+                    <button class="btn-sidebar-export" onclick="document.getElementById('jsonImportInput').click()">
+                        <span>📂 Restore JSON Backup</span>
+                        <span>↑</span>
+                    </button>
+                    <input type="file" id="jsonImportInput" accept=".json" style="display:none" onchange="importJSONBackup(event)">
+                </div>
+            </div>
+        </aside>
+
+        <!-- RIGHT CONTENT AREA -->
+        <section id="studioMainContent">
+            <!-- Dynamically rendered by app.js:
+                 - Topic Hero Banner + Multimedia Shelf
+                 - RIPS Sections + 2-Part Dot-Point Cards
+                 - Finance Interactive Ratio Calculator (when on Finance)
+                 - Video & Visual Vault (when on Media tab)
+                 - Band 6 Exam Writing Studio (when on Exam tab)
+            -->
+        </section>
+    </main>
+
+    <!-- =====================================================================
+         MODAL 1: VIDEO PLAYER & CUSTOM VIDEO LINK MODAL
+         ===================================================================== -->
+    <div class="modal-backdrop" id="videoModalBackdrop" onclick="if(event.target===this) closeVideoModal()">
+        <div class="modal-dialog">
+            <div class="modal-header">
+                <h3 id="videoModalTitle">Masterclass Video Player</h3>
+                <button class="modal-close-btn" onclick="closeVideoModal()">✕</button>
+            </div>
+            <div class="modal-body">
+                <div id="videoModalContainer"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- =====================================================================
+         MODAL 2: HIGH-RES INFOGRAPHIC LIGHTBOX MODAL
+         ===================================================================== -->
+    <div class="modal-backdrop" id="infographicModalBackdrop" onclick="if(event.target===this) closeInfographicModal()">
+        <div class="modal-dialog" style="max-width:1180px;">
+            <div class="modal-header">
+                <h3 id="infographicModalTitle">Syllabus Visual Blueprint</h3>
+                <div style="display:flex;gap:0.5rem;align-items:center;">
+                    <a id="infographicDownloadLink" href="#" download class="btn-action btn-word" style="padding:0.3rem 0.65rem;font-size:0.75rem;">⬇ Download PNG</a>
+                    <button class="modal-close-btn" onclick="closeInfographicModal()">✕</button>
+                </div>
+            </div>
+            <div class="modal-body" style="background:#0f172a;text-align:center;">
+                <img id="infographicModalImg" src="" alt="Syllabus Infographic" class="modal-infographic-img">
+            </div>
+        </div>
+    </div>
+
+    <!-- =====================================================================
+         MODAL 3: STUDENT LOGIN / PROFILE SELECTOR
+         ===================================================================== -->
+    <div class="modal-backdrop" id="studentModalBackdrop" onclick="if(event.target===this) closeStudentModal()">
+        <div class="modal-dialog" style="max-width:480px;">
+            <div class="modal-header">
+                <h3>👤 Select or Enter Student Profile</h3>
+                <button class="modal-close-btn" onclick="closeStudentModal()">✕</button>
+            </div>
+            <div class="modal-body">
+                <p style="font-size:0.86rem;color:var(--text-secondary);margin-bottom:1rem;">
+                    Your syllabus notes, mastery status, financial ratios, and exam responses are automatically saved to your profile and included on exported Word/PDF study guides.
+                </p>
+
+                <label style="font-size:0.78rem;font-weight:700;display:block;margin-bottom:0.35rem;">Select from Year 12 Class Roster:</label>
+                <select id="rosterSelectInput" style="width:100%;padding:0.6rem;border:1px solid var(--border-light);border-radius:8px;margin-bottom:0.9rem;font-size:0.9rem;" onchange="if(this.value) document.getElementById('customStudentInput').value = this.value">
+                    <option value="">-- Choose your name --</option>
+                </select>
+
+                <label style="font-size:0.78rem;font-weight:700;display:block;margin-bottom:0.35rem;">Or Enter Your Full Name:</label>
+                <input type="text" id="customStudentInput" placeholder="e.g. Simon Anderson" style="width:100%;padding:0.6rem;border:1px solid var(--border-light);border-radius:8px;margin-bottom:1.1rem;font-size:0.9rem;">
+
+                <div style="display:flex;justify-content:flex-end;gap:0.5rem;">
+                    <button class="btn-action btn-word" onclick="saveStudentProfile()">Save &amp; Continue</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="studio-toast" id="studioToast">Saved!</div>
+
+    <!-- Scripts -->
+    <script src="config.js"></script>
+    <script src="syllabus_data.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>

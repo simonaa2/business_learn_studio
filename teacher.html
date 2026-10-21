@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teacher Command Dashboard | Business Learn Studio</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header class="studio-header">
+        <div class="header-top-row">
+            <div class="brand-group">
+                <div class="brand-logo">T</div>
+                <div class="brand-title">
+                    <h1>
+                        Teacher Command Dashboard
+                        <span class="brand-badge">Cohort Progress Monitor</span>
+                    </h1>
+                    <div class="brand-subtitle">Year 12 HSC Business Studies — Live Topic Mastery &amp; Student Note Inspector</div>
+                </div>
+            </div>
+
+            <div class="header-meta-actions">
+                <a href="https://notebook.google.com/notebook/96479e04-bdd6-457b-9cea-a1b3624e895e" target="_blank" rel="noopener" class="btn-action btn-notebook">
+                    ✨ Gemini NotebookLM
+                </a>
+                <button class="btn-action btn-sync" onclick="refreshCohortProgress()">
+                    🔄 Refresh Cohort Data
+                </button>
+                <a href="index.html" class="btn-action btn-word">
+                    ← Return to Student Studio
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main style="max-width:1380px;margin:2rem auto;padding:0 1.5rem;">
+        <div class="topic-hero-banner" style="--topic-accent:#2563eb;">
+            <div class="topic-hero-top">
+                <div>
+                    <span class="topic-code-tag" style="background:#2563eb;">YEAR 12 COHORT</span>
+                    <h2 class="topic-hero-title" style="margin-top:0.35rem;">📊 HSC Business Studies Syllabus Mastery Matrix</h2>
+                    <p class="topic-hero-desc">View local and cloud-synced student progress across Operations, Marketing, Finance, and Human Resources. Click any student row to inspect or export their notes in Word (.doc) format.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="sidebar-card" style="overflow-x:auto;">
+            <table width="100%" cellspacing="0" cellpadding="12" style="border-collapse:collapse;width:100%;font-size:0.9rem;">
+                <thead>
+                    <tr style="background:#0f172a;color:#fff;text-align:left;">
+                        <th style="padding:0.85rem;border-radius:8px 0 0 0;">Student Name</th>
+                        <th>⚙️ Operations</th>
+                        <th>📣 Marketing</th>
+                        <th>📊 Finance</th>
+                        <th>👥 Human Resources</th>
+                        <th>Total Syllabus Mastery</th>
+                        <th>Last Updated</th>
+                        <th style="border-radius:0 8px 0 0;">Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="cohortTableBody">
+                    <!-- Rendered by teacher.js -->
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <script src="config.js"></script>
+    <script src="syllabus_data.js"></script>
+    <script src="teacher.js"></script>
+</body>
+</html>
