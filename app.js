@@ -33,13 +33,22 @@ let state = {
 };
 
 let autoSaveTimer = null;
+let cloudSyncTimer = null;
 
 // =========================================================================
 // INITIALIZATION & PERSISTENCE
 // =========================================================================
 document.addEventListener('DOMContentLoaded', () => {
     populateRosterDropdown();
-    loadStudentData(state.studentName);
+    const savedStudent = localStorage.getItem('BLS_ACTIVE_STUDENT');
+    const isAuthenticated = sessionStorage.getItem('BLS_AUTH_VERIFIED') === 'true' || localStorage.getItem('BLS_AUTH_VERIFIED') === 'true';
+
+    if (savedStudent && isAuthenticated) {
+        loadStudentData(savedStudent);
+    } else {
+        loadStudentData(savedStudent || 'Simon Anderson');
+        openStudentModal(true);
+    }
     renderCurrentView();
     updateAllProgressIndicators();
 });
@@ -98,6 +107,12 @@ function scheduleAutoSave() {
         saveStudentData(true);
         updateAllProgressIndicators();
     }, 350);
+
+    // Also debounce automatic background sync to Google Sheets every 12 seconds of typing
+    if (cloudSyncTimer) clearTimeout(cloudSyncTimer);
+    cloudSyncTimer = setTimeout(() => {
+        syncToTeacherCloud(true);
+    }, 12000);
 }
 
 // =========================================================================
@@ -1101,30 +1116,43 @@ function importJSONBackup(event) {
 }
 
 // =========================================================================
-// TEACHER CLOUD SYNC (GOOGLE APPS SCRIPT)
+// TEACHER CLOUD SYNC (GOOGLE APPS SCRIPT — GOOGLE SHEETS)
 // =========================================================================
-async function syncToTeacherCloud() {
+async function syncToTeacherCloud(silent = false) {
     saveStudentData(true);
     const btn = document.getElementById('syncCloudBtn');
-    if (btn) btn.textContent = '⏳ Syncing...';
+    if (btn && !silent) btn.textContent = '⏳ Syncing...';
 
     const overall = getOverallStats();
+    const opsStats = getTopicStats('operations');
+    const mktStats = getTopicStats('marketing');
+    const finStats = getTopicStats('finance');
+    const hrStats  = getTopicStats('hr');
+
+    // Build flat key-value payload compatible with Google Apps Script dynamic columns
     const payload = {
-        action: 'saveProgress',
         studentName: state.studentName,
+        classCode: (CONFIG && CONFIG.CLASS_CODE) ? CONFIG.CLASS_CODE : 'BUSN2026',
         timestamp: new Date().toISOString(),
-        completionPct: overall.pct,
-        completedCount: overall.completed,
-        totalDotPoints: overall.total,
-        topicBreakdown: {
-            operations: getTopicStats('operations').pct,
-            marketing: getTopicStats('marketing').pct,
-            finance: getTopicStats('finance').pct,
-            hr: getTopicStats('hr').pct
-        },
-        notes: state.notes,
-        examResponses: state.examResponses
+        bls_overall_pct: `${overall.pct}% (${overall.completed}/${overall.total})`,
+        bls_ops_pct: `${opsStats.pct}%`,
+        bls_mkt_pct: `${mktStats.pct}%`,
+        bls_fin_pct: `${finStats.pct}%`,
+        bls_hr_pct: `${hrStats.pct}%`,
+        bls_notes_json: JSON.stringify(state.notes),
+        bls_exam_json: JSON.stringify(state.examResponses)
     };
+
+    // Also include individual readable columns for every populated dot point
+    Object.keys(state.notes).forEach(dpId => {
+        const entry = state.notes[dpId];
+        if (!entry) return;
+        const t = (entry.theory || '').trim();
+        const c = (entry.caseStudy || '').trim();
+        if (t || c || entry.status !== 'none') {
+            payload[`bls_${dpId}`] = `[${(entry.status || 'none').toUpperCase()}] Theory: ${t} | Case: ${c}`;
+        }
+    });
 
     try {
         if (CONFIG && CONFIG.SCRIPT_URL) {
@@ -1135,12 +1163,19 @@ async function syncToTeacherCloud() {
                 body: JSON.stringify(payload)
             });
         }
-        showToast(`Synced ${state.studentName}'s progress (${overall.pct}%) to Teacher Dashboard!`);
+        const badge = document.getElementById('saveStatusBadge');
+        if (badge) {
+            const timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            badge.textContent = `☁️ Synced ${timeStr}`;
+        }
+        if (!silent) {
+            showToast(`Synced ${state.studentName}'s progress (${overall.pct}%) to Google Sheets!`);
+        }
     } catch (e) {
         console.warn('Cloud sync warning:', e);
-        showToast('Saved locally (offline mode).');
+        if (!silent) showToast('Saved locally (offline mode).');
     } finally {
-        if (btn) btn.textContent = '☁️ Sync to Teacher';
+        if (btn && !silent) btn.textContent = '☁️ Sync to Teacher';
     }
 }
 
@@ -1262,31 +1297,98 @@ function populateRosterDropdown() {
         CONFIG.ALLOWED_STUDENTS.map(name => `<option value="${escapeAttr(name)}">${escapeHtml(name)}</option>`).join('');
 }
 
-function openStudentModal() {
+function openStudentModal(forceGate = false) {
     const backdrop = document.getElementById('studentModalBackdrop');
     const input = document.getElementById('customStudentInput');
-    if (input) input.value = state.studentName;
+    const pwInput = document.getElementById('studentPasswordInput');
+    const errBox = document.getElementById('loginErrorBox');
+    const closeBtn = document.getElementById('loginCloseBtn');
+
+    if (errBox) errBox.style.display = 'none';
+    if (input) input.value = forceGate ? '' : state.studentName;
+    if (pwInput) pwInput.value = '';
+    if (closeBtn) closeBtn.style.display = forceGate ? 'none' : 'inline-block';
     if (backdrop) backdrop.classList.add('open');
 }
 
 function closeStudentModal() {
+    const isAuthenticated = sessionStorage.getItem('BLS_AUTH_VERIFIED') === 'true' || localStorage.getItem('BLS_AUTH_VERIFIED') === 'true';
+    if (!isAuthenticated) {
+        showLoginError('Please log in with your name and password to continue.');
+        return;
+    }
     const backdrop = document.getElementById('studentModalBackdrop');
     if (backdrop) backdrop.classList.remove('open');
 }
 
-function saveStudentProfile() {
-    const input = document.getElementById('customStudentInput');
-    const newName = (input ? input.value : '').trim();
-    if (!newName) {
-        alert('Please select or enter a student name.');
+function showLoginError(msg) {
+    const errBox = document.getElementById('loginErrorBox');
+    if (!errBox) {
+        alert(msg);
         return;
     }
+    errBox.textContent = msg;
+    errBox.style.display = 'block';
+}
+
+function saveStudentProfile() {
+    const input = document.getElementById('customStudentInput');
+    const pwInput = document.getElementById('studentPasswordInput');
+    const rawName = (input ? input.value : '').trim();
+    const rawPw = (pwInput ? pwInput.value : '').trim();
+
+    if (!rawName) {
+        showLoginError('Please select or enter your name.');
+        return;
+    }
+    if (!rawPw) {
+        showLoginError('Please enter your password (or class code).');
+        return;
+    }
+
+    let resolvedName = rawName;
+    const roster = (CONFIG && CONFIG.STUDENTS) ? CONFIG.STUDENTS : [];
+    const inputLower = rawName.toLowerCase();
+
+    // Check if student matches the Year 12 roster (by full name, first name, or prefix)
+    const rosterMatch = roster.find(s => {
+        const full = s.name.toLowerCase();
+        const first = s.name.split(' ')[0].toLowerCase();
+        return full === inputLower || first === inputLower || full.startsWith(inputLower);
+    });
+
+    const isClassCode = CONFIG && CONFIG.CLASS_CODE && rawPw.toUpperCase() === CONFIG.CLASS_CODE.toUpperCase();
+    const isTeacherPw = CONFIG && CONFIG.TEACHER_PASSWORD && rawPw === CONFIG.TEACHER_PASSWORD;
+
+    if (rosterMatch) {
+        if (rosterMatch.password !== rawPw && !isClassCode && !isTeacherPw) {
+            showLoginError(`Incorrect password for ${rosterMatch.name}. Please enter your personal password or check with your teacher.`);
+            return;
+        }
+        resolvedName = rosterMatch.name;
+    } else if (!isClassCode && !isTeacherPw) {
+        showLoginError('Name or password not recognised. Use your Year 12 roster name & password, or enter the class code.');
+        return;
+    }
+
+    sessionStorage.setItem('BLS_AUTH_VERIFIED', 'true');
+    localStorage.setItem('BLS_AUTH_VERIFIED', 'true');
+    loadStudentData(resolvedName);
     saveStudentData(true);
-    loadStudentData(newName);
-    closeStudentModal();
+
+    const backdrop = document.getElementById('studentModalBackdrop');
+    if (backdrop) backdrop.classList.remove('open');
+
     renderCurrentView();
     updateAllProgressIndicators();
-    showToast(`Switched profile to ${newName}`);
+    showToast(`Welcome, ${resolvedName}!`);
+}
+
+function logoutStudent() {
+    saveStudentData(true);
+    sessionStorage.removeItem('BLS_AUTH_VERIFIED');
+    localStorage.removeItem('BLS_AUTH_VERIFIED');
+    openStudentModal(true);
 }
 
 // =========================================================================

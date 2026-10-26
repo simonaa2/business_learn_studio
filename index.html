@@ -200,29 +200,35 @@
     </div>
 
     <!-- =====================================================================
-         MODAL 3: STUDENT LOGIN / PROFILE SELECTOR
+         MODAL 3: STUDENT LOGIN GATE (NAME + PASSWORD)
          ===================================================================== -->
-    <div class="modal-backdrop" id="studentModalBackdrop" onclick="if(event.target===this) closeStudentModal()">
+    <div class="modal-backdrop" id="studentModalBackdrop">
         <div class="modal-dialog" style="max-width:480px;">
             <div class="modal-header">
-                <h3>👤 Select or Enter Student Profile</h3>
-                <button class="modal-close-btn" onclick="closeStudentModal()">✕</button>
+                <h3>🔐 Year 12 Business Learn Studio — Student Login</h3>
+                <button class="modal-close-btn" id="loginCloseBtn" onclick="closeStudentModal()" title="Close">✕</button>
             </div>
             <div class="modal-body">
                 <p style="font-size:0.86rem;color:var(--text-secondary);margin-bottom:1rem;">
-                    Your syllabus notes, mastery status, financial ratios, and exam responses are automatically saved to your profile and included on exported Word/PDF study guides.
+                    Log in with your Year 12 name and password. Your syllabus notes, case studies, and mastery status auto-save to your device and sync directly to the Google Sheets Teacher Dashboard.
                 </p>
 
-                <label style="font-size:0.78rem;font-weight:700;display:block;margin-bottom:0.35rem;">Select from Year 12 Class Roster:</label>
-                <select id="rosterSelectInput" style="width:100%;padding:0.6rem;border:1px solid var(--border-light);border-radius:8px;margin-bottom:0.9rem;font-size:0.9rem;" onchange="if(this.value) document.getElementById('customStudentInput').value = this.value">
-                    <option value="">-- Choose your name --</option>
+                <label style="font-size:0.78rem;font-weight:700;display:block;margin-bottom:0.35rem;">Select Your Name (or type below):</label>
+                <select id="rosterSelectInput" style="width:100%;padding:0.6rem;border:1px solid var(--border-light);border-radius:8px;margin-bottom:0.85rem;font-size:0.9rem;" onchange="if(this.value) document.getElementById('customStudentInput').value = this.value">
+                    <option value="">-- Choose from Year 12 Class Roster --</option>
                 </select>
 
-                <label style="font-size:0.78rem;font-weight:700;display:block;margin-bottom:0.35rem;">Or Enter Your Full Name:</label>
-                <input type="text" id="customStudentInput" placeholder="e.g. Simon Anderson" style="width:100%;padding:0.6rem;border:1px solid var(--border-light);border-radius:8px;margin-bottom:1.1rem;font-size:0.9rem;">
+                <label style="font-size:0.78rem;font-weight:700;display:block;margin-bottom:0.35rem;">Your Name:</label>
+                <input type="text" id="customStudentInput" placeholder="e.g. Simon Anderson (or first name)" style="width:100%;padding:0.6rem;border:1px solid var(--border-light);border-radius:8px;margin-bottom:0.85rem;font-size:0.9rem;" onkeydown="if(event.key==='Enter') saveStudentProfile()">
 
-                <div style="display:flex;justify-content:flex-end;gap:0.5rem;">
-                    <button class="btn-action btn-word" onclick="saveStudentProfile()">Save &amp; Continue</button>
+                <label style="font-size:0.78rem;font-weight:700;display:block;margin-bottom:0.35rem;">Password <span style="font-weight:400;color:var(--text-muted);">(given by your teacher, or class code)</span>:</label>
+                <input type="password" id="studentPasswordInput" placeholder="Enter your password (e.g. firstname + 3 digits)" style="width:100%;padding:0.6rem;border:1px solid var(--border-light);border-radius:8px;margin-bottom:0.75rem;font-size:0.9rem;" onkeydown="if(event.key==='Enter') saveStudentProfile()">
+
+                <div id="loginErrorBox" style="display:none;background:#fef2f2;border:1px solid #fecaca;color:#b91c1c;padding:0.55rem 0.75rem;border-radius:6px;font-size:0.82rem;margin-bottom:0.85rem;"></div>
+
+                <div style="display:flex;justify-content:space-between;align-items:center;gap:0.5rem;margin-top:0.5rem;">
+                    <button class="btn-action btn-ghost" style="color:#64748b;border-color:#cbd5e1;" onclick="logoutStudent()">Switch / Log Out</button>
+                    <button class="btn-action btn-word" onclick="saveStudentProfile()">Log In to Studio →</button>
                 </div>
             </div>
         </div>
