@@ -5,7 +5,7 @@
 const STORAGE_PREFIX = 'BLS_Y12_HSC_V1_';
 
 let state = {
-    studentName: localStorage.getItem('BLS_ACTIVE_STUDENT') || 'Simon Anderson',
+    studentName: localStorage.getItem('BLS_ACTIVE_STUDENT') || 'Fynn Beaumont',
     currentTopic: 'operations',
     masteryFilter: 'all',
     searchQuery: '',
@@ -46,7 +46,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (savedStudent && isAuthenticated) {
         loadStudentData(savedStudent);
     } else {
-        loadStudentData(savedStudent || 'Simon Anderson');
+        loadStudentData(savedStudent || 'Fynn Beaumont');
         openStudentModal(true);
     }
     renderCurrentView();
@@ -1292,9 +1292,10 @@ function closeInfographicModal() {
 
 function populateRosterDropdown() {
     const sel = document.getElementById('rosterSelectInput');
-    if (!sel || !CONFIG || !CONFIG.ALLOWED_STUDENTS) return;
-    sel.innerHTML = `<option value="">-- Choose from Year 12 Roster --</option>` +
-        CONFIG.ALLOWED_STUDENTS.map(name => `<option value="${escapeAttr(name)}">${escapeHtml(name)}</option>`).join('');
+    if (!sel || !CONFIG) return;
+    const students = CONFIG.STUDENTS || [];
+    sel.innerHTML = `<option value="">-- Choose from Class Roster (19 Students) --</option>` +
+        students.map(s => `<option value="${escapeAttr(s.name)}">${escapeHtml(s.name)}${s.homeroom ? ' (' + escapeHtml(s.homeroom) + ')' : ''}</option>`).join('');
 }
 
 function openStudentModal(forceGate = false) {
@@ -1350,24 +1351,27 @@ function saveStudentProfile() {
     const roster = (CONFIG && CONFIG.STUDENTS) ? CONFIG.STUDENTS : [];
     const inputLower = rawName.toLowerCase();
 
-    // Check if student matches the Year 12 roster (by full name, first name, or prefix)
-    const rosterMatch = roster.find(s => {
+    // Check if student matches the class roster (prioritizing exact full name, alias, or password match when 2 students share a first name like Samuel)
+    const candidates = roster.filter(s => {
         const full = s.name.toLowerCase();
         const first = s.name.split(' ')[0].toLowerCase();
-        return full === inputLower || first === inputLower || full.startsWith(inputLower);
+        const aliasHit = Array.isArray(s.aliases) && s.aliases.some(a => a.toLowerCase() === inputLower);
+        return full === inputLower || aliasHit || first === inputLower || full.startsWith(inputLower);
     });
 
     const isClassCode = CONFIG && CONFIG.CLASS_CODE && rawPw.toUpperCase() === CONFIG.CLASS_CODE.toUpperCase();
     const isTeacherPw = CONFIG && CONFIG.TEACHER_PASSWORD && rawPw === CONFIG.TEACHER_PASSWORD;
 
+    const rosterMatch = candidates.find(s => s.password.toLowerCase() === rawPw.toLowerCase()) || candidates[0];
+
     if (rosterMatch) {
-        if (rosterMatch.password !== rawPw && !isClassCode && !isTeacherPw) {
+        if (rosterMatch.password.toLowerCase() !== rawPw.toLowerCase() && !isClassCode && !isTeacherPw) {
             showLoginError(`Incorrect password for ${rosterMatch.name}. Please enter your personal password or check with your teacher.`);
             return;
         }
         resolvedName = rosterMatch.name;
     } else if (!isClassCode && !isTeacherPw) {
-        showLoginError('Name or password not recognised. Use your Year 12 roster name & password, or enter the class code.');
+        showLoginError('Name or password not recognised. Select your name from the dropdown and enter your password (or class code).');
         return;
     }
 
