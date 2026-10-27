@@ -56,6 +56,7 @@ async function refreshCohortProgress() {
     tbody.innerHTML = `<tr><td colspan="8" style="padding:1.5rem;text-align:center;color:#64748b;">⏳ Fetching live student submissions from Google Sheets &amp; local storage...</td></tr>`;
 
     const students = (CONFIG && CONFIG.ALLOWED_STUDENTS) ? [...CONFIG.ALLOWED_STUDENTS] : [];
+    const allowedSet = new Set(students.map(s => s.toLowerCase()));
     const cloudMap = {};
 
     // 1. Fetch live submissions from Google Sheets Apps Script (doGet?action=read&password=...)
@@ -67,10 +68,7 @@ async function refreshCohortProgress() {
             if (data && data.success && Array.isArray(data.submissions)) {
                 data.submissions.forEach(sub => {
                     const sName = (sub.studentName || '').trim();
-                    if (!sName) return;
-                    if (!students.some(st => st.toLowerCase() === sName.toLowerCase())) {
-                        students.push(sName);
-                    }
+                    if (!sName || !allowedSet.has(sName.toLowerCase())) return;
                     let cloudNotes = {};
                     if (sub.bls_notes_json) {
                         try { cloudNotes = JSON.parse(sub.bls_notes_json); } catch (e) {}
@@ -90,19 +88,6 @@ async function refreshCohortProgress() {
             }
         } catch (err) {
             console.warn('Could not fetch remote Google Sheets submissions, falling back to local storage:', err);
-        }
-    }
-
-    // 2. Also discover any local profiles saved in this browser's localStorage
-    for (let i = 0; i < localStorage.length; i++) {
-        const key = localStorage.key(i);
-        if (key && key.startsWith(STORAGE_PREFIX)) {
-            try {
-                const parsed = JSON.parse(localStorage.getItem(key));
-                if (parsed && parsed.studentName && !students.some(st => st.toLowerCase() === parsed.studentName.toLowerCase())) {
-                    students.push(parsed.studentName);
-                }
-            } catch (e) {}
         }
     }
 

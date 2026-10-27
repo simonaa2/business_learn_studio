@@ -40,7 +40,17 @@ let cloudSyncTimer = null;
 // =========================================================================
 document.addEventListener('DOMContentLoaded', () => {
     populateRosterDropdown();
-    const savedStudent = localStorage.getItem('BLS_ACTIVE_STUDENT');
+    let savedStudent = localStorage.getItem('BLS_ACTIVE_STUDENT');
+    const allowedList = (CONFIG && CONFIG.ALLOWED_STUDENTS) ? CONFIG.ALLOWED_STUDENTS : [];
+    const isGraduatedOrInvalid = savedStudent && !allowedList.some(s => s.toLowerCase() === savedStudent.toLowerCase());
+
+    if (isGraduatedOrInvalid) {
+        localStorage.removeItem('BLS_ACTIVE_STUDENT');
+        localStorage.removeItem('BLS_AUTH_VERIFIED');
+        sessionStorage.removeItem('BLS_AUTH_VERIFIED');
+        savedStudent = null;
+    }
+
     const isAuthenticated = sessionStorage.getItem('BLS_AUTH_VERIFIED') === 'true' || localStorage.getItem('BLS_AUTH_VERIFIED') === 'true';
 
     if (savedStudent && isAuthenticated) {
