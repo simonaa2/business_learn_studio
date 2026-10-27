@@ -1129,11 +1129,20 @@ async function syncToTeacherCloud(silent = false) {
     const finStats = getTopicStats('finance');
     const hrStats  = getTopicStats('hr');
 
-    // Build flat key-value payload compatible with Google Apps Script dynamic columns
+    // Build flat key-value payload compatible with BOTH existing 166-column deployment AND dynamic headers
     const payload = {
         studentName: state.studentName,
         classCode: (CONFIG && CONFIG.CLASS_CODE) ? CONFIG.CLASS_CODE : 'BUSN2026',
         timestamp: new Date().toISOString(),
+        // Store in existing deployed columns so no Apps Script redeploy is required!
+        'selected-question': `Overall: ${overall.pct}% | Ops: ${opsStats.pct}% | Mkt: ${mktStats.pct}% | Fin: ${finStats.pct}% | HR: ${hrStats.pct}%`,
+        'selected-question-text': JSON.stringify({
+            notes: state.notes,
+            ratios: state.ratios,
+            examResponses: state.examResponses
+        }),
+        'partb-response': JSON.stringify(state.examResponses),
+        // Also send new dynamic columns if the user ever redeploys v2.0
         bls_overall_pct: `${overall.pct}% (${overall.completed}/${overall.total})`,
         bls_ops_pct: `${opsStats.pct}%`,
         bls_mkt_pct: `${mktStats.pct}%`,

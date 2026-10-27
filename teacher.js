@@ -33,6 +33,11 @@ async function refreshCohortProgress() {
                     let cloudNotes = {};
                     if (sub.bls_notes_json) {
                         try { cloudNotes = JSON.parse(sub.bls_notes_json); } catch (e) {}
+                    } else if (sub['selected-question-text']) {
+                        try {
+                            const parsedCol = JSON.parse(sub['selected-question-text']);
+                            cloudNotes = parsedCol.notes || parsedCol || {};
+                        } catch (e) {}
                     }
                     cloudMap[sName.toLowerCase()] = {
                         studentName: sName,
