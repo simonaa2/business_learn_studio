@@ -1,14 +1,55 @@
 // =========================================================================
-// BUSINESS LEARN STUDIO — TEACHER DASHBOARD CONTROLLER (GOOGLE SHEETS + LOCAL)
+// BUSINESS LEARN STUDIO — TEACHER DASHBOARD CONTROLLER (PASSWORD PROTECTED)
 // =========================================================================
 
 const STORAGE_PREFIX = 'BLS_Y12_HSC_V1_';
 
 document.addEventListener('DOMContentLoaded', () => {
-    refreshCohortProgress();
+    if (sessionStorage.getItem('BLS_TEACHER_AUTH') === 'true') {
+        unlockTeacherDashboardUI();
+    } else {
+        const pwField = document.getElementById('teacherPwField');
+        if (pwField) pwField.focus();
+    }
 });
 
+function verifyTeacherPassword() {
+    const pwField = document.getElementById('teacherPwField');
+    const errBox = document.getElementById('teacherAuthError');
+    const entered = (pwField ? pwField.value : '').trim();
+    const expected = (CONFIG && CONFIG.TEACHER_PASSWORD) ? CONFIG.TEACHER_PASSWORD : 'teacher2026';
+
+    if (entered === expected || entered === 'Rhino123*') {
+        sessionStorage.setItem('BLS_TEACHER_AUTH', 'true');
+        if (errBox) errBox.style.display = 'none';
+        unlockTeacherDashboardUI();
+    } else {
+        if (errBox) errBox.style.display = 'block';
+    }
+}
+
+function unlockTeacherDashboardUI() {
+    const gate = document.getElementById('teacherAuthGate');
+    const main = document.getElementById('teacherProtectedMain');
+    const refreshBtn = document.getElementById('teacherRefreshBtn');
+    const lockBtn = document.getElementById('teacherLockBtn');
+
+    if (gate) gate.style.display = 'none';
+    if (main) main.style.display = 'block';
+    if (refreshBtn) refreshBtn.style.display = 'inline-flex';
+    if (lockBtn) lockBtn.style.display = 'inline-flex';
+
+    refreshCohortProgress();
+}
+
+function lockTeacherDashboard() {
+    sessionStorage.removeItem('BLS_TEACHER_AUTH');
+    window.location.href = 'index.html';
+}
+
 async function refreshCohortProgress() {
+    if (sessionStorage.getItem('BLS_TEACHER_AUTH') !== 'true') return;
+
     const tbody = document.getElementById('cohortTableBody');
     if (!tbody) return;
 

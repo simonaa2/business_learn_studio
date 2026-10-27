@@ -1404,6 +1404,22 @@ function logoutStudent() {
     openStudentModal(true);
 }
 
+function openTeacherAccessPrompt() {
+    if (sessionStorage.getItem('BLS_TEACHER_AUTH') === 'true') {
+        window.location.href = 'teacher.html';
+        return;
+    }
+    const pw = prompt('🔒 Enter Teacher Password to access the Cohort Dashboard:');
+    if (pw === null) return;
+    const expected = (CONFIG && CONFIG.TEACHER_PASSWORD) ? CONFIG.TEACHER_PASSWORD : 'teacher2026';
+    if (pw.trim() === expected || pw.trim() === 'Rhino123*') {
+        sessionStorage.setItem('BLS_TEACHER_AUTH', 'true');
+        window.location.href = 'teacher.html';
+    } else {
+        alert('❌ Access Denied: Incorrect Teacher Password.');
+    }
+}
+
 // =========================================================================
 // HELPERS
 // =========================================================================

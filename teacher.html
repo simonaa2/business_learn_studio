@@ -25,8 +25,11 @@
                 <a href="https://notebook.google.com/notebook/96479e04-bdd6-457b-9cea-a1b3624e895e" target="_blank" rel="noopener" class="btn-action btn-notebook">
                     ✨ Gemini NotebookLM
                 </a>
-                <button class="btn-action btn-sync" onclick="refreshCohortProgress()">
+                <button class="btn-action btn-sync" id="teacherRefreshBtn" style="display:none;" onclick="refreshCohortProgress()">
                     🔄 Refresh Cohort Data
+                </button>
+                <button class="btn-action btn-ghost" id="teacherLockBtn" style="display:none;" onclick="lockTeacherDashboard()">
+                    🔒 Lock Teacher View
                 </button>
                 <a href="index.html" class="btn-action btn-word">
                     ← Return to Student Studio
@@ -35,13 +38,49 @@
         </div>
     </header>
 
-    <main style="max-width:1380px;margin:2rem auto;padding:0 1.5rem;">
+    <!-- =====================================================================
+         TEACHER PASSWORD LOCK SCREEN (SHOWN UNTIL AUTHENTICATED)
+         ===================================================================== -->
+    <section id="teacherAuthGate" style="max-width:460px;margin:4.5rem auto;padding:0 1.5rem;">
+        <div class="sidebar-card" style="padding:2rem;box-shadow:var(--shadow-lg);border-top:4px solid #2563eb;">
+            <div style="display:inline-block;background:#eff6ff;color:#1d4ed8;font-size:0.74rem;font-weight:800;padding:0.2rem 0.65rem;border-radius:999px;margin-bottom:0.75rem;text-transform:uppercase;">
+                Restricted Staff Access
+            </div>
+            <h2 style="font-size:1.45rem;margin-bottom:0.4rem;">🔒 Teacher Dashboard Login</h2>
+            <p style="font-size:0.86rem;color:var(--text-secondary);margin-bottom:1.25rem;">
+                This area is restricted to the classroom teacher. Enter your teacher password to view live cohort progress and inspect student workbooks.
+            </p>
+
+            <label for="teacherPwField" style="font-size:0.78rem;font-weight:700;display:block;margin-bottom:0.35rem;">Teacher Password:</label>
+            <input
+                type="password"
+                id="teacherPwField"
+                placeholder="Enter teacher password..."
+                style="width:100%;padding:0.65rem 0.8rem;border:1px solid var(--border-light);border-radius:8px;font-size:0.95rem;margin-bottom:0.75rem;"
+                onkeydown="if(event.key==='Enter') verifyTeacherPassword()"
+            >
+
+            <div id="teacherAuthError" style="display:none;background:#fef2f2;border:1px solid #fecaca;color:#b91c1c;padding:0.55rem 0.75rem;border-radius:6px;font-size:0.82rem;margin-bottom:0.85rem;">
+                ❌ Incorrect Teacher Password. Access is restricted to staff.
+            </div>
+
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:0.5rem;margin-top:0.5rem;">
+                <a href="index.html" class="btn-action btn-ghost" style="color:#64748b;border-color:#cbd5e1;">← Student Studio</a>
+                <button class="btn-action btn-word" onclick="verifyTeacherPassword()">Unlock Dashboard →</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- =====================================================================
+         PROTECTED COHORT CONTENT (HIDDEN UNTIL UNLOCKED)
+         ===================================================================== -->
+    <main id="teacherProtectedMain" style="display:none;max-width:1380px;margin:2rem auto;padding:0 1.5rem;">
         <div class="topic-hero-banner" style="--topic-accent:#2563eb;">
             <div class="topic-hero-top">
                 <div>
-                    <span class="topic-code-tag" style="background:#2563eb;">YEAR 12 COHORT</span>
+                    <span class="topic-code-tag" style="background:#2563eb;">YEAR 12 COHORT (19 STUDENTS)</span>
                     <h2 class="topic-hero-title" style="margin-top:0.35rem;">📊 HSC Business Studies Syllabus Mastery Matrix</h2>
-                    <p class="topic-hero-desc">View local and cloud-synced student progress across Operations, Marketing, Finance, and Human Resources. Click any student row to inspect or export their notes in Word (.doc) format.</p>
+                    <p class="topic-hero-desc">View live Google Sheets and local student progress across Operations, Marketing, Finance, and Human Resources. Click any student row to inspect or export their notes in Word (.doc) format.</p>
                 </div>
             </div>
         </div>
@@ -61,7 +100,7 @@
                     </tr>
                 </thead>
                 <tbody id="cohortTableBody">
-                    <!-- Rendered by teacher.js -->
+                    <!-- Rendered by teacher.js ONLY after password verification -->
                 </tbody>
             </table>
         </div>
