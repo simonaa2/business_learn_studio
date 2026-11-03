@@ -146,6 +146,7 @@
     .uppercase { text-transform: uppercase; }
     .underline { text-decoration: underline; }
     .text-left { text-align: left; }
+    .text-right { text-align: right; }
     .tracking-tight { letter-spacing: -0.025em; }
     .tracking-wider { letter-spacing: 0.05em; }
     .leading-relaxed { line-height: 1.625; }
@@ -476,10 +477,13 @@
         3. The 4Vs (Vol, Var, Dem, Vis)
       </button>
       <button onclick="switchTab('techlayout')" id="tabBtn-techlayout" class="tab-btn flex-1 min-w-[130px] text-xs font-semibold py-2 px-3 rounded-lg transition text-[var(--muted-foreground)] hover:text-[var(--foreground)]">
-        4. Layout, Tech &amp; M-C-I
+        4. Layout, Tech &amp; Task Design
+      </button>
+      <button onclick="switchTab('mci')" id="tabBtn-mci" class="tab-btn flex-1 min-w-[130px] text-xs font-semibold py-2 px-3 rounded-lg transition text-[var(--muted-foreground)] hover:text-[var(--foreground)]">
+        5. 📊 M-C-I Dashboard (KPI &rarr; Control &rarr; Improve)
       </button>
       <button onclick="switchTab('outputs')" id="tabBtn-outputs" class="tab-btn flex-1 min-w-[130px] text-xs font-semibold py-2 px-3 rounded-lg transition text-[var(--muted-foreground)] hover:text-[var(--foreground)]">
-        5. Outputs &amp; HSC Exam Quiz
+        6. Outputs &amp; HSC Exam Quiz
       </button>
     </div>
   </nav>
@@ -760,42 +764,235 @@
         </div>
       </div>
 
-      <div class="lg:col-span-6 bg-[var(--card)] border border-[var(--border)] rounded-2xl p-4">
-        <div class="flex items-center justify-between mb-2">
-          <h2 class="text-sm font-bold text-emerald-400">Monitoring, Control &amp; Improvement (M-C-I)</h2>
-          <span class="text-xs text-[var(--muted-foreground)]">Watch QC scanner catch red defective burgers!</span>
+      <div class="lg:col-span-6 bg-[var(--card)] border border-[var(--border)] rounded-2xl p-4 flex flex-col justify-between">
+        <div>
+          <div class="flex items-center justify-between mb-2">
+            <h2 class="text-sm font-bold text-emerald-400">Monitoring, Control &amp; Improvement (M-C-I)</h2>
+            <button onclick="switchTab('mci')" class="text-xs font-bold px-2.5 py-1 rounded-lg bg-emerald-500 text-white shadow-sm transition">
+              📊 Open Full M-C-I KPI Dashboard &rarr;
+            </button>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+            <div class="p-3 rounded-xl bg-[var(--background)] border border-[var(--border)]">
+              <div class="text-xs font-bold mb-1">🔍 1. Monitoring</div>
+              <p class="text-xs text-[var(--muted-foreground)] mb-2">Measuring actual KPIs against planned targets.</p>
+              <div class="flex flex-col gap-1.5">
+                <button onclick="setInput('monitoringLevel', 1)" id="btnMon-1" class="text-xs py-1.5 px-2 rounded-lg border border-[var(--border)]">Monthly Count Only</button>
+                <button onclick="setInput('monitoringLevel', 2)" id="btnMon-2" class="text-xs py-1.5 px-2 rounded-lg border border-orange-500">Hourly Shift KPIs</button>
+                <button onclick="setInput('monitoringLevel', 3)" id="btnMon-3" class="text-xs py-1.5 px-2 rounded-lg border border-[var(--border)]">Live IoT Sensors</button>
+              </div>
+            </div>
+
+            <div class="p-3 rounded-xl bg-[var(--background)] border border-[var(--border)]">
+              <div class="text-xs font-bold mb-1">🛠️ 2. Control</div>
+              <p class="text-xs text-[var(--muted-foreground)] mb-2">Taking corrective action at the QC Pass gate.</p>
+              <div class="flex flex-col gap-1.5">
+                <button onclick="setInput('controlLevel', 1)" id="btnCtrl-1" class="text-xs py-1.5 px-2 rounded-lg border border-[var(--border)]">No Inspection</button>
+                <button onclick="setInput('controlLevel', 2)" id="btnCtrl-2" class="text-xs py-1.5 px-2 rounded-lg border border-orange-500">Visual &amp; Temp Probe</button>
+                <button onclick="setInput('controlLevel', 3)" id="btnCtrl-3" class="text-xs py-1.5 px-2 rounded-lg border border-[var(--border)]">Strict Auto-Reject Gate</button>
+              </div>
+            </div>
+
+            <div class="p-3 rounded-xl bg-[var(--background)] border border-[var(--border)]">
+              <div class="text-xs font-bold mb-1">📈 3. Improvement</div>
+              <p class="text-xs text-[var(--muted-foreground)] mb-2">Continuous Kaizen &amp; bottleneck elimination.</p>
+              <div class="flex flex-col gap-1.5">
+                <button onclick="setInput('improvementLevel', 1)" id="btnImp-1" class="text-xs py-1.5 px-2 rounded-lg border border-[var(--border)]">Reactive Only</button>
+                <button onclick="setInput('improvementLevel', 2)" id="btnImp-2" class="text-xs py-1.5 px-2 rounded-lg border border-orange-500">Kaizen Staff Huddles</button>
+                <button onclick="setInput('improvementLevel', 3)" id="btnImp-3" class="text-xs py-1.5 px-2 rounded-lg border border-[var(--border)]">Six Sigma Optimization</button>
+              </div>
+            </div>
+          </div>
         </div>
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
-          <div class="p-3 rounded-xl bg-[var(--background)] border border-[var(--border)]">
-            <div class="text-xs font-bold mb-1">🔍 1. Monitoring</div>
-            <p class="text-xs text-[var(--muted-foreground)] mb-2">Measuring actual KPIs against planned targets.</p>
-            <div class="flex flex-col gap-1.5">
-              <button onclick="setInput('monitoringLevel', 1)" id="btnMon-1" class="text-xs py-1.5 px-2 rounded-lg border border-[var(--border)]">Monthly Count Only</button>
-              <button onclick="setInput('monitoringLevel', 2)" id="btnMon-2" class="text-xs py-1.5 px-2 rounded-lg border border-orange-500">Hourly Shift KPIs</button>
-              <button onclick="setInput('monitoringLevel', 3)" id="btnMon-3" class="text-xs py-1.5 px-2 rounded-lg border border-[var(--border)]">Live IoT Sensors</button>
+      </div>
+    </section>
+
+    <!-- TAB 5: MONITORING, CONTROL & IMPROVEMENT (M-C-I) COMMAND DASHBOARD -->
+    <section id="panel-mci" class="tab-panel hidden">
+      <!-- 3-Stage Closed-Loop Pipeline Header -->
+      <div class="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-3.5 mb-3">
+        <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-2 mb-3">
+          <div>
+            <span class="text-xs font-bold uppercase tracking-wider text-emerald-400">HSC Operations Feedback Loop</span>
+            <h2 class="text-sm md:text-lg font-bold">Monitoring (KPIs) &rarr; Control (Corrective Action) &rarr; Improvement (Kaizen &amp; 5 Pillars)</h2>
+          </div>
+          <div class="flex flex-wrap items-center gap-1.5">
+            <span class="text-xs text-[var(--muted-foreground)] mr-1">Planned KPI Target Strictness:</span>
+            <button onclick="setKpiStrictness(1)" id="btnStrict-1" class="text-xs px-2.5 py-1 rounded-lg border border-[var(--border)]">Relaxed Targets</button>
+            <button onclick="setKpiStrictness(2)" id="btnStrict-2" class="text-xs px-2.5 py-1 rounded-lg border border-orange-500 bg-orange-500/15 text-orange-400 font-bold">HSC Benchmark</button>
+            <button onclick="setKpiStrictness(3)" id="btnStrict-3" class="text-xs px-2.5 py-1 rounded-lg border border-[var(--border)]">Six Sigma World-Class</button>
+          </div>
+        </div>
+
+        <!-- Visual 3-Stage Flow Banner -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 text-xs">
+          <div class="p-2.5 rounded-xl bg-[var(--background)] border border-sky-500/30 flex items-center justify-between">
+            <div>
+              <div class="font-bold text-sky-400">🔍 STAGE 1: MONITORING (KPIs)</div>
+              <div class="text-[var(--muted-foreground)] mt-0.5">Measure actual KPIs vs planned targets</div>
+            </div>
+            <span id="mciStage1Badge" class="font-mono font-bold px-2 py-1 rounded-md bg-sky-500/10 text-sky-300 border border-sky-500/30">4 / 6 On Target</span>
+          </div>
+          <div class="p-2.5 rounded-xl bg-[var(--background)] border border-amber-500/30 flex items-center justify-between">
+            <div>
+              <div class="font-bold text-amber-400">🛠️ STAGE 2: CONTROL (Action)</div>
+              <div class="text-[var(--muted-foreground)] mt-0.5">Assess discrepancies &amp; take corrective action</div>
+            </div>
+            <span id="mciStage2Badge" class="font-mono font-bold px-2 py-1 rounded-md bg-amber-500/15 text-amber-300 border border-amber-500/30">2 Variances</span>
+          </div>
+          <div class="p-2.5 rounded-xl bg-[var(--background)] border border-emerald-500/30 flex items-center justify-between">
+            <div>
+              <div class="font-bold text-emerald-400">📈 STAGE 3: IMPROVEMENT (Kaizen)</div>
+              <div class="text-[var(--muted-foreground)] mt-0.5">Eliminate bottlenecks across 5 HSC pillars</div>
+            </div>
+            <span id="mciStage3Badge" class="font-mono font-bold px-2 py-1 rounded-md bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">96.9% Yield</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3-Column Interactive M-C-I Command Grid -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-4">
+
+        <!-- COLUMN 1 (5 cols): STAGE 1 - MONITORING (KPI SCORECARD & VARIANCE TABLE) -->
+        <div class="lg:col-span-5 bg-[var(--card)] border border-[var(--border)] rounded-2xl p-4 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-2">
+              <div>
+                <span class="text-xs font-bold uppercase tracking-wider text-sky-400">Stage 1: Monitoring</span>
+                <h3 class="text-sm font-bold">Live KPI Scorecard (Planned vs. Actual)</h3>
+              </div>
+              <span id="mciSensorStatus" class="text-xs font-mono px-2 py-0.5 rounded bg-sky-500/10 text-sky-300 border border-sky-500/30">Shift KPIs Active</span>
+            </div>
+
+            <!-- Monitoring Level Selector -->
+            <div class="grid grid-cols-3 gap-1.5 mb-3">
+              <button onclick="setInput('monitoringLevel', 1)" id="btnDashMon-1" class="text-xs py-1.5 px-2 rounded-lg border border-[var(--border)]">1. Monthly Count</button>
+              <button onclick="setInput('monitoringLevel', 2)" id="btnDashMon-2" class="text-xs py-1.5 px-2 rounded-lg border border-orange-500">2. Shift KPIs</button>
+              <button onclick="setInput('monitoringLevel', 3)" id="btnDashMon-3" class="text-xs py-1.5 px-2 rounded-lg border border-[var(--border)]">3. Live IoT Sensors</button>
+            </div>
+
+            <!-- Live 6-KPI Comparison Matrix -->
+            <div id="kpiMatrixContainer" class="space-y-2 bg-[var(--background)] p-3 rounded-xl border border-[var(--border)]">
+              <!-- Populated dynamically by renderMCIDashboard() -->
             </div>
           </div>
 
-          <div class="p-3 rounded-xl bg-[var(--background)] border border-[var(--border)]">
-            <div class="text-xs font-bold mb-1">🛠️ 2. Control</div>
-            <p class="text-xs text-[var(--muted-foreground)] mb-2">Taking corrective action at the QC Pass gate.</p>
-            <div class="flex flex-col gap-1.5">
-              <button onclick="setInput('controlLevel', 1)" id="btnCtrl-1" class="text-xs py-1.5 px-2 rounded-lg border border-[var(--border)]">No Inspection</button>
-              <button onclick="setInput('controlLevel', 2)" id="btnCtrl-2" class="text-xs py-1.5 px-2 rounded-lg border border-orange-500">Visual &amp; Temp Probe</button>
-              <button onclick="setInput('controlLevel', 3)" id="btnCtrl-3" class="text-xs py-1.5 px-2 rounded-lg border border-[var(--border)]">Strict Auto-Reject Gate</button>
+          <div id="monitoringInsightBox" class="mt-3 p-2.5 rounded-xl bg-sky-500/10 border border-sky-500/30 text-xs text-sky-300">
+            🔍 <strong>Syllabus Note:</strong> KPIs are specific criteria used to measure the efficiency and effectiveness of the business's performance (lead times, defect rates, capacity volume, and unit costs).
+          </div>
+        </div>
+
+        <!-- COLUMN 2 (4 cols): STAGE 2 - CONTROL (DISCREPANCY DIAGNOSIS & CORRECTIVE ACTIONS) -->
+        <div class="lg:col-span-4 bg-[var(--card)] border border-[var(--border)] rounded-2xl p-4 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-2">
+              <div>
+                <span class="text-xs font-bold uppercase tracking-wider text-amber-400">Stage 2: Control</span>
+                <h3 class="text-sm font-bold">Discrepancy Alerts &amp; Corrective Action</h3>
+              </div>
+              <span id="mciControlGateBadge" class="text-xs font-mono px-2 py-0.5 rounded bg-amber-500/15 text-amber-300 border border-amber-500/30">QC Gate L2</span>
+            </div>
+
+            <!-- Control Level Selector -->
+            <div class="grid grid-cols-3 gap-1.5 mb-3">
+              <button onclick="setInput('controlLevel', 1)" id="btnDashCtrl-1" class="text-xs py-1.5 px-2 rounded-lg border border-[var(--border)]">1. No QC Gate</button>
+              <button onclick="setInput('controlLevel', 2)" id="btnDashCtrl-2" class="text-xs py-1.5 px-2 rounded-lg border border-orange-500">2. Temp Probe</button>
+              <button onclick="setInput('controlLevel', 3)" id="btnDashCtrl-3" class="text-xs py-1.5 px-2 rounded-lg border border-[var(--border)]">3. Auto-Reject</button>
+            </div>
+
+            <!-- Active Variance Alerts -->
+            <div id="controlDiscrepancyBox" class="p-2.5 rounded-xl bg-[var(--background)] border border-[var(--border)] mb-3 text-xs space-y-1.5">
+              <!-- Populated dynamically by renderMCIDashboard() -->
+            </div>
+
+            <!-- Managerial Corrective Action Console -->
+            <div class="p-3 rounded-xl bg-[var(--background)] border border-[var(--border)]">
+              <div class="text-xs font-bold text-amber-400 mb-1.5">🛠️ Take Immediate Corrective Action (Click to intervene):</div>
+              <div class="space-y-1.5">
+                <button onclick="triggerCorrectiveAction('quality')" class="w-full text-left text-xs p-2 rounded-lg border border-[var(--border)] bg-[var(--card)] hover:border-orange-500 transition flex items-center justify-between">
+                  <span>🛡️ <strong>Fix Quality KPI:</strong> Auto-Reject QC + Grill Master Training</span>
+                  <span class="text-emerald-400 font-mono shrink-0 ml-2">-Defects</span>
+                </button>
+                <button onclick="triggerCorrectiveAction('leadtime')" class="w-full text-left text-xs p-2 rounded-lg border border-[var(--border)] bg-[var(--card)] hover:border-orange-500 transition flex items-center justify-between">
+                  <span>⚡ <strong>Fix Lead Time KPI:</strong> Parallel CPA Flow + Robotic Tech</span>
+                  <span class="text-sky-400 font-mono shrink-0 ml-2">-Wait Time</span>
+                </button>
+                <button onclick="triggerCorrectiveAction('capacity')" class="w-full text-left text-xs p-2 rounded-lg border border-[var(--border)] bg-[var(--card)] hover:border-orange-500 transition flex items-center justify-between">
+                  <span>👩‍🍳 <strong>Fix Volume KPI:</strong> Boost HR (+2 Staff) + Upgrade Plant</span>
+                  <span class="text-orange-400 font-mono shrink-0 ml-2">+Capacity</span>
+                </button>
+                <button onclick="triggerCorrectiveAction('flow')" class="w-full text-left text-xs p-2 rounded-lg border border-[var(--border)] bg-[var(--card)] hover:border-orange-500 transition flex items-center justify-between">
+                  <span>📐 <strong>Fix Process Flow KPI:</strong> Snap Assembly Line + Task Audit</span>
+                  <span class="text-purple-400 font-mono shrink-0 ml-2">-Motion</span>
+                </button>
+              </div>
             </div>
           </div>
 
-          <div class="p-3 rounded-xl bg-[var(--background)] border border-[var(--border)]">
-            <div class="text-xs font-bold mb-1">📈 3. Improvement</div>
-            <p class="text-xs text-[var(--muted-foreground)] mb-2">Continuous Kaizen &amp; bottleneck elimination.</p>
-            <div class="flex flex-col gap-1.5">
-              <button onclick="setInput('improvementLevel', 1)" id="btnImp-1" class="text-xs py-1.5 px-2 rounded-lg border border-[var(--border)]">Reactive Only</button>
-              <button onclick="setInput('improvementLevel', 2)" id="btnImp-2" class="text-xs py-1.5 px-2 rounded-lg border border-orange-500">Kaizen Staff Huddles</button>
-              <button onclick="setInput('improvementLevel', 3)" id="btnImp-3" class="text-xs py-1.5 px-2 rounded-lg border border-[var(--border)]">Six Sigma Optimization</button>
-            </div>
+          <div id="controlActionLog" class="mt-3 p-2.5 rounded-xl bg-amber-500/10 border border-amber-500/30 text-xs text-amber-300">
+            📋 <strong>Control Action Log:</strong> Monitoring KPIs... Click any Corrective Action above when a KPI breaches its target!
           </div>
         </div>
+
+        <!-- COLUMN 3 (3 cols): STAGE 3 - IMPROVEMENT (5 HSC PILLARS & KAIZEN BOTTLENECK SPRINT) -->
+        <div class="lg:col-span-3 bg-[var(--card)] border border-[var(--border)] rounded-2xl p-4 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-2">
+              <div>
+                <span class="text-xs font-bold uppercase tracking-wider text-emerald-400">Stage 3: Improvement</span>
+                <h3 class="text-sm font-bold">Kaizen &amp; 5 HSC Pillars</h3>
+              </div>
+            </div>
+
+            <!-- Improvement Level Selector -->
+            <div class="grid grid-cols-3 gap-1.5 mb-3">
+              <button onclick="setInput('improvementLevel', 1)" id="btnDashImp-1" class="text-xs py-1.5 px-1.5 rounded-lg border border-[var(--border)]">1. Reactive</button>
+              <button onclick="setInput('improvementLevel', 2)" id="btnDashImp-2" class="text-xs py-1.5 px-1.5 rounded-lg border border-orange-500">2. Kaizen</button>
+              <button onclick="setInput('improvementLevel', 3)" id="btnDashImp-3" class="text-xs py-1.5 px-1.5 rounded-lg border border-[var(--border)]">3. Six Sigma</button>
+            </div>
+
+            <!-- 5 HSC Syllabus Improvement Pillars -->
+            <div class="p-3 rounded-xl bg-[var(--background)] border border-[var(--border)] space-y-2.5 text-xs mb-3">
+              <div class="font-bold text-emerald-400">📈 5 Syllabus Improvement Targets:</div>
+              <div>
+                <div class="flex justify-between mb-0.5"><span>1. Time (Lead Time Speed)</span><span id="impValTime" class="font-mono text-sky-400">78%</span></div>
+                <div class="w-full bg-[var(--border)] h-1.5 rounded-full overflow-hidden"><div id="impBarTime" class="bg-sky-500 h-full transition-all" style="width:78%"></div></div>
+              </div>
+              <div>
+                <div class="flex justify-between mb-0.5"><span>2. Process Flows (Smoothness)</span><span id="impValFlow" class="font-mono text-purple-400">85%</span></div>
+                <div class="w-full bg-[var(--border)] h-1.5 rounded-full overflow-hidden"><div id="impBarFlow" class="bg-purple-500 h-full transition-all" style="width:85%"></div></div>
+              </div>
+              <div>
+                <div class="flex justify-between mb-0.5"><span>3. Quality (Zero Defects)</span><span id="impValQual" class="font-mono text-emerald-400">88%</span></div>
+                <div class="w-full bg-[var(--border)] h-1.5 rounded-full overflow-hidden"><div id="impBarQual" class="bg-emerald-500 h-full transition-all" style="width:88%"></div></div>
+              </div>
+              <div>
+                <div class="flex justify-between mb-0.5"><span>4. Cost ($/Unit Efficiency)</span><span id="impValCost" class="font-mono text-amber-400">76%</span></div>
+                <div class="w-full bg-[var(--border)] h-1.5 rounded-full overflow-hidden"><div id="impBarCost" class="bg-amber-500 h-full transition-all" style="width:76%"></div></div>
+              </div>
+              <div>
+                <div class="flex justify-between mb-0.5"><span>5. Efficiency (Output/Staff)</span><span id="impValEff" class="font-mono text-orange-400">65/staff</span></div>
+                <div class="w-full bg-[var(--border)] h-1.5 rounded-full overflow-hidden"><div id="impBarEff" class="bg-orange-500 h-full transition-all" style="width:72%"></div></div>
+              </div>
+            </div>
+
+            <!-- Kaizen Bottleneck Elimination Card -->
+            <div class="p-3 rounded-xl bg-[var(--background)] border border-emerald-500/30 text-xs">
+              <div class="flex justify-between items-center mb-1">
+                <span class="text-[var(--muted-foreground)]">Detected Bottleneck:</span>
+                <span id="kaizenBottleneckName" class="font-bold text-rose-400">B: Grill (8m)</span>
+              </div>
+              <button onclick="runKaizenSprint()" class="w-full mt-1.5 py-2 px-3 rounded-lg bg-emerald-500 text-white font-bold shadow-sm hover:bg-emerald-500/25 transition">
+                🚀 Run Kaizen Bottleneck Sprint (-1m)
+              </button>
+            </div>
+          </div>
+
+          <div id="kaizenStatusBox" class="mt-3 p-2.5 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-xs text-emerald-300">
+            💡 <strong>Continuous Improvement (Kaizen):</strong> Ongoing commitment to shaving time off the Critical Path bottleneck and pursuing Six Sigma quality.
+          </div>
+        </div>
+
       </div>
     </section>
 
@@ -1768,6 +1965,9 @@
       highlightButtonGroup('btnMon-', state.monitoringLevel, 3);
       highlightButtonGroup('btnCtrl-', state.controlLevel, 3);
       highlightButtonGroup('btnImp-', state.improvementLevel, 3);
+      highlightButtonGroup('btnDashMon-', state.monitoringLevel, 3);
+      highlightButtonGroup('btnDashCtrl-', state.controlLevel, 3);
+      highlightButtonGroup('btnDashImp-', state.improvementLevel, 3);
       highlightButtonGroup('btnSrv-', state.servicePolicy, 3);
       highlightButtonGroup('btnWar-', state.warrantyPolicy, 3);
 
@@ -1797,11 +1997,257 @@
       document.getElementById('diagVisImpact').textContent = state.visibilityLevel === 1 ? 'Low' : state.visibilityLevel === 2 ? 'Moderate' : 'High Theatre';
 
       renderCPADiagram(m);
+      renderMCIDashboard(m);
 
       document.getElementById('outDefectCount').textContent = `${m.defectUnits}/day`;
       document.getElementById('outWarrantyCost').textContent = `$${m.dailyWarrantyCost}/day`;
 
       checkChallengeProgress(m);
+    }
+
+    let kpiStrictness = 2; // 1 = Relaxed, 2 = HSC Benchmark, 3 = Six Sigma World-Class
+
+    function setKpiStrictness(level) {
+      kpiStrictness = level;
+      highlightButtonGroup('btnStrict-', level, 3);
+      renderAll();
+    }
+
+    function renderMCIDashboard(m) {
+      highlightButtonGroup('btnStrict-', kpiStrictness, 3);
+
+      // Planned KPI Targets based on chosen strictness benchmark
+      const targets = kpiStrictness === 1
+        ? { leadTime: 16.5, defectRate: 4.5, capRatio: 0.90, motion: 1.0, unitCost: 9.80, csat: 75 }
+        : kpiStrictness === 2
+          ? { leadTime: 14.5, defectRate: 2.8, capRatio: 1.00, motion: 0.5, unitCost: 8.80, csat: 84 }
+          : { leadTime: 12.5, defectRate: 1.5, capRatio: 1.05, motion: 0.3, unitCost: 8.20, csat: 90 };
+
+      const targetCapUnits = Math.round(state.demandVolume * targets.capRatio);
+
+      const kpiRows = [
+        {
+          name: '1. Lead Time / Wait Time',
+          targetStr: `<= ${targets.leadTime.toFixed(1)}m`,
+          actualStr: `${m.leadTime.toFixed(1)}m`,
+          ok: m.leadTime <= targets.leadTime,
+          varianceStr: m.leadTime <= targets.leadTime
+            ? `-${(targets.leadTime - m.leadTime).toFixed(1)}m Fast`
+            : `+${(m.leadTime - targets.leadTime).toFixed(1)}m Slow!`,
+          cause: `Critical Path is ${m.rawCPA}m (Tech L${state.techLevel})`
+        },
+        {
+          name: '2. Defect & Warranty Rate',
+          targetStr: `<= ${targets.defectRate.toFixed(1)}%`,
+          actualStr: `${m.defectRate.toFixed(1)}%`,
+          ok: m.defectRate <= targets.defectRate,
+          varianceStr: m.defectRate <= targets.defectRate
+            ? `-${(targets.defectRate - m.defectRate).toFixed(1)}% Clean`
+            : `+${(m.defectRate - targets.defectRate).toFixed(1)}% Breach!`,
+          cause: `QC Control Gate is L${state.controlLevel}, Staff Skill L${state.staffSkill}`
+        },
+        {
+          name: '3. Capacity & Volume Rate',
+          targetStr: `>= ${targetCapUnits}/d`,
+          actualStr: `${m.effectiveCapacity}/d`,
+          ok: m.effectiveCapacity >= targetCapUnits,
+          varianceStr: m.effectiveCapacity >= targetCapUnits
+            ? `+${m.effectiveCapacity - targetCapUnits} Surplus`
+            : `-${targetCapUnits - m.effectiveCapacity} Shortfall!`,
+          cause: `${state.staffCount} Staff & Plant L${state.facilityGrade} vs ${state.demandVolume} Demand`
+        },
+        {
+          name: '4. Process Flow Motion Waste',
+          targetStr: `<= +${targets.motion.toFixed(1)}m`,
+          actualStr: `+${m.flowInfo.motionPenalty.toFixed(1)}m`,
+          ok: m.flowInfo.motionPenalty <= targets.motion && m.flowInfo.disconnectedStations.length === 0 && m.flowInfo.qcConnected,
+          varianceStr: (m.flowInfo.motionPenalty <= targets.motion && m.flowInfo.disconnectedStations.length === 0 && m.flowInfo.qcConnected)
+            ? `Optimal Flow`
+            : `Layout / Flow Gap!`,
+          cause: m.flowInfo.disconnectedStations.length > 0 ? 'Unplugged stations on floorplan' : 'Excess walking distance between pods'
+        },
+        {
+          name: '5. Direct/Indirect Unit Cost',
+          targetStr: `<= $${targets.unitCost.toFixed(2)}`,
+          actualStr: `$${m.unitCost.toFixed(2)}`,
+          ok: m.unitCost <= targets.unitCost,
+          varianceStr: m.unitCost <= targets.unitCost
+            ? `-$${(targets.unitCost - m.unitCost).toFixed(2)} Saved`
+            : `+$${(m.unitCost - targets.unitCost).toFixed(2)} Over!`,
+          cause: `Material L${state.materialGrade} + Warranty rework $${m.dailyWarrantyCost}/d`
+        },
+        {
+          name: '6. Customer Satisfaction (CSAT)',
+          targetStr: `>= ${targets.csat}%`,
+          actualStr: `${m.csat}%`,
+          ok: m.csat >= targets.csat,
+          varianceStr: m.csat >= targets.csat
+            ? `+${m.csat - targets.csat}% Above`
+            : `-${targets.csat - m.csat}% Below!`,
+          cause: `Driven by wait time, defects & Service L${state.servicePolicy}`
+        }
+      ];
+
+      const onTargetCount = kpiRows.filter(r => r.ok).length;
+      const breachRows = kpiRows.filter(r => !r.ok);
+
+      // Update Top 3-Stage Pipeline Badges
+      const s1Badge = document.getElementById('mciStage1Badge');
+      const s2Badge = document.getElementById('mciStage2Badge');
+      const s3Badge = document.getElementById('mciStage3Badge');
+      if (s1Badge) {
+        s1Badge.textContent = `${onTargetCount} / 6 On Target`;
+        s1Badge.className = `font-mono font-bold px-2 py-1 rounded-md border ${onTargetCount === 6 ? 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30' : 'bg-sky-500/10 text-sky-300 border-sky-500/30'}`;
+      }
+      if (s2Badge) {
+        s2Badge.textContent = breachRows.length === 0 ? '0 Variances (In Control)' : `${breachRows.length} KPI Breach${breachRows.length > 1 ? 'es' : ''}!`;
+        s2Badge.className = `font-mono font-bold px-2 py-1 rounded-md border ${breachRows.length === 0 ? 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30' : 'bg-rose-500/15 text-rose-300 border-rose-500/40'}`;
+      }
+      const firstPassYield = (100 - m.defectRate).toFixed(1);
+      if (s3Badge) {
+        s3Badge.textContent = `${firstPassYield}% First-Pass Yield`;
+      }
+
+      // Update Monitoring Sensor Status
+      const monLabels = { 1: 'Monthly Lagging Audit', 2: 'Hourly Shift KPIs', 3: 'Real-Time IoT Telemetry' };
+      const sensorEl = document.getElementById('mciSensorStatus');
+      if (sensorEl) sensorEl.textContent = monLabels[state.monitoringLevel];
+
+      // Render KPI Matrix Rows
+      const matrixEl = document.getElementById('kpiMatrixContainer');
+      if (matrixEl) {
+        matrixEl.innerHTML = kpiRows.map(r => `
+          <div class="p-2 rounded-lg border ${r.ok ? 'border-[var(--border)] bg-[var(--card)]' : 'border-rose-500/40 bg-rose-500/10'} flex items-center justify-between text-xs">
+            <div>
+              <div class="font-bold ${r.ok ? 'text-[var(--foreground)]' : 'text-rose-300'}">${r.name}</div>
+              <div class="text-[var(--muted-foreground)] font-mono">Target: ${r.targetStr} | Actual: <strong class="text-[var(--foreground)]">${r.actualStr}</strong></div>
+            </div>
+            <div class="text-right shrink-0 ml-2">
+              <span class="px-2 py-0.5 rounded font-mono font-bold ${r.ok ? 'bg-emerald-500/15 text-emerald-300 border border-emerald-500/30' : 'bg-rose-500/15 text-rose-300 border border-rose-500/40'}">
+                ${r.ok ? '✅ ' + r.varianceStr : '⚠️ ' + r.varianceStr}
+              </span>
+            </div>
+          </div>
+        `).join('');
+      }
+
+      // Render Stage 2 Control Discrepancy Box
+      const ctrlGateEl = document.getElementById('mciControlGateBadge');
+      const ctrlLabels = { 1: 'No QC Gate (L1)', 2: 'Temp Probe (L2)', 3: 'Auto-Reject (L3)' };
+      if (ctrlGateEl) ctrlGateEl.textContent = ctrlLabels[state.controlLevel];
+
+      const discBox = document.getElementById('controlDiscrepancyBox');
+      if (discBox) {
+        if (breachRows.length === 0) {
+          discBox.innerHTML = `
+            <div class="p-2 rounded-lg bg-emerald-500/15 border border-emerald-500/30 text-emerald-300">
+              ✅ <strong>All 6 KPIs In Control!</strong> Actual operational performance meets or exceeds every planned KPI target. Try switching to <strong>Six Sigma World-Class</strong> targets above to stress-test your kitchen!
+            </div>`;
+        } else {
+          discBox.innerHTML = `
+            <div class="font-bold text-rose-400 mb-1">🚨 ${breachRows.length} Discrepanc${breachRows.length > 1 ? 'ies' : 'y'} Requiring Corrective Action:</div>
+            ${breachRows.map(b => `
+              <div class="p-1.5 rounded bg-rose-500/10 border border-rose-500/30 text-rose-300">
+                • <strong>${b.name}:</strong> Actual (${b.actualStr}) missed Target (${b.targetStr}) &mdash; <em>${b.cause}</em>
+              </div>
+            `).join('')}
+          `;
+        }
+      }
+
+      // Render Stage 3 Improvement (5 HSC Improvement Pillars)
+      const timeScore = Math.max(15, Math.min(100, Math.round((22 - m.leadTime) / 14 * 100)));
+      const flowScore = Math.max(15, Math.min(100, Math.round(100 - (m.flowInfo.motionPenalty * 35) - (m.flowInfo.disconnectedStations.length * 25))));
+      const qualScore = Math.max(15, Math.min(100, Math.round((10 - m.defectRate) / 9.2 * 100)));
+      const costScore = Math.max(15, Math.min(100, Math.round((12.5 - m.unitCost) / 5.5 * 100)));
+      const outputPerStaff = Math.round(m.unitsSold / state.staffCount);
+      const effScore = Math.max(15, Math.min(100, Math.round((outputPerStaff / 78) * 100)));
+
+      const setBar = (valId, barId, valText, pct) => {
+        const vEl = document.getElementById(valId);
+        const bEl = document.getElementById(barId);
+        if (vEl) vEl.textContent = valText;
+        if (bEl) bEl.style.width = `${pct}%`;
+      };
+      setBar('impValTime', 'impBarTime', `${timeScore}% (${m.leadTime.toFixed(1)}m)`, timeScore);
+      setBar('impValFlow', 'impBarFlow', `${flowScore}%`, flowScore);
+      setBar('impValQual', 'impBarQual', `${qualScore}% (${firstPassYield}% OK)`, qualScore);
+      setBar('impValCost', 'impBarCost', `${costScore}% ($${m.unitCost.toFixed(2)})`, costScore);
+      setBar('impValEff', 'impBarEff', `${outputPerStaff} units/staff`, effScore);
+
+      // Identify longest Critical Path task (excluding POS & QC) for Kaizen Bottleneck card
+      const bottleCandidates = ['grill', 'bun', 'fryer'];
+      let maxTaskKey = 'grill';
+      bottleCandidates.forEach(k => {
+        if (getTaskDuration(k) > getTaskDuration(maxTaskKey)) maxTaskKey = k;
+      });
+      const bEl = document.getElementById('kaizenBottleneckName');
+      if (bEl) {
+        bEl.textContent = `${stationMeta[maxTaskKey].code}: ${stationMeta[maxTaskKey].name} (${getTaskDuration(maxTaskKey)}m)`;
+      }
+    }
+
+    function triggerCorrectiveAction(actionType) {
+      const logEl = document.getElementById('controlActionLog');
+      if (actionType === 'quality') {
+        state.controlLevel = 3;
+        state.monitoringLevel = 3;
+        if (state.staffSkill < 3) state.staffSkill = 3;
+        renderAll();
+        if (logEl) {
+          logEl.className = 'mt-3 p-2.5 rounded-xl bg-emerald-500/15 border border-emerald-500/40 text-xs text-emerald-300';
+          logEl.innerHTML = `✅ <strong>Corrective Action Executed (Quality):</strong> Activated <em>Strict Auto-Reject QC Gate (L3)</em>, <em>Live IoT Sensors</em> &amp; <em>Certified Grill Masters</em>. Defect Rate dropped to <strong>${cachedMetrics.defectRate.toFixed(1)}%</strong>!`;
+        }
+      } else if (actionType === 'leadtime') {
+        applyFlowPreset('parallel');
+        state.techLevel = 3;
+        renderAll();
+        if (logEl) {
+          logEl.className = 'mt-3 p-2.5 rounded-xl bg-emerald-500/15 border border-emerald-500/40 text-xs text-emerald-300';
+          logEl.innerHTML = `✅ <strong>Corrective Action Executed (Lead Time):</strong> Re-wired floorplan to <em>Optimal Parallel CPA Flow</em> &amp; deployed <em>Robotic Clamshell Grills (L3)</em>. Lead Time dropped to <strong>${cachedMetrics.leadTime.toFixed(1)} mins</strong>!`;
+        }
+      } else if (actionType === 'capacity') {
+        state.staffCount = Math.min(12, state.staffCount + 2);
+        if (state.facilityGrade < 3) state.facilityGrade += 1;
+        renderAll();
+        if (logEl) {
+          logEl.className = 'mt-3 p-2.5 rounded-xl bg-emerald-500/15 border border-emerald-500/40 text-xs text-emerald-300';
+          logEl.innerHTML = `✅ <strong>Corrective Action Executed (Capacity):</strong> Expanded roster to <em>${state.staffCount} Staff</em> &amp; upgraded <em>Plant Capacity (L${state.facilityGrade})</em>. Daily capacity is now <strong>${cachedMetrics.effectiveCapacity}/day</strong>!`;
+        }
+      } else if (actionType === 'flow') {
+        setLayoutPreset(2);
+        applyFlowPreset('parallel');
+        state.taskDesign = 3;
+        renderAll();
+        if (logEl) {
+          logEl.className = 'mt-3 p-2.5 rounded-xl bg-emerald-500/15 border border-emerald-500/40 text-xs text-emerald-300';
+          logEl.innerHTML = `✅ <strong>Corrective Action Executed (Process Flow):</strong> Snapped workstations to <em>Product Assembly Line</em> &amp; <em>Ergonomic Task Design (L3)</em>. Motion waste reduced to <strong>+${cachedMetrics.flowInfo.motionPenalty.toFixed(1)}m</strong>!`;
+        }
+      }
+    }
+
+    function runKaizenSprint() {
+      // Shave 1m off the longest cooking bottleneck (B, C, or D) down to minimum 3m, and upgrade Improvement to Six Sigma (L3)
+      let reducedLabel = '';
+      if (state.taskB >= state.taskD && state.taskB > 3) {
+        state.taskB -= 1;
+        reducedLabel = `B: Grill Patty reduced to ${state.taskB}m`;
+      } else if (state.taskD > 3) {
+        state.taskD -= 1;
+        reducedLabel = `D: Fry Chips reduced to ${state.taskD}m`;
+      } else if (state.taskC > 2) {
+        state.taskC -= 1;
+        reducedLabel = `C: Toast Bun reduced to ${state.taskC}m`;
+      } else {
+        reducedLabel = 'All station times at peak Six Sigma speed';
+      }
+      state.improvementLevel = 3;
+      renderAll();
+      const box = document.getElementById('kaizenStatusBox');
+      if (box) {
+        box.className = 'mt-3 p-2.5 rounded-xl bg-emerald-500/15 border border-emerald-500/40 text-xs text-emerald-300';
+        box.innerHTML = `🚀 <strong>Kaizen Sprint Complete:</strong> ${reducedLabel} &amp; <em>Six Sigma Optimization</em> enabled! New Order Lead Time: <strong>${cachedMetrics.leadTime.toFixed(1)}m</strong> | First-Pass Yield: <strong>${(100 - cachedMetrics.defectRate).toFixed(1)}%</strong>.`;
+      }
     }
 
     function renderCPADiagram(m) {
