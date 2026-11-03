@@ -483,7 +483,7 @@
         5. 📊 M-C-I Dashboard (KPI &rarr; Control &rarr; Improve)
       </button>
       <button onclick="switchTab('outputs')" id="tabBtn-outputs" class="tab-btn flex-1 min-w-[130px] text-xs font-semibold py-2 px-3 rounded-lg transition text-[var(--muted-foreground)] hover:text-[var(--foreground)]">
-        6. Outputs &amp; HSC Exam Quiz
+        6. 🧪 Student Lab Missions &amp; Outputs
       </button>
     </div>
   </nav>
@@ -996,50 +996,88 @@
       </div>
     </section>
 
-    <!-- TAB 5: OUTPUTS & HSC MINI-QUIZ -->
+    <!-- TAB 6: OUTPUTS, AUTO-CHECKED LAB MISSIONS & SIMULATION-TESTING QUIZ -->
     <section id="panel-outputs" class="tab-panel hidden grid grid-cols-1 lg:grid-cols-12 gap-4">
-      <div class="lg:col-span-5 bg-[var(--card)] border border-[var(--border)] rounded-2xl p-4">
-        <h2 class="text-sm font-bold text-amber-400 mb-2">Outputs: Customer Service &amp; Warranties</h2>
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 mb-3">
-          <div class="p-3 rounded-xl bg-[var(--background)] border border-[var(--border)]">
-            <div class="text-xs font-bold mb-1">🤝 Customer Service</div>
-            <div class="flex flex-col gap-1.5 mt-2">
-              <button onclick="setInput('servicePolicy', 1)" id="btnSrv-1" class="text-xs py-1.5 px-2 rounded-lg border border-[var(--border)]">Counter Pickup ($0/d)</button>
-              <button onclick="setInput('servicePolicy', 2)" id="btnSrv-2" class="text-xs py-1.5 px-2 rounded-lg border border-orange-500">Table Service ($100/d)</button>
-              <button onclick="setInput('servicePolicy', 3)" id="btnSrv-3" class="text-xs py-1.5 px-2 rounded-lg border border-[var(--border)]">VIP Concierge ($240/d)</button>
+      <!-- Left Column: Outputs Controls + 6 Live Auto-Verified Practical Lab Missions -->
+      <div class="lg:col-span-5 bg-[var(--card)] border border-[var(--border)] rounded-2xl p-4 flex flex-col justify-between">
+        <div>
+          <h2 class="text-sm font-bold text-amber-400 mb-2">Outputs: Customer Service &amp; Warranties</h2>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 mb-2.5">
+            <div class="p-2.5 rounded-xl bg-[var(--background)] border border-[var(--border)]">
+              <div class="text-xs font-bold mb-1">🤝 Customer Service</div>
+              <div class="flex flex-col gap-1.5 mt-1.5">
+                <button onclick="setInput('servicePolicy', 1)" id="btnSrv-1" class="text-xs py-1.5 px-2 rounded-lg border border-[var(--border)]">Counter Pickup ($0/d)</button>
+                <button onclick="setInput('servicePolicy', 2)" id="btnSrv-2" class="text-xs py-1.5 px-2 rounded-lg border border-orange-500">Table Service ($100/d)</button>
+                <button onclick="setInput('servicePolicy', 3)" id="btnSrv-3" class="text-xs py-1.5 px-2 rounded-lg border border-[var(--border)]">VIP Concierge ($240/d)</button>
+              </div>
+            </div>
+            <div class="p-2.5 rounded-xl bg-[var(--background)] border border-[var(--border)]">
+              <div class="text-xs font-bold mb-1">🛡️ Warranty Guarantee</div>
+              <div class="flex flex-col gap-1.5 mt-1.5">
+                <button onclick="setInput('warrantyPolicy', 1)" id="btnWar-1" class="text-xs py-1.5 px-2 rounded-lg border border-[var(--border)]">ACL Minimum Only</button>
+                <button onclick="setInput('warrantyPolicy', 2)" id="btnWar-2" class="text-xs py-1.5 px-2 rounded-lg border border-orange-500">Hot Remake Guarantee</button>
+                <button onclick="setInput('warrantyPolicy', 3)" id="btnWar-3" class="text-xs py-1.5 px-2 rounded-lg border border-[var(--border)]">Remake + Full Refund</button>
+              </div>
             </div>
           </div>
-          <div class="p-3 rounded-xl bg-[var(--background)] border border-[var(--border)]">
-            <div class="text-xs font-bold mb-1">🛡️ Warranty Guarantee</div>
-            <div class="flex flex-col gap-1.5 mt-2">
-              <button onclick="setInput('warrantyPolicy', 1)" id="btnWar-1" class="text-xs py-1.5 px-2 rounded-lg border border-[var(--border)]">ACL Minimum Only</button>
-              <button onclick="setInput('warrantyPolicy', 2)" id="btnWar-2" class="text-xs py-1.5 px-2 rounded-lg border border-orange-500">Hot Remake Guarantee</button>
-              <button onclick="setInput('warrantyPolicy', 3)" id="btnWar-3" class="text-xs py-1.5 px-2 rounded-lg border border-[var(--border)]">Remake + Full Refund</button>
+          <div class="p-2.5 rounded-xl bg-[var(--background)] border border-[var(--border)] text-xs mb-3">
+            <div class="font-bold text-rose-400 mb-0.5">🔄 Live Warranty Feedback Loop:</div>
+            <div>Defective burgers (<span id="outDefectCount" class="font-bold">13/day</span>) loop back to the <strong>Warranty Claim Desk</strong> costing <span id="outWarrantyCost" class="font-bold text-amber-400">$98/day</span>, signaling Operations to improve <em>Control</em> &amp; <em>HR Training</em>!</div>
+          </div>
+
+          <!-- 6 Live Auto-Verified Practical Lab Missions -->
+          <div class="p-3 rounded-xl bg-[var(--background)] border border-emerald-500/30">
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-xs font-bold text-emerald-400">🧪 Live Auto-Checked Lab Missions (Test the Sim!):</span>
+              <span id="labMissionScoreBadge" class="text-xs font-mono font-bold px-2 py-0.5 rounded bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">0 / 6 Verified</span>
+            </div>
+            <div id="liveLabMissionsList" class="space-y-1.5 text-xs">
+              <!-- Populated dynamically by renderLabMissions() -->
             </div>
           </div>
-        </div>
-        <div class="p-3 rounded-xl bg-[var(--background)] border border-[var(--border)] text-xs">
-          <div class="font-bold text-rose-400 mb-1">🔄 Live Warranty Feedback Loop (See bottom-right of canvas):</div>
-          <div>Defective burgers (<span id="outDefectCount" class="font-bold">13/day</span>) loop back to the <strong>Warranty Claim Desk</strong> costing <span id="outWarrantyCost" class="font-bold text-amber-400">$98/day</span>, signaling Operations to improve <em>Control</em> &amp; <em>HR Training</em>!</div>
         </div>
       </div>
 
-      <div class="lg:col-span-7 bg-[var(--card)] border border-[var(--border)] rounded-2xl p-4">
-        <div class="flex items-center justify-between mb-2">
-          <h2 class="text-sm font-bold text-purple-400">Year 12 Operations Mini-Exam Quiz</h2>
-          <span class="text-xs font-bold px-2.5 py-0.5 rounded-full bg-purple-500/15 text-purple-400 border border-purple-500/30" id="quizScoreBadge">Score: 0 / 5</span>
-        </div>
-        <div class="p-3.5 rounded-xl bg-[var(--background)] border border-[var(--border)]">
-          <div class="flex justify-between text-xs text-[var(--muted-foreground)] mb-1">
-            <span id="quizProgress">Question 1 of 5</span>
-            <span id="quizTopicTag" class="font-mono text-orange-400">INPUTS</span>
+      <!-- Right Column: 12 Simulation-Testing Experimental Questions -->
+      <div class="lg:col-span-7 bg-[var(--card)] border border-[var(--border)] rounded-2xl p-4 flex flex-col justify-between">
+        <div>
+          <div class="flex items-center justify-between mb-2">
+            <div>
+              <span class="text-xs font-bold uppercase tracking-wider text-purple-400">Experimental Operations Lab</span>
+              <h2 class="text-sm font-bold">12 Simulation-Testing Questions (Test &amp; Observe to Answer!)</h2>
+            </div>
+            <span class="text-xs font-bold px-2.5 py-1 rounded-full bg-purple-500/15 text-purple-400 border border-purple-500/30" id="quizScoreBadge">Score: 0 / 12</span>
           </div>
-          <h3 class="text-xs sm:text-sm font-bold mb-2.5" id="quizQuestionText"></h3>
-          <div id="quizOptions" class="space-y-1.5"></div>
-          <div id="quizFeedback" class="hidden mt-2.5 p-2.5 rounded-lg text-xs"></div>
-          <div class="mt-3 flex justify-between">
-            <button onclick="prevQuizQuestion()" class="text-xs px-3 py-1 rounded-lg border border-[var(--border)]">&larr; Prev</button>
-            <button onclick="nextQuizQuestion()" class="text-xs px-3 py-1 rounded-lg bg-orange-500 text-white font-semibold">Next Question &rarr;</button>
+
+          <!-- Question Number Quick-Jump Strip -->
+          <div id="quizNumberStrip" class="flex flex-wrap gap-1 mb-2.5"></div>
+
+          <div class="p-3.5 rounded-xl bg-[var(--background)] border border-[var(--border)]">
+            <div class="flex flex-wrap justify-between items-center gap-2 text-xs text-[var(--muted-foreground)] mb-2">
+              <span id="quizProgress" class="font-bold text-[var(--foreground)]">Experiment 1 of 12</span>
+              <span id="quizTopicTag" class="font-mono text-orange-400 px-2 py-0.5 rounded bg-orange-500/15 border border-orange-500/30">SEQUENCING &amp; CPA</span>
+            </div>
+
+            <!-- Interactive "How to Test in the Simulation" Box -->
+            <div class="p-2.5 rounded-lg bg-sky-500/10 border border-sky-500/30 text-xs mb-2.5">
+              <div class="flex flex-wrap items-center justify-between gap-2 mb-1">
+                <span class="font-bold text-sky-400">🔬 Step-by-Step Simulation Test:</span>
+                <button onclick="runCurrentQuizExperiment()" class="text-xs font-bold px-2.5 py-1 rounded-md bg-sky-500 text-white shadow-sm transition">
+                  ⚡ Click to Auto-Load This Test in Sim
+                </button>
+              </div>
+              <div id="quizExperimentInstruction" class="text-sky-300"></div>
+            </div>
+
+            <h3 class="text-xs sm:text-sm font-bold mb-2.5" id="quizQuestionText"></h3>
+            <div id="quizOptions" class="space-y-1.5"></div>
+            <div id="quizFeedback" class="hidden mt-2.5 p-2.5 rounded-lg text-xs"></div>
+
+            <div class="mt-3 flex justify-between items-center pt-2 border-t border-[var(--border)]">
+              <button onclick="prevQuizQuestion()" class="text-xs px-3 py-1.5 rounded-lg border border-[var(--border)] hover:bg-[var(--secondary)]">&larr; Previous Test</button>
+              <span id="quizLiveReadout" class="text-xs font-mono text-[var(--muted-foreground)]"></span>
+              <button onclick="nextQuizQuestion()" class="text-xs px-3 py-1.5 rounded-lg bg-orange-500 text-white font-semibold">Next Test &rarr;</button>
+            </div>
           </div>
         </div>
       </div>
@@ -1998,6 +2036,7 @@
 
       renderCPADiagram(m);
       renderMCIDashboard(m);
+      renderLabMissions(m);
 
       document.getElementById('outDefectCount').textContent = `${m.defectUnits}/day`;
       document.getElementById('outWarrantyCost').textContent = `$${m.dailyWarrantyCost}/day`;
@@ -2404,67 +2443,253 @@
       loadScenario('sandbox');
     }
 
-    // ==================== QUIZ ====================
+    // ==================== 6 LIVE AUTO-VERIFIED LAB MISSIONS ====================
+    const labMissions = [
+      {
+        id: 'M1',
+        title: '1. Parallel CPA Optimization (Tab 1)',
+        desc: 'Connect all 7 stations in Parallel & reduce Calculated CPA to <= 12 mins.',
+        check: (m) => m.flowInfo.disconnectedStations.length === 0 && m.flowInfo.qcConnected && m.rawCPA <= 12
+      },
+      {
+        id: 'M2',
+        title: '2. High-Volume Surge Mastery (Tab 2 & 3)',
+        desc: 'Set Demand Volume >= 600/day and configure HR & Plant so Unmet Demand = 0.',
+        check: (m) => state.demandVolume >= 600 && m.unmetDemand === 0
+      },
+      {
+        id: 'M3',
+        title: '3. Open Theatre Bespoke Quality (Tab 2 & 3)',
+        desc: 'Set Variety = 3 & Visibility = 3 (Theatre Grill) while achieving CSAT >= 92%.',
+        check: (m) => state.varietyLevel === 3 && state.visibilityLevel === 3 && m.csat >= 92
+      },
+      {
+        id: 'M4',
+        title: '4. Lean Floorplan Layout (Drag Stations)',
+        desc: 'Arrange stations on the kitchen floorplan so Motion Waste is <= +0.3m.',
+        check: (m) => m.flowInfo.motionPenalty <= 0.3 && m.flowInfo.disconnectedStations.length === 0
+      },
+      {
+        id: 'M5',
+        title: '5. Six Sigma M-C-I Control (Tab 5)',
+        desc: 'Select "Six Sigma World-Class" KPI targets in Tab 5 and get all 6/6 KPIs On Target!',
+        check: (m) => kpiStrictness === 3 && m.leadTime <= 12.5 && m.defectRate <= 1.5 && m.effectiveCapacity >= Math.round(state.demandVolume * 1.05) && m.flowInfo.motionPenalty <= 0.3 && m.unitCost <= 8.20 && m.csat >= 90
+      },
+      {
+        id: 'M6',
+        title: '6. Zero-Defect Profit Record (All Tabs)',
+        desc: 'Achieve Defect Rate <= 1.0% AND Daily Net Profit >= $3,200/day.',
+        check: (m) => m.defectRate <= 1.0 && m.dailyProfit >= 3200
+      }
+    ];
+
+    let completedMissions = new Set();
+
+    function renderLabMissions(m) {
+      const listEl = document.getElementById('liveLabMissionsList');
+      if (!listEl) return;
+
+      labMissions.forEach(mission => {
+        if (mission.check(m)) completedMissions.add(mission.id);
+      });
+
+      const badge = document.getElementById('labMissionScoreBadge');
+      if (badge) {
+        badge.textContent = `${completedMissions.size} / ${labMissions.length} Verified`;
+      }
+
+      listEl.innerHTML = labMissions.map(mission => {
+        const done = completedMissions.has(mission.id);
+        const activeNow = mission.check(m);
+        return `
+          <div class="p-2 rounded-lg border ${done ? 'border-emerald-500/40 bg-emerald-500/10' : 'border-[var(--border)] bg-[var(--card)]'} flex items-center justify-between gap-2">
+            <div>
+              <div class="font-bold ${done ? 'text-emerald-300' : 'text-[var(--foreground)]'}">${done ? '✅ ' : '⬜ '}${mission.title}</div>
+              <div class="text-[var(--muted-foreground)]">${mission.desc}</div>
+            </div>
+            <span class="px-2 py-0.5 rounded font-mono font-bold shrink-0 ${activeNow ? 'bg-emerald-500 text-white' : done ? 'bg-emerald-500/20 text-emerald-300' : 'bg-[var(--background)] text-[var(--muted-foreground)]'}">
+              ${activeNow ? 'LIVE ✓' : done ? 'DONE ✓' : 'TEST'}
+            </span>
+          </div>
+        `;
+      }).join('');
+
+      // Also update live readout inside quiz panel
+      const readoutEl = document.getElementById('quizLiveReadout');
+      if (readoutEl) {
+        readoutEl.textContent = `Live Sim: CPA ${m.rawCPA}m | Lead ${m.leadTime.toFixed(1)}m | Cap ${m.effectiveCapacity}/d | Defects ${m.defectRate.toFixed(1)}% | Profit $${m.dailyProfit}`;
+      }
+    }
+
+    // ==================== 12 SIMULATION-TESTING EXPERIMENTAL QUESTIONS ====================
     const quizQuestions = [
       {
-        topic: 'SEQUENCING & SCHEDULING (FLOW DESIGN)',
-        q: 'When you switch the Flow Builder from "Single-Line Serial Flow (27m)" to "Parallel CPA Flow (15m)", why does total lead time drop by 12 minutes?',
+        topic: '1. SEQUENCING & SCHEDULING (SERIAL VS PARALLEL)',
+        experimentInstruction: 'Click "🔄 Reset" at the top, then click "🐢 Single-Line Serial Flow (27m)" above the kitchen canvas (or click the blue button above to auto-load it). Look at the KPI Scoreboard and Tab 1.',
+        setupFn: () => { resetToDefaults(); applyFlowPreset('serial'); },
+        q: 'When you switch the kitchen from "⚡ Parallel CPA Flow" to "🐢 Single-Line Serial Flow", what exact changes occur on the simulation scoreboard?',
         options: [
-          'Because Gantt charts and CPA allow independent tasks (Grill, Bun Prep, Fryers) to be scheduled simultaneously in parallel.',
-          'Because workers are no longer needed in the kitchen.',
-          'Because quality control is removed.',
-          'Because raw materials are frozen.'
+          'Calculated CPA jumps from 15m to 27m (+12m slower), and Daily Capacity drops from 391/day to 282/day because stations must wait in a single-file queue.',
+          'Calculated CPA drops from 15m to 8m, and Daily Capacity doubles to 800/day.',
+          'Calculated CPA stays at 15m because task durations did not change.',
+          'Warranty Defect Rate drops to 0.0% because single-file lines never make mistakes.'
         ],
         correct: 0,
-        explanation: 'Correct! Scheduling tasks in parallel rather than waiting in a single sequential queue dramatically reduces total order completion time.'
+        explanation: 'Verified in Sim! Chaining A→B→C→D→E→F→G in a single serial line removes all parallel scheduling savings (12 mins lost per order), blowing CPA out to 27m and choking daily throughput from 391/day down to 282/day.'
       },
       {
-        topic: 'INPUTS (TRANSFORMED VS TRANSFORMING)',
-        q: 'In the visual floorplan above, which items are Transformed Resources (changed into outputs) versus Transforming Resources (carry out the work)?',
+        topic: '2. CRITICAL PATH ANALYSIS (SLACK TIME TEST)',
+        experimentInstruction: 'Click "🔄 Reset" (so Parallel CPA Flow is active: B=8m, C=4m, D=6m). Open Tab 1 and drag the slider for "C: Toast Bun" from 4m up to 7m. Watch "Calculated CPA" and the Gantt chart.',
+        setupFn: () => { resetToDefaults(); state.taskC = 7; renderAll(); },
+        q: 'When you increase "C: Toast Bun" from 4m to 7m (while B: Grill Patty is 8m), what happens to the Calculated CPA time and why?',
         options: [
-          'Beef patties, POS order data, and customers are Transformed; Kitchen staff and grills are Transforming.',
-          'Kitchen staff are Transformed; Beef patties and customers are Transforming.',
-          'Both grills and wagyu beef are Transforming resources.',
-          'Warranties are Inputs.'
-        ],
-        correct: 0,
-        explanation: 'Correct! Materials, Information, and Customers (M.I.C.) are Transformed Resources; Human Resources and Facilities are Transforming Resources.'
-      },
-      {
-        topic: 'PROCESS LAYOUT VS PRODUCT LAYOUT',
-        q: 'When you arrange workstations into a sequential assembly line (Product Layout), what type of production is it best suited for?',
-        options: [
-          'Low volume, high variety bespoke catering.',
-          'High volume, standardized mass production where tasks follow a fixed sequence.',
-          'Building a bridge or ship in one fixed spot.',
-          'Eliminating all human resources.'
+          'Calculated CPA increases by 3 minutes (from 15m to 18m).',
+          'Calculated CPA stays at 15 mins (0m change) because C: Toast Bun is on a non-critical path with slack time while waiting for the 8m Grill Patty.',
+          'Calculated CPA drops to 11 mins.',
+          'Station E (Assemble) becomes unplugged.'
         ],
         correct: 1,
-        explanation: 'Spot on! A Product Layout arranges workstations sequentially along an assembly line to maximize efficiency for high-volume standardized goods.'
+        explanation: 'Verified in Sim! On the Gantt chart, C: Toast Bun (blue bar, 2m–9m) still finishes before B: Grill Patty (red bar, 2m–10m). Because C has slack time, increasing C from 4m to 7m adds zero minutes to the 15m Critical Path!'
       },
       {
-        topic: 'CRITICAL PATH ANALYSIS (CPA)',
-        q: 'Look at the animated red Critical Path. If Grill (Path 1) takes 15m and Bun Prep (Path 2) takes 11m, why does speeding up Bun Prep by 2 minutes save ZERO minutes overall?',
+        topic: '3. SHIFTING THE CRITICAL PATH (BOTTLENECK TEST)',
+        experimentInstruction: 'Click "🔄 Reset", open Tab 1, and drag "D: Fry Chips" all the way up to 12m (leaving B: Grill at 8m). Watch the animated red dashed Critical Path on the floorplan canvas!',
+        setupFn: () => { resetToDefaults(); state.taskD = 12; renderAll(); },
+        q: 'When you drag "D: Fry Chips" up to 12m in Tab 1, which path turns pulsing red on the floorplan and what is the new Calculated CPA?',
         options: [
-          'Because the Critical Path is the longest path (15m); burger assembly must still wait for the grill patty to finish.',
-          'Because Gantt charts do not allow parallel tasks.',
-          'Because Bun Prep is an output, not a transformation process.',
-          'It actually saves 2 minutes on every order.'
+          'A(2m) → B(8m) → E(3m) → G(2m) = 15m remains the Critical Path.',
+          'A(2m) → C(4m) → E(3m) → G(2m) = 11m becomes the Critical Path.',
+          'The Critical Path shifts to the Chip Fryer branch: A(2m) → D(12m) → F(2m) → G(2m) = 18m!',
+          'All stations turn grey and stop working.'
         ],
-        correct: 0,
-        explanation: 'Exactly! The Critical Path is the longest path through the network diagram, establishing the minimum time needed to complete the entire order.'
+        correct: 2,
+        explanation: 'Verified in Sim! Once D: Fry Chips reaches 12m, the bottom branch (2 + 12 + 2 + 2 = 18m) exceeds the Grill branch (15m), shifting the red Critical Path to A → D → F → G (18m).'
       },
       {
-        topic: 'OUTPUTS (WARRANTIES & CONTROL)',
-        q: 'What happens in the simulation when you bypass "G: QC & Pack" in the Flow Builder?',
+        topic: '4. FLOW DESIGNER (BYPASSING QUALITY CONTROL)',
+        experimentInstruction: 'Click "🔄 Reset", then click "⚠️ Bypassed Fryer/QC (Flawed)" above the floorplan canvas. Check the Warranty Defect Rate and Daily Net Profit gauges.',
+        setupFn: () => { resetToDefaults(); applyFlowPreset('flawed'); },
+        q: 'In the simulation, what happens to the Warranty Defect Rate and Daily Net Profit when you load the "⚠️ Bypassed Fryer/QC (Flawed)" flow?',
         options: [
-          'Defective burgers escape to customers uninspected, causing Warranty Claims to spike and Customer Satisfaction to fall.',
-          'Customer satisfaction increases to 100%.',
-          'Material costs drop to $0.',
-          'The Critical Path becomes 100 minutes.'
+          'Defect Rate spikes from 3.1% to 15.6% (Warranty Cost jumps to $527/day), crashing Daily Net Profit from $2,213 to $1,531!',
+          'Defect Rate stays at 3.1% and Daily Net Profit rises to $4,000.',
+          'Lead Time increases to 45 minutes.',
+          'Customer Satisfaction rises to 99% because orders skip inspection.'
         ],
         correct: 0,
-        explanation: 'Correct! Without Control (quality inspection), defective outputs reach customers, driving up costly warranty claims and damaging brand reputation.'
+        explanation: 'Verified in Sim! Unplugging stations F & G and bypassing the QC inspection gate causes defective outputs to escape straight to customers, spiking defects to 15.6% and costing $527/day in warranty claims.'
+      },
+      {
+        topic: '5. INPUTS (TRANSFORMED VS TRANSFORMING BOTTLENECK)',
+        experimentInstruction: 'Open Tab 2 (Inputs). Set Materials to "Artisan Wagyu ($6.80)" and Information to "AI Forecast", but set HR Roster to "3 Staff (Untrained Casuals)" and Facilities to "Cramped Single-Grill".',
+        setupFn: () => { resetToDefaults(); state.materialGrade = 3; state.infoSystem = 3; state.staffCount = 3; state.staffSkill = 1; state.facilityGrade = 1; renderAll(); },
+        q: 'When you combine top-tier Transformed Resources (Wagyu + AI Info) with weak Transforming Resources (3 Untrained Staff + Cramped Single-Grill), what happens to Daily Capacity?',
+        options: [
+          'Capacity reaches 800/day because Wagyu beef cooks itself.',
+          'Effective Capacity collapses to 146 / 400 (Bottleneck: -254 lost orders/day) and Profit falls to $402, proving Transforming Resources (HR & Facilities) determine how many inputs can be processed!',
+          'Unit Cost drops to $2.00.',
+          'Defect Rate drops to 0.4%.'
+        ],
+        correct: 1,
+        explanation: 'Verified in Sim! Even with the best Transformed Resources (Materials & Information), insufficient Transforming Resources (3 Untrained Staff & Single-Grill Plant) cap output at just 146 burgers/day.'
+      },
+      {
+        topic: '6. THE 4Vs (VOLUME & VARIATION IN DEMAND SURGE)',
+        experimentInstruction: 'Click "🔄 Reset", open Tab 3 (The 4Vs), drag "1. Volume" to 650/day, and drag "3. Variation in Demand" to Level 3 (Extreme Footy Surge). Check Gauge 1 (Capacity vs Demand).',
+        setupFn: () => { resetToDefaults(); state.demandVolume = 650; state.variationLevel = 3; renderAll(); },
+        q: 'When Demand Volume hits 650/day AND Variation in Demand is set to "Extreme Footy Surge", what happens to Effective Capacity in Gauge 1?',
+        options: [
+          'Effective Capacity drops from 391 to 332 / 650 (Bottleneck: -318 lost/day!) because extreme demand peaks overwhelm fixed staffing and equipment.',
+          'Effective Capacity automatically expands to 650 / 650 at zero cost.',
+          'Unit Cost increases to $25.00.',
+          'Critical Path time drops to 6.0m.'
+        ],
+        correct: 0,
+        explanation: 'Verified in Sim! High variation in demand (sudden footy rush surges) penalizes effective utilization (dropping capacity from 391 to 332/day) unless Operations invests in flexible HR rosters and higher-capacity facilities.'
+      },
+      {
+        topic: '7. THE 4Vs (HIGH VISIBILITY & CUSTOMER CONTACT)',
+        experimentInstruction: 'In Tab 3, set "4. Visibility" to Level 3 (Live Theatre Grill) so the divider wall opens on the canvas. Now go to Tab 2 and switch "HR Training" between Untrained Casuals (L1) and Certified Grill Masters (L3).',
+        setupFn: () => { resetToDefaults(); state.visibilityLevel = 3; state.staffSkill = 1; renderAll(); },
+        q: 'With the Live Theatre Grill wall wide open (Visibility = 3), compare Customer Satisfaction (CSAT) when staff are Untrained Casuals (L1) vs. Certified Grill Masters (L3). What do you observe?',
+        options: [
+          'Visibility has zero effect on Customer Satisfaction.',
+          'With Untrained Casuals visible through the glass, CSAT plunges to 61%; upgrading to Certified Grill Masters boosts CSAT to 85% (+24% jump) because customers directly observe kitchen quality!',
+          'Untrained Casuals produce higher CSAT than Grill Masters.',
+          'Opening the theatre wall closes the restaurant.'
+        ],
+        correct: 1,
+        explanation: 'Verified in Sim! High Visibility (direct customer contact) amplifies the impact of staff skill: sloppy, untrained work seen by customers tanks CSAT to 61%, while skilled theatre grilling lifts CSAT to 85%.'
+      },
+      {
+        topic: '8. PROCESS LAYOUT & PHYSICAL MOTION WASTE',
+        experimentInstruction: 'Click "🔄 Reset", then in Tab 4 switch "Process Layout" from "Product (Assembly Line)" to "Process Layout (Pods)" — or use "✋ Move Stations" to drag stations far apart.',
+        setupFn: () => { resetToDefaults(); setLayoutPreset(1); },
+        q: 'When you switch from the compact "Product (Assembly Line)" layout to spread-out "Process Layout (Pods)" for a standard menu, what happens to Motion Waste and Order Lead Time?',
+        options: [
+          'Motion Waste increases from +0.4m to +0.8m and Order Lead Time slows from 13.8m to 14.8m due to longer walking distances between functional pods.',
+          'Motion Waste drops to 0.0m and Lead Time drops to 5.0m.',
+          'Process Layout is only used for building bridges.',
+          'Layout changes only affect Warranty Policy.'
+        ],
+        correct: 0,
+        explanation: 'Verified in Sim! Spreading workstations into functional pods increases physical travel distance across the floorplan (+0.8m motion waste), slowing Lead Time from 13.8m to 14.8m for standardized production.'
+      },
+      {
+        topic: '9. MONITORING (KPI TARGET STRICTNESS TEST)',
+        experimentInstruction: 'Click "🔄 Reset", open Tab 5 (📊 M-C-I Dashboard), and switch "Planned KPI Target Strictness" at the top right from "HSC Benchmark" to "Six Sigma World-Class".',
+        setupFn: () => { resetToDefaults(); switchTab('mci'); setKpiStrictness(3); },
+        q: 'In Tab 5 (M-C-I Dashboard), when you tighten management\'s planned targets from "HSC Benchmark" to "Six Sigma World-Class" on the default kitchen, what happens in Stage 1 (Monitoring)?',
+        options: [
+          'Stage 1 shifts from "6 / 6 On Target" to "0 / 6 On Target" (6 KPI Breaches in Stage 2!), showing how Monitoring compares actual performance against predetermined KPI targets.',
+          'All 6 KPIs remain green because targets never change.',
+          'The kitchen stops cooking burgers.',
+          'Unit price doubles to $32.00.'
+        ],
+        correct: 0,
+        explanation: 'Verified in Sim! Under HSC Benchmark targets, the default kitchen meets 6/6 KPIs (13.8m vs 14.5m target, 3.1% vs 2.8% or close). Switching to Six Sigma World-Class targets (<=12.5m, <=1.5% defects, <=$8.20 cost, >=90% CSAT) immediately exposes KPI variances requiring Control & Improvement!'
+      },
+      {
+        topic: '10. CONTROL (TAKING CORRECTIVE ACTION IN TAB 5)',
+        experimentInstruction: 'Select "⚠️ Crisis 3: Defective Burgers & Warranty Blowout" from the top scenario bar, then open Tab 5 (📊 M-C-I Dashboard) and click "🛡️ Fix Quality KPI: Auto-Reject QC + Grill Master Training".',
+        setupFn: () => { document.getElementById('scenarioSelect').value = 'quality_crisis'; loadScenario('quality_crisis'); switchTab('mci'); },
+        q: 'When you load "Crisis 3: Quality Crisis" (Defect Rate = 13.8%, Warranty Cost = $880/d) and click "🛡️ Fix Quality KPI" in Stage 2 (Control), what does the Defect Rate immediately drop to?',
+        options: [
+          'It stays at 13.8% because Control has no effect on defects.',
+          'It immediately drops from 13.8% down to 4.9% (and Warranty Cost drops from $880/d to $336/d) as Auto-Reject QC and Grill Master training take corrective action!',
+          'It increases to 25.0%.',
+          'It reduces Staff Count to 0.'
+        ],
+        correct: 1,
+        explanation: 'Verified in Sim! Clicking "Fix Quality KPI" in Stage 2 executes immediate managerial Control (upgrading Control to L3 Auto-Reject Gate, Monitoring to L3 IoT Sensors, and Staff Skill to L3), slashing defects from 13.8% to 4.9%!'
+      },
+      {
+        topic: '11. IMPROVEMENT (KAIZEN BOTTLENECK SPRINT IN TAB 5)',
+        experimentInstruction: 'Click "🔄 Reset", open Tab 5 (📊 M-C-I Dashboard), look at Stage 3 (Improvement) on the right, and click "🚀 Run Kaizen Bottleneck Sprint (-1m)" TWICE.',
+        setupFn: () => { resetToDefaults(); switchTab('mci'); },
+        q: 'Starting from Default (Reset), what happens in Stage 3 (Improvement) when you click "🚀 Run Kaizen Bottleneck Sprint (-1m)" TWICE?',
+        options: [
+          'The Grill bottleneck (B) is shaved from 8m down to 6m, Six Sigma Optimization activates, Order Lead Time drops from 13.8m to 11.1m, and First-Pass Yield rises to 97.7%!',
+          'Lead Time increases from 13.8m to 20.0m.',
+          'Kaizen only changes the colour of the burger buns.',
+          'Daily Net Profit becomes negative.'
+        ],
+        correct: 0,
+        explanation: 'Verified in Sim! Running two Kaizen sprints systematically eliminates the 8m Grill bottleneck (8m → 7m → 6m) and activates Six Sigma (L3), cutting Order Lead Time from 13.8m to 11.1m and lifting First-Pass Yield to 97.7%.'
+      },
+      {
+        topic: '12. OUTPUTS (WARRANTIES AS AN OPERATIONS FEEDBACK SIGNAL)',
+        experimentInstruction: 'Load "⚠️ Crisis 3: Defective Burgers", open Tab 6 (Outputs), and toggle "🛡️ Warranty Guarantee" between "ACL Minimum Only" (L1) and "Remake + Full Refund" (L3).',
+        setupFn: () => { document.getElementById('scenarioSelect').value = 'quality_crisis'; loadScenario('quality_crisis'); switchTab('outputs'); },
+        q: 'In Crisis 3 (55 defective burgers/day), what happens to Daily Warranty Cost when you switch from "ACL Minimum Only" to "Remake + Full Refund", and what does this signal to Operations?',
+        options: [
+          'Warranty Cost jumps from $303/day to $880/day, signaling that generous warranty promises are financially unsustainable unless Operations fixes root-cause quality in Control & Inputs!',
+          'Warranty Cost drops to $0/day when Full Refunds are offered.',
+          'Warranties automatically fix the grill temperature.',
+          'Customer Service and Warranties have no connection to Operations.'
+        ],
+        correct: 0,
+        explanation: 'Verified in Sim! With 55 defective units/day, a Remake + Full Refund guarantee costs $880/day vs $303/day under ACL Minimum—proving that warranty claims are a critical measure of operational quality that must be solved through M-C-I!'
       }
     ];
 
@@ -2474,16 +2699,28 @@
 
     function renderQuiz() {
       const item = quizQuestions[currentQuizIdx];
-      document.getElementById('quizProgress').textContent = `Question ${currentQuizIdx + 1} of ${quizQuestions.length}`;
+      document.getElementById('quizProgress').textContent = `Experiment ${currentQuizIdx + 1} of ${quizQuestions.length}`;
       document.getElementById('quizTopicTag').textContent = item.topic;
+      document.getElementById('quizExperimentInstruction').textContent = item.experimentInstruction;
       document.getElementById('quizQuestionText').textContent = item.q;
+
+      // Render Question Number Strip (1 to 12)
+      const stripEl = document.getElementById('quizNumberStrip');
+      if (stripEl) {
+        stripEl.innerHTML = quizQuestions.map((_, i) => {
+          const isCurrent = i === currentQuizIdx;
+          const isDone = answeredQuestions.has(i);
+          return `<button onclick="jumpToQuizQuestion(${i})" class="text-xs font-mono font-bold px-2 py-1 rounded border transition ${isCurrent ? 'bg-orange-500 text-white border-orange-500' : isDone ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40' : 'bg-[var(--background)] text-[var(--muted-foreground)] border-[var(--border)]'}">${i + 1}${isDone ? '✓' : ''}</button>`;
+        }).join('');
+      }
+
       const optsDiv = document.getElementById('quizOptions');
       optsDiv.innerHTML = '';
       document.getElementById('quizFeedback').classList.add('hidden');
 
       item.options.forEach((optText, idx) => {
         const btn = document.createElement('button');
-        btn.className = 'w-full text-left text-xs p-2 rounded-lg border border-[var(--border)] bg-[var(--card)] hover:border-orange-500 transition';
+        btn.className = 'w-full text-left text-xs p-2.5 rounded-lg border border-[var(--border)] bg-[var(--card)] hover:border-orange-500 transition';
         btn.textContent = `${String.fromCharCode(65 + idx)}. ${optText}`;
         btn.onclick = () => {
           const fb = document.getElementById('quizFeedback');
@@ -2493,16 +2730,32 @@
               quizScore++;
               answeredQuestions.add(currentQuizIdx);
               document.getElementById('quizScoreBadge').textContent = `Score: ${quizScore} / ${quizQuestions.length}`;
+              renderQuiz();
+              document.getElementById('quizFeedback').classList.remove('hidden');
             }
             fb.className = 'mt-2.5 p-2.5 rounded-lg text-xs bg-emerald-500/15 border border-emerald-500/40 text-emerald-300';
             fb.textContent = '✅ ' + item.explanation;
           } else {
             fb.className = 'mt-2.5 p-2.5 rounded-lg text-xs bg-rose-500/15 border border-rose-500/40 text-rose-300';
-            fb.textContent = '❌ ' + item.explanation;
+            fb.textContent = '❌ Test it in the simulator above! ' + item.explanation;
           }
         };
         optsDiv.appendChild(btn);
       });
+    }
+
+    function runCurrentQuizExperiment() {
+      const item = quizQuestions[currentQuizIdx];
+      if (item && item.setupFn) {
+        item.setupFn();
+        // Keep Tab 6 visible or let student inspect the live scoreboard
+        switchTab('outputs');
+      }
+    }
+
+    function jumpToQuizQuestion(idx) {
+      currentQuizIdx = idx;
+      renderQuiz();
     }
 
     function nextQuizQuestion() {
