@@ -308,6 +308,10 @@ function renderTopicHeroBanner(topicObj) {
                 <a href="${escapeAttr(SYLLABUS_DATA.notebookUrl)}" target="_blank" rel="noopener" class="media-chip chip-notebook">
                     ✨ Launch AI NotebookLM
                 </a>
+                ${topicObj.id === 'operations' ? `
+                <a href="operations-sim.html" target="_blank" rel="noopener" class="media-chip" style="background:linear-gradient(135deg,#f97316,#ea580c);color:#fff;font-weight:800;border:none;">
+                    ⚙️ Launch Interactive Operations &amp; Flow Designer Sim ↗
+                </a>` : ''}
             </div>
         </div>
     </div>`;

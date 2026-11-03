@@ -1,0 +1,1862 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bespoke Burger Co. — Live Visual Operations &amp; Flow Designer | Year 12 Business Studies</title>
+  <meta name="description" content="Interactive HSC Year 12 Business Studies Operations Simulation with Drag-and-Drop Transformation Flow & Sequence Designer, CPA, Gantt Charts, 4Vs, Inputs, and Outputs.">
+  <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    :root {
+      --background: #090810;
+      --card: #121324;
+      --secondary: #1e2238;
+      --border: rgba(255, 255, 255, 0.1);
+      --foreground: #f8fafc;
+      --muted-foreground: #94a3b8;
+    }
+    body.light-mode {
+      --background: #f8fafc;
+      --card: #ffffff;
+      --secondary: #f1f5f9;
+      --border: rgba(15, 23, 42, 0.12);
+      --foreground: #0f172a;
+      --muted-foreground: #64748b;
+    }
+    input[type="range"] {
+      accent-color: #f97316;
+    }
+    @keyframes flowDash {
+      to { stroke-dashoffset: -24; }
+    }
+    .cpa-animated-edge {
+      stroke-dasharray: 8 4;
+      animation: flowDash 0.7s linear infinite;
+    }
+  </style>
+</head>
+<body class="bg-[var(--background)] text-[var(--foreground)] antialiased p-3 md:p-5 select-none">
+
+  <!-- TOP NAVIGATION BAR -->
+  <nav class="max-w-7xl mx-auto mb-3 flex flex-wrap items-center justify-between gap-2 bg-[var(--card)] border border-[var(--border)] rounded-xl px-4 py-2.5">
+    <div class="flex items-center gap-3">
+      <a href="simulations.html" class="text-xs font-semibold px-3 py-1.5 rounded-lg border border-[var(--border)] hover:bg-[var(--secondary)] transition flex items-center gap-1.5">
+        <span>&larr;</span> <span>Back to Simulations Hub</span>
+      </a>
+      <a href="index.html" class="text-xs font-medium text-[var(--muted-foreground)] hover:text-[var(--foreground)] transition">
+        🏠 Main Portal
+      </a>
+    </div>
+    <div class="flex items-center gap-2">
+      <span class="text-xs font-bold uppercase tracking-wider text-orange-400">NESA Year 12 HSC: Operations Processes &amp; Flow Builder</span>
+      <button onclick="document.body.classList.toggle('light-mode')" class="text-xs px-2.5 py-1 rounded-lg border border-[var(--border)] hover:bg-[var(--secondary)]" title="Toggle Dark/Light Theme">
+        🌓 Theme
+      </button>
+    </div>
+  </nav>
+
+  <!-- TOP HEADER & SCENARIO BAR -->
+  <header class="max-w-7xl mx-auto mb-4">
+    <div class="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-3.5 shadow-sm flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-orange-500/15 border border-orange-500/30 flex items-center justify-center text-xl shrink-0">
+          🍔
+        </div>
+        <div>
+          <div class="flex items-center gap-2 flex-wrap">
+            <h1 class="text-base md:text-lg font-bold tracking-tight">Bespoke Burger Co. — Operations &amp; Flow Designer</h1>
+            <span class="text-xs font-semibold px-2 py-0.5 rounded-full bg-orange-500/15 text-orange-500 border border-orange-500/30">
+              Interactive Floorplan &amp; CPA Builder
+            </span>
+          </div>
+          <p class="text-xs text-[var(--muted-foreground)]">
+            Drag workstations on the floorplan, wire your own transformation sequence arrows, and watch the Critical Path &amp; bottlenecks react live!
+          </p>
+        </div>
+      </div>
+
+      <!-- Mode / Speed / Scenario Controls -->
+      <div class="flex flex-wrap items-center gap-2">
+        <button id="btnPauseSim" onclick="toggleSimPause()" class="text-xs font-semibold px-3 py-1.5 rounded-lg bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 hover:bg-emerald-500/25 transition">
+          ⏸ Pause
+        </button>
+        <select id="simSpeedSelect" onchange="setSimSpeed(parseFloat(this.value))" class="text-xs font-semibold bg-[var(--background)] text-[var(--foreground)] border border-[var(--border)] rounded-lg px-2.5 py-1.5">
+          <option value="0.6">🐢 0.5x Slow-Mo</option>
+          <option value="1" selected>▶️ 1x Normal</option>
+          <option value="2">⏩ 2x Rush</option>
+        </select>
+        <select id="scenarioSelect" onchange="loadScenario(this.value)" class="text-xs font-semibold bg-[var(--background)] text-[var(--foreground)] border border-[var(--border)] rounded-lg px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-orange-500">
+          <option value="sandbox">🛠️ Free Sandbox + Flow Designer</option>
+          <option value="broken_flow">🧩 Crisis 0: Fix the Broken Serial Flow! (Flow Design Challenge)</option>
+          <option value="friday_rush">🔥 Crisis 1: Friday Footy Rush (Demand &amp; Bottleneck)</option>
+          <option value="gourmet_pivot">👨‍🍳 Crisis 2: Gourmet Theatre Pivot (Variety &amp; Visibility)</option>
+          <option value="quality_crisis">⚠️ Crisis 3: Defective Burgers &amp; Warranty Claims</option>
+          <option value="speed_record">⚡ Crisis 4: 11-Min Critical Path Challenge</option>
+        </select>
+        <button onclick="resetToDefaults()" class="text-xs px-2.5 py-1.5 rounded-lg border border-[var(--border)] hover:bg-[var(--secondary)] text-[var(--muted-foreground)] hover:text-[var(--foreground)] transition">
+          Reset
+        </button>
+      </div>
+    </div>
+
+    <!-- Active Challenge Banner -->
+    <div id="challengeBanner" class="hidden mt-2.5 bg-amber-500/10 border border-amber-500/40 rounded-xl p-3 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+      <div class="flex items-start gap-2.5">
+        <span class="text-lg" id="challengeIcon">🔥</span>
+        <div>
+          <div class="flex items-center gap-2">
+            <h2 class="text-xs font-bold text-amber-500" id="challengeTitle">Challenge</h2>
+            <span id="challengeBadge" class="text-xs px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-400 font-semibold">Active</span>
+          </div>
+          <p class="text-xs text-[var(--foreground)] mt-0.5" id="challengeDesc"></p>
+          <p class="text-xs text-orange-400 mt-0.5 font-semibold" id="challengeTargets"></p>
+        </div>
+      </div>
+      <div id="challengeSuccessBox" class="hidden shrink-0 bg-emerald-500/20 border border-emerald-500/40 text-emerald-400 px-3 py-1.5 rounded-lg text-xs font-bold">
+        ✅ Challenge Solved!
+      </div>
+    </div>
+  </header>
+
+  <!-- ==================== HERO VISUALIZATION & INTERACTIVE FLOW BUILDER STAGE ==================== -->
+  <section class="max-w-7xl mx-auto mb-4 grid grid-cols-1 lg:grid-cols-12 gap-4">
+    <!-- Left 9 Cols: Interactive Animated Kitchen Floorplan Canvas -->
+    <div class="lg:col-span-9 bg-[var(--card)] border border-[var(--border)] rounded-2xl p-3 shadow-sm flex flex-col">
+
+      <!-- INTERACTIVE FLOW DESIGNER TOOLBAR -->
+      <div class="flex flex-wrap items-center justify-between gap-2 mb-2.5 p-2 rounded-xl bg-[var(--background)] border border-[var(--border)]">
+        <div class="flex flex-wrap items-center gap-1.5">
+          <span class="text-xs font-bold text-orange-400 mr-1">🎨 Flow Builder Tools:</span>
+          <button id="toolBtn-move" onclick="setCanvasTool('move')" class="text-xs font-bold px-2.5 py-1.5 rounded-lg bg-orange-500 text-white shadow-sm transition flex items-center gap-1">
+            <span>✋ Drag Stations (Layout)</span>
+          </button>
+          <button id="toolBtn-connect" onclick="setCanvasTool('connect')" class="text-xs font-semibold px-2.5 py-1.5 rounded-lg border border-[var(--border)] hover:bg-[var(--secondary)] transition flex items-center gap-1">
+            <span>🔗 Draw / Toggle Sequence Arrow</span>
+          </button>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-1.5">
+          <span class="text-xs text-[var(--muted-foreground)]">Presets:</span>
+          <button onclick="applyFlowPreset('parallel')" class="text-xs font-semibold px-2.5 py-1 rounded-lg bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 hover:bg-emerald-500/25 transition" title="Grill, Bun, and Fryer run simultaneously in parallel (Shortest Lead Time!)">
+            ⚡ Parallel CPA Flow (15m)
+          </button>
+          <button onclick="applyFlowPreset('serial')" class="text-xs font-semibold px-2.5 py-1 rounded-lg bg-amber-500/15 text-amber-400 border border-amber-500/30 hover:bg-amber-500/25 transition" title="All stations chained one after another in a single line (No parallel tasks = 27m Lead Time!)">
+            🐢 Single-Line Serial Flow (27m)
+          </button>
+          <button onclick="applyFlowPreset('flawed')" class="text-xs font-semibold px-2.5 py-1 rounded-lg bg-rose-500/15 text-rose-400 border border-rose-500/30 hover:bg-rose-500/25 transition" title="Test what happens when a step or QC station is bypassed!">
+            ⚠️ Bypassed QC Flow (High Defects)
+          </button>
+        </div>
+      </div>
+
+      <!-- Dynamic Flow Builder Instruction Bar -->
+      <div id="flowToolHint" class="text-xs px-3 py-1.5 mb-2 rounded-lg bg-sky-500/10 border border-sky-500/30 text-sky-300 flex items-center justify-between">
+        <span>💡 <strong>Drag Mode Active:</strong> Click and drag any workstation (A to G) on the kitchen floorplan below to design your physical layout! Spreading stations too far apart adds walking waste time.</span>
+        <span class="font-mono text-xs shrink-0 ml-2" id="flowDistancePenalty">Motion Waste: +0.4m</span>
+      </div>
+
+      <!-- Animated HTML5 Canvas -->
+      <div class="relative w-full rounded-xl overflow-hidden border border-[var(--border)] bg-slate-950">
+        <canvas id="opsCanvas" width="920" height="400" class="w-full h-auto block cursor-grab"></canvas>
+      </div>
+
+      <!-- Bottom Visual Callout Strip -->
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 mt-2.5 text-xs">
+        <div class="p-2 rounded-lg bg-[var(--background)] border border-[var(--border)] flex items-center justify-between">
+          <span class="text-[var(--muted-foreground)]">Sequence Status:</span>
+          <span class="font-bold text-emerald-400" id="visCalloutSeq">✅ Valid Parallel Flow</span>
+        </div>
+        <div class="p-2 rounded-lg bg-[var(--background)] border border-[var(--border)] flex items-center justify-between">
+          <span class="text-[var(--muted-foreground)]">Critical Path Bottleneck:</span>
+          <span class="font-bold text-rose-400" id="visCalloutBottleneck">A &rarr; B &rarr; E &rarr; G (15m)</span>
+        </div>
+        <div class="p-2 rounded-lg bg-[var(--background)] border border-[var(--border)] flex items-center justify-between">
+          <span class="text-[var(--muted-foreground)]">Layout Travel Penalty:</span>
+          <span class="font-bold text-amber-400" id="visCalloutWall">+0.4m Walking Distance</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right 3 Cols: Live Visual Gauges & KPIs -->
+    <div class="lg:col-span-3 bg-[var(--card)] border border-[var(--border)] rounded-2xl p-3.5 flex flex-col justify-between gap-2">
+      <div class="text-xs font-bold uppercase tracking-wider text-[var(--muted-foreground)] border-b border-[var(--border)] pb-1.5">
+        Live Operations Telemetry
+      </div>
+
+      <!-- Gauge 1: Capacity vs Demand -->
+      <div class="p-2.5 rounded-xl bg-[var(--background)] border border-[var(--border)]">
+        <div class="flex justify-between text-xs">
+          <span class="text-[var(--muted-foreground)]">Output / Demand</span>
+          <span class="font-bold" id="kpiVolume">420 / 400</span>
+        </div>
+        <div class="w-full bg-[var(--border)] h-2 rounded-full mt-1.5 overflow-hidden">
+          <div id="barVolume" class="bg-emerald-500 h-full transition-all duration-300" style="width: 85%"></div>
+        </div>
+        <div class="text-xs text-[var(--muted-foreground)] mt-1" id="kpiVolumeSub">Surplus capacity (+20)</div>
+      </div>
+
+      <!-- Gauge 2: Critical Path Lead Time -->
+      <div class="p-2.5 rounded-xl bg-[var(--background)] border border-[var(--border)]">
+        <div class="flex justify-between text-xs">
+          <span class="text-[var(--muted-foreground)]">Order Lead Time (CPA)</span>
+          <span class="font-bold text-purple-400"><span id="kpiLeadTime">15.0</span> mins</span>
+        </div>
+        <div class="w-full bg-[var(--border)] h-2 rounded-full mt-1.5 overflow-hidden">
+          <div id="barLeadTime" class="bg-purple-500 h-full transition-all duration-300" style="width: 60%"></div>
+        </div>
+        <div class="text-xs text-[var(--muted-foreground)] mt-1" id="kpiLeadSub">Critical Path: 15m</div>
+      </div>
+
+      <!-- Gauge 3: Defect & Warranty Rate -->
+      <div class="p-2.5 rounded-xl bg-[var(--background)] border border-[var(--border)]">
+        <div class="flex justify-between text-xs">
+          <span class="text-[var(--muted-foreground)]">Warranty Defect Rate</span>
+          <span class="font-bold text-rose-400"><span id="kpiDefects">3.2</span>%</span>
+        </div>
+        <div class="w-full bg-[var(--border)] h-2 rounded-full mt-1.5 overflow-hidden">
+          <div id="barDefects" class="bg-rose-500 h-full transition-all duration-300" style="width: 32%"></div>
+        </div>
+        <div class="text-xs text-[var(--muted-foreground)] mt-1" id="kpiDefectCost">Rectification: $98/day</div>
+      </div>
+
+      <!-- Gauge 4: Customer Satisfaction -->
+      <div class="p-2.5 rounded-xl bg-[var(--background)] border border-[var(--border)]">
+        <div class="flex justify-between text-xs">
+          <span class="text-[var(--muted-foreground)]">Customer Satisfaction</span>
+          <span class="font-bold text-amber-400"><span id="kpiCsat">84</span>%</span>
+        </div>
+        <div class="w-full bg-[var(--border)] h-2 rounded-full mt-1.5 overflow-hidden">
+          <div id="barCsat" class="bg-amber-400 h-full transition-all duration-300" style="width: 84%"></div>
+        </div>
+        <div class="text-xs text-[var(--muted-foreground)] mt-1" id="kpiCsatSub">Repeat orders: Strong</div>
+      </div>
+
+      <!-- Gauge 5: Unit Cost & Daily Profit -->
+      <div class="p-2.5 rounded-xl bg-[var(--background)] border border-[var(--border)]">
+        <div class="flex justify-between text-xs">
+          <span class="text-[var(--muted-foreground)]">Unit Cost / Price</span>
+          <span class="font-bold text-sky-400">$<span id="kpiUnitCost">8.40</span> / $<span id="kpiUnitPrice">16.00</span></span>
+        </div>
+        <div class="flex justify-between items-baseline mt-1.5 pt-1.5 border-t border-[var(--border)]">
+          <span class="text-xs text-[var(--muted-foreground)]">Daily Net Profit:</span>
+          <span class="text-base font-bold text-emerald-400" id="kpiProfit">$1,890</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== SYLLABUS CONTROL DECK TABS ==================== -->
+  <nav class="max-w-7xl mx-auto mb-3">
+    <div class="flex flex-wrap gap-1.5 bg-[var(--card)] p-1.5 rounded-xl border border-[var(--border)]">
+      <button onclick="switchTab('scheduling')" id="tabBtn-scheduling" class="tab-btn flex-1 min-w-[130px] text-xs font-semibold py-2 px-3 rounded-lg transition bg-orange-500 text-white shadow-sm">
+        1. Flow Designer, CPA &amp; Gantt
+      </button>
+      <button onclick="switchTab('inputs')" id="tabBtn-inputs" class="tab-btn flex-1 min-w-[130px] text-xs font-semibold py-2 px-3 rounded-lg transition text-[var(--muted-foreground)] hover:text-[var(--foreground)]">
+        2. Inputs (M.I.C. &amp; HR/Plant)
+      </button>
+      <button onclick="switchTab('fourvs')" id="tabBtn-fourvs" class="tab-btn flex-1 min-w-[130px] text-xs font-semibold py-2 px-3 rounded-lg transition text-[var(--muted-foreground)] hover:text-[var(--foreground)]">
+        3. The 4Vs (Vol, Var, Dem, Vis)
+      </button>
+      <button onclick="switchTab('techlayout')" id="tabBtn-techlayout" class="tab-btn flex-1 min-w-[130px] text-xs font-semibold py-2 px-3 rounded-lg transition text-[var(--muted-foreground)] hover:text-[var(--foreground)]">
+        4. Layout, Tech &amp; M-C-I
+      </button>
+      <button onclick="switchTab('outputs')" id="tabBtn-outputs" class="tab-btn flex-1 min-w-[130px] text-xs font-semibold py-2 px-3 rounded-lg transition text-[var(--muted-foreground)] hover:text-[var(--foreground)]">
+        5. Outputs &amp; HSC Exam Quiz
+      </button>
+    </div>
+  </nav>
+
+  <!-- ==================== TAB PANELS ==================== -->
+  <main class="max-w-7xl mx-auto">
+
+    <!-- TAB 1 (DEFAULT): FLOW DESIGNER, CPA & GANTT CHART -->
+    <section id="panel-scheduling" class="tab-panel grid grid-cols-1 lg:grid-cols-12 gap-4">
+      <!-- Left: Custom Sequence Matrix & Task Duration Sliders -->
+      <div class="lg:col-span-7 bg-[var(--card)] border border-[var(--border)] rounded-2xl p-4 flex flex-col justify-between">
+        <div>
+          <div class="flex items-center justify-between mb-2">
+            <div>
+              <span class="text-xs font-bold uppercase tracking-wider text-orange-400">Student Flow &amp; Sequence Architect</span>
+              <h2 class="text-sm font-bold">Design Your Transformation Sequence &amp; Task Times</h2>
+            </div>
+            <span class="text-xs px-2.5 py-1 rounded-md bg-rose-500/15 text-rose-400 border border-rose-500/30 font-bold">
+              Calculated CPA: <span id="cpaTotalDisplay">15</span> mins
+            </span>
+          </div>
+          <p class="text-xs text-[var(--muted-foreground)] mb-3">
+            Use the <strong>🔗 Draw / Toggle Sequence Arrow</strong> tool on the canvas above (click a start station, then click a destination station) OR toggle the sequence links below to see how <strong>parallel vs. sequential flows</strong> change the Critical Path and Gantt schedule!
+          </p>
+
+          <!-- Interactive Station Duration Sliders -->
+          <div class="grid grid-cols-3 gap-2 mb-3">
+            <div class="p-2.5 rounded-xl bg-[var(--background)] border border-[var(--border)]">
+              <div class="flex justify-between text-xs font-bold"><span>B: Grill Patty</span><span id="valTaskB" class="text-rose-400">8m</span></div>
+              <input type="range" id="sliderTaskB" min="3" max="11" value="8" oninput="updateCPA()" class="w-full mt-1">
+            </div>
+            <div class="p-2.5 rounded-xl bg-[var(--background)] border border-[var(--border)]">
+              <div class="flex justify-between text-xs font-bold"><span>C: Toast Bun</span><span id="valTaskC" class="text-sky-400">4m</span></div>
+              <input type="range" id="sliderTaskC" min="2" max="9" value="4" oninput="updateCPA()" class="w-full mt-1">
+            </div>
+            <div class="p-2.5 rounded-xl bg-[var(--background)] border border-[var(--border)]">
+              <div class="flex justify-between text-xs font-bold"><span>D: Fry Chips</span><span id="valTaskD" class="text-emerald-400">6m</span></div>
+              <input type="range" id="sliderTaskD" min="3" max="13" value="6" oninput="updateCPA()" class="w-full mt-1">
+            </div>
+          </div>
+
+          <!-- Active Flow Connections Manager -->
+          <div class="p-3 rounded-xl bg-[var(--background)] border border-[var(--border)]">
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-xs font-bold text-sky-400">🔗 Active Sequence Connections (Click any chip to remove, or use canvas 🔗 tool to add):</span>
+              <button onclick="applyFlowPreset('parallel')" class="text-xs text-orange-400 underline">Restore Optimal Parallel</button>
+            </div>
+            <div id="activeEdgesList" class="flex flex-wrap gap-1.5"></div>
+            <div id="flowAuditBox" class="mt-2.5 p-2 rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-xs text-emerald-300">
+              ✅ <strong>Sequence Audit:</strong> All stations are connected in a valid parallel network!
+            </div>
+          </div>
+        </div>
+
+        <!-- Path Comparison Cards -->
+        <div class="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+          <div class="p-2.5 rounded-xl border border-rose-500/50 bg-rose-500/10">
+            <div class="font-bold text-rose-400">🔥 Active Critical Path (Longest Sequence):</div>
+            <div class="font-mono mt-0.5 font-bold" id="critPathChainText">A (2m) &rarr; B (8m) &rarr; E (3m) &rarr; G (2m) = 15m</div>
+          </div>
+          <div class="p-2.5 rounded-xl border border-[var(--border)] bg-[var(--background)]">
+            <div class="font-bold text-sky-400">💡 Why Parallel Scheduling Matters:</div>
+            <div class="text-[var(--muted-foreground)] mt-0.5" id="parallelSavingText">Running B, C, and D in parallel saves <strong>12 minutes</strong> per order compared to a single-file serial line!</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: Dynamic Gantt Chart (Automatically updates from Student's Custom Flow!) -->
+      <div class="lg:col-span-5 bg-[var(--card)] border border-[var(--border)] rounded-2xl p-4 flex flex-col justify-between">
+        <div>
+          <div class="flex items-center justify-between mb-1">
+            <h2 class="text-sm font-bold text-sky-400">Live Auto-Generated Gantt Chart</h2>
+            <span class="text-xs font-mono text-[var(--muted-foreground)]">Scale: 0m – 30m</span>
+          </div>
+          <p class="text-xs text-[var(--muted-foreground)] mb-3">
+            Watch the Gantt bars shift horizontally in real time as you re-wire station dependencies! Red bars are on the <strong>Critical Path</strong>; blue bars have <strong>Slack Time</strong>.
+          </p>
+          <div id="ganttBarsContainer" class="bg-[var(--background)] border border-[var(--border)] rounded-xl p-3 space-y-2">
+            <!-- Populated dynamically by renderCPADiagram() -->
+          </div>
+        </div>
+
+        <div class="mt-3 p-2.5 rounded-xl bg-purple-500/10 border border-purple-500/30 text-xs">
+          <strong>🎓 Try This Experiment:</strong> Click <strong>"🐢 Single-Line Serial Flow (27m)"</strong> above the canvas. Notice how chaining <code>A &rarr; B &rarr; C &rarr; D &rarr; E &rarr; F &rarr; G</code> forces every station to wait in line, nearly doubling your Gantt chart from 15m to 27m!
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 2: INPUTS -->
+    <section id="panel-inputs" class="tab-panel hidden grid grid-cols-1 lg:grid-cols-12 gap-4">
+      <div class="lg:col-span-6 bg-[var(--card)] border border-[var(--border)] rounded-2xl p-4">
+        <div class="flex items-center justify-between mb-2">
+          <h2 class="text-sm font-bold text-orange-400">Transformed Resources (Materials, Information, Customers)</h2>
+          <span class="text-xs text-[var(--muted-foreground)]">Watch left side of canvas!</span>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+          <div class="p-3 rounded-xl bg-[var(--background)] border border-[var(--border)]">
+            <div class="text-xs font-bold mb-1">🥩 Materials</div>
+            <p class="text-xs text-[var(--muted-foreground)] mb-2">Raw &amp; intermediate ingredients entering the kitchen.</p>
+            <div class="flex flex-col gap-1.5">
+              <button onclick="setInput('materialGrade', 1)" id="btnMat-1" class="text-xs py-1.5 px-2 rounded-lg border border-[var(--border)]">Frozen Bulk ($3.20)</button>
+              <button onclick="setInput('materialGrade', 2)" id="btnMat-2" class="text-xs py-1.5 px-2 rounded-lg border border-orange-500">Fresh Local ($4.60)</button>
+              <button onclick="setInput('materialGrade', 3)" id="btnMat-3" class="text-xs py-1.5 px-2 rounded-lg border border-[var(--border)]">Artisan Wagyu ($6.80)</button>
+            </div>
+          </div>
+
+          <div class="p-3 rounded-xl bg-[var(--background)] border border-[var(--border)]">
+            <div class="text-xs font-bold mb-1">📊 Information</div>
+            <p class="text-xs text-[var(--muted-foreground)] mb-2">Order dockets &amp; allergy data guiding kitchen tasks.</p>
+            <div class="flex flex-col gap-1.5">
+              <button onclick="setInput('infoSystem', 1)" id="btnInfo-1" class="text-xs py-1.5 px-2 rounded-lg border border-[var(--border)]">Handwritten Dockets</button>
+              <button onclick="setInput('infoSystem', 2)" id="btnInfo-2" class="text-xs py-1.5 px-2 rounded-lg border border-orange-500">Digital KDS Screens</button>
+              <button onclick="setInput('infoSystem', 3)" id="btnInfo-3" class="text-xs py-1.5 px-2 rounded-lg border border-[var(--border)]">AI Forecast + Allergy Sync</button>
+            </div>
+          </div>
+
+          <div class="p-3 rounded-xl bg-[var(--background)] border border-[var(--border)]">
+            <div class="text-xs font-bold mb-1">🙋 Customers</div>
+            <p class="text-xs text-[var(--muted-foreground)] mb-2">How customer choices shape the burger output.</p>
+            <div class="flex flex-col gap-1.5">
+              <button onclick="setInput('custModel', 1)" id="btnCust-1" class="text-xs py-1.5 px-2 rounded-lg border border-[var(--border)]">Fixed Set Menu</button>
+              <button onclick="setInput('custModel', 2)" id="btnCust-2" class="text-xs py-1.5 px-2 rounded-lg border border-orange-500">Custom Add-Ons</button>
+              <button onclick="setInput('custModel', 3)" id="btnCust-3" class="text-xs py-1.5 px-2 rounded-lg border border-[var(--border)]">100% Bespoke Diet</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="lg:col-span-6 bg-[var(--card)] border border-[var(--border)] rounded-2xl p-4">
+        <div class="flex items-center justify-between mb-2">
+          <h2 class="text-sm font-bold text-emerald-400">Transforming Resources (Human Resources &amp; Facilities)</h2>
+          <span class="text-xs text-[var(--muted-foreground)]">Adds chefs &amp; equipment to floorplan!</span>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+          <div class="p-3 rounded-xl bg-[var(--background)] border border-[var(--border)]">
+            <div class="flex justify-between text-xs font-bold mb-1">
+              <span>👩‍🍳 HR Roster</span>
+              <span class="text-emerald-400"><span id="lblStaffCount">6</span> Staff</span>
+            </div>
+            <p class="text-xs text-[var(--muted-foreground)] mb-2">Watch green chef avatars appear at stations above!</p>
+            <input type="range" id="sliderStaffCount" min="3" max="12" value="6" oninput="setInput('staffCount', parseInt(this.value))" class="w-full">
+            <div class="flex justify-between text-xs text-[var(--muted-foreground)] mt-1">
+              <span>3</span><span>6</span><span>12</span>
+            </div>
+          </div>
+
+          <div class="p-3 rounded-xl bg-[var(--background)] border border-[var(--border)]">
+            <div class="text-xs font-bold mb-1">🎓 HR Training</div>
+            <p class="text-xs text-[var(--muted-foreground)] mb-2">Skilled chefs work faster with fewer red defective burgers.</p>
+            <div class="flex flex-col gap-1.5">
+              <button onclick="setInput('staffSkill', 1)" id="btnSkill-1" class="text-xs py-1.5 px-2 rounded-lg border border-[var(--border)]">Untrained Casuals</button>
+              <button onclick="setInput('staffSkill', 2)" id="btnSkill-2" class="text-xs py-1.5 px-2 rounded-lg border border-orange-500">Cross-Trained Crew</button>
+              <button onclick="setInput('staffSkill', 3)" id="btnSkill-3" class="text-xs py-1.5 px-2 rounded-lg border border-[var(--border)]">Certified Grill Masters</button>
+            </div>
+          </div>
+
+          <div class="p-3 rounded-xl bg-[var(--background)] border border-[var(--border)]">
+            <div class="text-xs font-bold mb-1">🏭 Facilities (Plant)</div>
+            <p class="text-xs text-[var(--muted-foreground)] mb-2">Physical kitchen capacity &amp; grill bays.</p>
+            <div class="flex flex-col gap-1.5">
+              <button onclick="setInput('facilityGrade', 1)" id="btnFac-1" class="text-xs py-1.5 px-2 rounded-lg border border-[var(--border)]">Cramped Single-Grill</button>
+              <button onclick="setInput('facilityGrade', 2)" id="btnFac-2" class="text-xs py-1.5 px-2 rounded-lg border border-orange-500">Dual-Line Commercial</button>
+              <button onclick="setInput('facilityGrade', 3)" id="btnFac-3" class="text-xs py-1.5 px-2 rounded-lg border border-[var(--border)]">Smart Mega-Kitchen</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 3: THE 4Vs -->
+    <section id="panel-fourvs" class="tab-panel hidden grid grid-cols-1 lg:grid-cols-12 gap-4">
+      <div class="lg:col-span-8 bg-[var(--card)] border border-[var(--border)] rounded-2xl p-4">
+        <h2 class="text-sm font-bold text-orange-400 mb-2">Adjust the 4Vs &amp; Watch the Kitchen Floorplan React</h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div class="p-3 rounded-xl bg-[var(--background)] border border-[var(--border)]">
+            <div class="flex justify-between text-xs font-bold mb-1">
+              <span>1. Volume (Daily Order Rate)</span>
+              <span class="text-orange-400"><span id="lblDemandVolume">400</span> / day</span>
+            </div>
+            <p class="text-xs text-[var(--muted-foreground)] mb-2">Drag up to 800 to flood the kitchen with incoming orders!</p>
+            <input type="range" id="sliderVolume" min="150" max="800" step="25" value="400" oninput="setInput('demandVolume', parseInt(this.value))" class="w-full">
+          </div>
+
+          <div class="p-3 rounded-xl bg-[var(--background)] border border-[var(--border)]">
+            <div class="flex justify-between text-xs font-bold mb-1">
+              <span>2. Variety (Menu Mix Complexity)</span>
+              <span class="text-purple-400" id="lblVarietyLevel">Medium (12 Items)</span>
+            </div>
+            <p class="text-xs text-[var(--muted-foreground)] mb-2">High variety spawns multi-colored custom burger orders on canvas.</p>
+            <input type="range" id="sliderVariety" min="1" max="3" step="1" value="2" oninput="setInput('varietyLevel', parseInt(this.value))" class="w-full">
+          </div>
+
+          <div class="p-3 rounded-xl bg-[var(--background)] border border-[var(--border)]">
+            <div class="flex justify-between text-xs font-bold mb-1">
+              <span>3. Variation in Demand (Rush Surges)</span>
+              <span class="text-rose-400" id="lblVariation">Moderate Peaks</span>
+            </div>
+            <p class="text-xs text-[var(--muted-foreground)] mb-2">Extreme variation creates sudden waves of orders that bottleneck the grill!</p>
+            <input type="range" id="sliderVariation" min="1" max="3" step="1" value="2" oninput="setInput('variationLevel', parseInt(this.value))" class="w-full">
+          </div>
+
+          <div class="p-3 rounded-xl bg-[var(--background)] border border-[var(--border)]">
+            <div class="flex justify-between text-xs font-bold mb-1">
+              <span>4. Visibility (Customer Contact Wall)</span>
+              <span class="text-amber-400" id="lblVisibility">Open Counter</span>
+            </div>
+            <p class="text-xs text-[var(--muted-foreground)] mb-2">Watch the divider wall on the right of the canvas open or close!</p>
+            <input type="range" id="sliderVisibility" min="1" max="3" step="1" value="2" oninput="setInput('visibilityLevel', parseInt(this.value))" class="w-full">
+          </div>
+        </div>
+      </div>
+
+      <div class="lg:col-span-4 bg-[var(--card)] border border-[var(--border)] rounded-2xl p-4 flex flex-col justify-between">
+        <div>
+          <h3 class="text-xs font-bold uppercase tracking-wider text-purple-400 mb-2">4Vs Strategic Profile</h3>
+          <div class="space-y-2.5 bg-[var(--background)] p-3 rounded-xl border border-[var(--border)] text-xs">
+            <div>
+              <div class="flex justify-between mb-0.5"><span>Economies of Scale</span><span id="diagScale" class="text-emerald-400 font-mono">Moderate</span></div>
+              <div class="w-full bg-[var(--border)] h-1.5 rounded-full overflow-hidden"><div id="barDiagScale" class="bg-emerald-500 h-full" style="width:55%"></div></div>
+            </div>
+            <div>
+              <div class="flex justify-between mb-0.5"><span>Mix Complexity</span><span id="diagComplex" class="text-purple-400 font-mono">Medium</span></div>
+              <div class="w-full bg-[var(--border)] h-1.5 rounded-full overflow-hidden"><div id="barDiagComplex" class="bg-purple-500 h-full" style="width:55%"></div></div>
+            </div>
+            <div>
+              <div class="flex justify-between mb-0.5"><span>Peak Rush Surge Risk</span><span id="diagRushRisk" class="text-amber-400 font-mono">Manageable</span></div>
+              <div class="w-full bg-[var(--border)] h-1.5 rounded-full overflow-hidden"><div id="barDiagRush" class="bg-amber-500 h-full" style="width:55%"></div></div>
+            </div>
+            <div>
+              <div class="flex justify-between mb-0.5"><span>Direct Customer Contact</span><span id="diagVisImpact" class="text-sky-400 font-mono">Moderate</span></div>
+              <div class="w-full bg-[var(--border)] h-1.5 rounded-full overflow-hidden"><div id="barDiagVis" class="bg-sky-500 h-full" style="width:55%"></div></div>
+            </div>
+          </div>
+        </div>
+        <p id="fourVsCommentary" class="text-xs text-[var(--muted-foreground)] mt-2 p-2.5 rounded-lg bg-[var(--background)] border border-[var(--border)]">
+          Adjust sliders to see how the 4Vs shape transformation!
+        </p>
+      </div>
+    </section>
+
+    <!-- TAB 4: LAYOUT, TECH, TASK DESIGN & M-C-I -->
+    <section id="panel-techlayout" class="tab-panel hidden grid grid-cols-1 lg:grid-cols-12 gap-4">
+      <div class="lg:col-span-6 bg-[var(--card)] border border-[var(--border)] rounded-2xl p-4">
+        <div class="flex items-center justify-between mb-2">
+          <h2 class="text-sm font-bold text-orange-400">Workplace Layout, Technology &amp; Task Design</h2>
+          <span class="text-xs text-sky-400 font-semibold">Snap stations to a preset or drag them yourself!</span>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+          <div class="p-3 rounded-xl bg-[var(--background)] border border-[var(--border)]">
+            <div class="text-xs font-bold mb-1">📐 Process Layout</div>
+            <p class="text-xs text-[var(--muted-foreground)] mb-2">Snap stations to standard layouts or drag them freely!</p>
+            <div class="flex flex-col gap-1.5">
+              <button onclick="setLayoutPreset(1)" id="btnLay-1" class="text-xs py-1.5 px-2 rounded-lg border border-[var(--border)]">Process Layout (Pods)</button>
+              <button onclick="setLayoutPreset(2)" id="btnLay-2" class="text-xs py-1.5 px-2 rounded-lg border border-orange-500">Product (Assembly Line)</button>
+              <button onclick="setLayoutPreset(3)" id="btnLay-3" class="text-xs py-1.5 px-2 rounded-lg border border-[var(--border)]">Fixed Position (Station)</button>
+            </div>
+          </div>
+
+          <div class="p-3 rounded-xl bg-[var(--background)] border border-[var(--border)]">
+            <div class="text-xs font-bold mb-1">🤖 Technology</div>
+            <p class="text-xs text-[var(--muted-foreground)] mb-2">Adds automated kiosks &amp; robotic clamshell grills.</p>
+            <div class="flex flex-col gap-1.5">
+              <button onclick="setInput('techLevel', 1)" id="btnTech-1" class="text-xs py-1.5 px-2 rounded-lg border border-[var(--border)]">Manual Grill &amp; Till</button>
+              <button onclick="setInput('techLevel', 2)" id="btnTech-2" class="text-xs py-1.5 px-2 rounded-lg border border-orange-500">Kiosks + Auto-Timers</button>
+              <button onclick="setInput('techLevel', 3)" id="btnTech-3" class="text-xs py-1.5 px-2 rounded-lg border border-[var(--border)]">Robotic Clamshell Grill</button>
+            </div>
+          </div>
+
+          <div class="p-3 rounded-xl bg-[var(--background)] border border-[var(--border)]">
+            <div class="text-xs font-bold mb-1">📋 Task Design</div>
+            <p class="text-xs text-[var(--muted-foreground)] mb-2">Clarifies job roles &amp; reduces station confusion.</p>
+            <div class="flex flex-col gap-1.5">
+              <button onclick="setInput('taskDesign', 1)" id="btnTask-1" class="text-xs py-1.5 px-2 rounded-lg border border-[var(--border)]">Ad-Hoc Roles</button>
+              <button onclick="setInput('taskDesign', 2)" id="btnTask-2" class="text-xs py-1.5 px-2 rounded-lg border border-orange-500">Specialized Stations</button>
+              <button onclick="setInput('taskDesign', 3)" id="btnTask-3" class="text-xs py-1.5 px-2 rounded-lg border border-[var(--border)]">Ergonomic + Skills Audit</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="lg:col-span-6 bg-[var(--card)] border border-[var(--border)] rounded-2xl p-4">
+        <div class="flex items-center justify-between mb-2">
+          <h2 class="text-sm font-bold text-emerald-400">Monitoring, Control &amp; Improvement (M-C-I)</h2>
+          <span class="text-xs text-[var(--muted-foreground)]">Watch QC scanner catch red defective burgers!</span>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+          <div class="p-3 rounded-xl bg-[var(--background)] border border-[var(--border)]">
+            <div class="text-xs font-bold mb-1">🔍 1. Monitoring</div>
+            <p class="text-xs text-[var(--muted-foreground)] mb-2">Measuring actual KPIs against planned targets.</p>
+            <div class="flex flex-col gap-1.5">
+              <button onclick="setInput('monitoringLevel', 1)" id="btnMon-1" class="text-xs py-1.5 px-2 rounded-lg border border-[var(--border)]">Monthly Count Only</button>
+              <button onclick="setInput('monitoringLevel', 2)" id="btnMon-2" class="text-xs py-1.5 px-2 rounded-lg border border-orange-500">Hourly Shift KPIs</button>
+              <button onclick="setInput('monitoringLevel', 3)" id="btnMon-3" class="text-xs py-1.5 px-2 rounded-lg border border-[var(--border)]">Live IoT Sensors</button>
+            </div>
+          </div>
+
+          <div class="p-3 rounded-xl bg-[var(--background)] border border-[var(--border)]">
+            <div class="text-xs font-bold mb-1">🛠️ 2. Control</div>
+            <p class="text-xs text-[var(--muted-foreground)] mb-2">Taking corrective action at the QC Pass gate.</p>
+            <div class="flex flex-col gap-1.5">
+              <button onclick="setInput('controlLevel', 1)" id="btnCtrl-1" class="text-xs py-1.5 px-2 rounded-lg border border-[var(--border)]">No Inspection</button>
+              <button onclick="setInput('controlLevel', 2)" id="btnCtrl-2" class="text-xs py-1.5 px-2 rounded-lg border border-orange-500">Visual &amp; Temp Probe</button>
+              <button onclick="setInput('controlLevel', 3)" id="btnCtrl-3" class="text-xs py-1.5 px-2 rounded-lg border border-[var(--border)]">Strict Auto-Reject Gate</button>
+            </div>
+          </div>
+
+          <div class="p-3 rounded-xl bg-[var(--background)] border border-[var(--border)]">
+            <div class="text-xs font-bold mb-1">📈 3. Improvement</div>
+            <p class="text-xs text-[var(--muted-foreground)] mb-2">Continuous Kaizen &amp; bottleneck elimination.</p>
+            <div class="flex flex-col gap-1.5">
+              <button onclick="setInput('improvementLevel', 1)" id="btnImp-1" class="text-xs py-1.5 px-2 rounded-lg border border-[var(--border)]">Reactive Only</button>
+              <button onclick="setInput('improvementLevel', 2)" id="btnImp-2" class="text-xs py-1.5 px-2 rounded-lg border border-orange-500">Kaizen Staff Huddles</button>
+              <button onclick="setInput('improvementLevel', 3)" id="btnImp-3" class="text-xs py-1.5 px-2 rounded-lg border border-[var(--border)]">Six Sigma Optimization</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 5: OUTPUTS & HSC MINI-QUIZ -->
+    <section id="panel-outputs" class="tab-panel hidden grid grid-cols-1 lg:grid-cols-12 gap-4">
+      <div class="lg:col-span-5 bg-[var(--card)] border border-[var(--border)] rounded-2xl p-4">
+        <h2 class="text-sm font-bold text-amber-400 mb-2">Outputs: Customer Service &amp; Warranties</h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 mb-3">
+          <div class="p-3 rounded-xl bg-[var(--background)] border border-[var(--border)]">
+            <div class="text-xs font-bold mb-1">🤝 Customer Service</div>
+            <div class="flex flex-col gap-1.5 mt-2">
+              <button onclick="setInput('servicePolicy', 1)" id="btnSrv-1" class="text-xs py-1.5 px-2 rounded-lg border border-[var(--border)]">Counter Pickup ($0/d)</button>
+              <button onclick="setInput('servicePolicy', 2)" id="btnSrv-2" class="text-xs py-1.5 px-2 rounded-lg border border-orange-500">Table Service ($100/d)</button>
+              <button onclick="setInput('servicePolicy', 3)" id="btnSrv-3" class="text-xs py-1.5 px-2 rounded-lg border border-[var(--border)]">VIP Concierge ($240/d)</button>
+            </div>
+          </div>
+          <div class="p-3 rounded-xl bg-[var(--background)] border border-[var(--border)]">
+            <div class="text-xs font-bold mb-1">🛡️ Warranty Guarantee</div>
+            <div class="flex flex-col gap-1.5 mt-2">
+              <button onclick="setInput('warrantyPolicy', 1)" id="btnWar-1" class="text-xs py-1.5 px-2 rounded-lg border border-[var(--border)]">ACL Minimum Only</button>
+              <button onclick="setInput('warrantyPolicy', 2)" id="btnWar-2" class="text-xs py-1.5 px-2 rounded-lg border border-orange-500">Hot Remake Guarantee</button>
+              <button onclick="setInput('warrantyPolicy', 3)" id="btnWar-3" class="text-xs py-1.5 px-2 rounded-lg border border-[var(--border)]">Remake + Full Refund</button>
+            </div>
+          </div>
+        </div>
+        <div class="p-3 rounded-xl bg-[var(--background)] border border-[var(--border)] text-xs">
+          <div class="font-bold text-rose-400 mb-1">🔄 Live Warranty Feedback Loop (See bottom-right of canvas):</div>
+          <div>Defective burgers (<span id="outDefectCount" class="font-bold">13/day</span>) loop back to the <strong>Warranty Claim Desk</strong> costing <span id="outWarrantyCost" class="font-bold text-amber-400">$98/day</span>, signaling Operations to improve <em>Control</em> &amp; <em>HR Training</em>!</div>
+        </div>
+      </div>
+
+      <div class="lg:col-span-7 bg-[var(--card)] border border-[var(--border)] rounded-2xl p-4">
+        <div class="flex items-center justify-between mb-2">
+          <h2 class="text-sm font-bold text-purple-400">Year 12 Operations Mini-Exam Quiz</h2>
+          <span class="text-xs font-bold px-2.5 py-0.5 rounded-full bg-purple-500/15 text-purple-400 border border-purple-500/30" id="quizScoreBadge">Score: 0 / 5</span>
+        </div>
+        <div class="p-3.5 rounded-xl bg-[var(--background)] border border-[var(--border)]">
+          <div class="flex justify-between text-xs text-[var(--muted-foreground)] mb-1">
+            <span id="quizProgress">Question 1 of 5</span>
+            <span id="quizTopicTag" class="font-mono text-orange-400">INPUTS</span>
+          </div>
+          <h3 class="text-xs sm:text-sm font-bold mb-2.5" id="quizQuestionText"></h3>
+          <div id="quizOptions" class="space-y-1.5"></div>
+          <div id="quizFeedback" class="hidden mt-2.5 p-2.5 rounded-lg text-xs"></div>
+          <div class="mt-3 flex justify-between">
+            <button onclick="prevQuizQuestion()" class="text-xs px-3 py-1 rounded-lg border border-[var(--border)]">&larr; Prev</button>
+            <button onclick="nextQuizQuestion()" class="text-xs px-3 py-1 rounded-lg bg-orange-500 text-white font-semibold">Next Question &rarr;</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <script>
+    // ==================== STATE & CUSTOM GRAPH DESIGNER ====================
+    const defaultState = {
+      materialGrade: 2,
+      infoSystem: 2,
+      custModel: 2,
+      staffCount: 6,
+      staffSkill: 2,
+      facilityGrade: 2,
+      demandVolume: 400,
+      varietyLevel: 2,
+      variationLevel: 2,
+      visibilityLevel: 2,
+      taskA: 2,
+      taskB: 8,
+      taskC: 4,
+      taskD: 6,
+      taskE: 3,
+      taskF: 2,
+      taskG: 2,
+      techLevel: 2,
+      taskDesign: 2,
+      layoutType: 2,
+      monitoringLevel: 2,
+      controlLevel: 2,
+      improvementLevel: 2,
+      servicePolicy: 2,
+      warrantyPolicy: 2
+    };
+
+    let state = { ...defaultState };
+    let currentScenario = 'sandbox';
+    let cachedMetrics = null;
+
+    // Interactive Flow Builder Mode: 'move' (drag stations) or 'connect' (draw/toggle sequence edges)
+    let canvasTool = 'move';
+    let draggingStationKey = null;
+    let dragOffsetX = 0;
+    let dragOffsetY = 0;
+    let connectSourceKey = null;
+
+    // Station Nodes with draggable coordinates
+    const stationMeta = {
+      pos:      { code: 'A', name: 'POS Order', color: '#38bdf8', w: 88, h: 52 },
+      grill:    { code: 'B', name: 'Grill Patty', color: '#f97316', w: 94, h: 56 },
+      bun:      { code: 'C', name: 'Toast Bun', color: '#38bdf8', w: 94, h: 52 },
+      fryer:    { code: 'D', name: 'Fry Chips', color: '#10b981', w: 94, h: 52 },
+      assemble: { code: 'E', name: 'Assemble', color: '#a855f7', w: 94, h: 58 },
+      season:   { code: 'F', name: 'Season Chips', color: '#14b8a6', w: 94, h: 52 },
+      qc:       { code: 'G', name: 'QC & Pack', color: '#eab308', w: 88, h: 58 }
+    };
+
+    let stationCoords = {};
+    // Directed edges representing student's custom sequence flow: [{ from: 'pos', to: 'grill' }, ...]
+    let customEdges = [];
+
+    function setLayoutPreset(type) {
+      state.layoutType = type;
+      if (type === 2) {
+        // Product Layout (Assembly Line)
+        stationCoords = {
+          pos:      { x: 215, y: 185 },
+          grill:    { x: 345, y: 85  },
+          bun:      { x: 345, y: 185 },
+          fryer:    { x: 345, y: 285 },
+          assemble: { x: 490, y: 135 },
+          season:   { x: 490, y: 275 },
+          qc:       { x: 625, y: 185 }
+        };
+      } else if (type === 1) {
+        // Process Layout (Functional Pods)
+        stationCoords = {
+          pos:      { x: 215, y: 85  },
+          grill:    { x: 350, y: 65  },
+          bun:      { x: 235, y: 265 },
+          fryer:    { x: 385, y: 295 },
+          assemble: { x: 495, y: 110 },
+          season:   { x: 520, y: 265 },
+          qc:       { x: 630, y: 185 }
+        };
+      } else {
+        // Fixed Position Layout
+        stationCoords = {
+          pos:      { x: 225, y: 100 },
+          grill:    { x: 345, y: 70  },
+          bun:      { x: 225, y: 255 },
+          fryer:    { x: 355, y: 300 },
+          assemble: { x: 465, y: 175 },
+          season:   { x: 485, y: 295 },
+          qc:       { x: 625, y: 180 }
+        };
+      }
+      renderAll();
+    }
+
+    function applyFlowPreset(presetName) {
+      connectSourceKey = null;
+      if (presetName === 'parallel') {
+        // Optimal Parallel Network (15m CPA)
+        customEdges = [
+          { from: 'pos', to: 'grill' },
+          { from: 'pos', to: 'bun' },
+          { from: 'pos', to: 'fryer' },
+          { from: 'grill', to: 'assemble' },
+          { from: 'bun', to: 'assemble' },
+          { from: 'fryer', to: 'season' },
+          { from: 'assemble', to: 'qc' },
+          { from: 'season', to: 'qc' }
+        ];
+      } else if (presetName === 'serial') {
+        // Single-File Serial Line (A -> B -> C -> D -> E -> F -> G = 27m CPA!)
+        customEdges = [
+          { from: 'pos', to: 'grill' },
+          { from: 'grill', to: 'bun' },
+          { from: 'bun', to: 'fryer' },
+          { from: 'fryer', to: 'assemble' },
+          { from: 'assemble', to: 'season' },
+          { from: 'season', to: 'qc' }
+        ];
+      } else if (presetName === 'flawed') {
+        // Bypassed Fryer & QC (Missing steps!)
+        customEdges = [
+          { from: 'pos', to: 'grill' },
+          { from: 'pos', to: 'bun' },
+          { from: 'grill', to: 'assemble' },
+          { from: 'bun', to: 'assemble' }
+        ];
+      }
+      renderAll();
+    }
+
+    function getTaskDuration(key) {
+      const map = {
+        pos: state.taskA,
+        grill: state.taskB,
+        bun: state.taskC,
+        fryer: state.taskD,
+        assemble: state.taskE,
+        season: state.taskF,
+        qc: state.taskG
+      };
+      return map[key] || 2;
+    }
+
+    // Dynamic DAG Critical Path & Schedule Calculator based on Student's customEdges!
+    function analyzeCustomFlowGraph() {
+      const keys = Object.keys(stationMeta);
+      const earliestStart = {};
+      const earliestFinish = {};
+      const prevNodeOnLongest = {};
+
+      keys.forEach(k => {
+        earliestStart[k] = 0;
+        earliestFinish[k] = getTaskDuration(k);
+        prevNodeOnLongest[k] = null;
+      });
+
+      // Bellman-Ford style longest path relaxation (handles any custom student graph up to 7 nodes safely even if they accidentally make a cycle)
+      for (let iter = 0; iter < keys.length; iter++) {
+        customEdges.forEach(e => {
+          if (earliestFinish[e.from] + getTaskDuration(e.to) > earliestFinish[e.to]) {
+            earliestStart[e.to] = earliestFinish[e.from];
+            earliestFinish[e.to] = earliestStart[e.to] + getTaskDuration(e.to);
+            prevNodeOnLongest[e.to] = e.from;
+          }
+        });
+      }
+
+      // Find terminal node with max finish time
+      let maxFinish = 0;
+      let endKey = 'qc';
+      keys.forEach(k => {
+        if (earliestFinish[k] > maxFinish) {
+          maxFinish = earliestFinish[k];
+          endKey = k;
+        }
+      });
+
+      // Reconstruct Critical Path chain
+      const critNodes = new Set();
+      const critEdges = new Set();
+      let curr = endKey;
+      const chainOrder = [];
+      let safety = 0;
+      while (curr && safety < 10) {
+        critNodes.add(curr);
+        chainOrder.unshift(curr);
+        const prev = prevNodeOnLongest[curr];
+        if (prev) {
+          critEdges.add(`${prev}->${curr}`);
+        }
+        curr = prev;
+        safety++;
+      }
+
+      // Audit student's flow for missing stations or bypassed QC
+      const reachableFromPos = new Set(['pos']);
+      let changed = true;
+      while (changed) {
+        changed = false;
+        customEdges.forEach(e => {
+          if (reachableFromPos.has(e.from) && !reachableFromPos.has(e.to)) {
+            reachableFromPos.add(e.to);
+            changed = true;
+          }
+        });
+      }
+
+      const disconnectedStations = keys.filter(k => !reachableFromPos.has(k));
+      const qcConnected = reachableFromPos.has('qc') && customEdges.some(e => e.to === 'qc');
+
+      // Calculate total physical walking/conveyor distance across all active edges
+      let totalPixelDist = 0;
+      customEdges.forEach(e => {
+        const c1 = stationCoords[e.from];
+        const c2 = stationCoords[e.to];
+        if (c1 && c2) {
+          totalPixelDist += Math.hypot(c2.x - c1.x, c2.y - c1.y);
+        }
+      });
+      // Optimal compact distance is ~950px; excess distance adds motion waste time
+      const motionPenalty = +Math.max(0, (totalPixelDist - 850) / 450).toFixed(1);
+
+      return {
+        rawCPA: maxFinish,
+        earliestStart,
+        earliestFinish,
+        critNodes,
+        critEdges,
+        chainOrder,
+        disconnectedStations,
+        qcConnected,
+        motionPenalty
+      };
+    }
+
+    // ==================== SCENARIO CHALLENGES ====================
+    const scenarios = {
+      broken_flow: {
+        icon: '🧩',
+        title: 'Crisis 0: Fix the Broken Serial Flow! (Sequencing & Scheduling Challenge)',
+        desc: 'A rookie manager chained all 7 stations in a single-file line (A→B→C→D→E→F→G), blowing lead time out to 27 mins! Re-wire the stations into a Parallel Flow so Grill, Bun, and Fryer run simultaneously.',
+        targetsText: 'Goal: Re-wire the flow (or click "⚡ Parallel CPA Flow") so all 7 stations are connected and Order Lead Time drops to <= 15.5 mins!',
+        setup: { demandVolume: 400 },
+        onLoad: () => applyFlowPreset('serial'),
+        checkWin: (m) => m.flowInfo.disconnectedStations.length === 0 && m.flowInfo.qcConnected && m.leadTime <= 15.5
+      },
+      friday_rush: {
+        icon: '🔥',
+        title: 'Crisis 1: Friday Night Footy Rush (Variation in Demand & Bottleneck)',
+        desc: 'Look at the canvas! Demand surged to 650/day with Extreme Variation (+80% rush waves) and a Process Pod layout. The Grill queue is flashing red!',
+        targetsText: 'Goal: Reach Capacity >= 650/day, Lead Time <= 14.0m, and Daily Profit >= $2,200 (Hint: Try Product Layout, more HR & Tech!).',
+        setup: { demandVolume: 650, variationLevel: 3, varietyLevel: 1, staffCount: 4, facilityGrade: 1, layoutType: 1, techLevel: 1 },
+        onLoad: () => { setLayoutPreset(1); applyFlowPreset('parallel'); },
+        checkWin: (m) => m.effectiveCapacity >= 650 && m.leadTime <= 14.0 && m.dailyProfit >= 2200
+      },
+      gourmet_pivot: {
+        icon: '👨‍🍳',
+        title: 'Crisis 2: Gourmet Theatre Pivot (High Variety & High Visibility)',
+        desc: 'The glass theatre wall is wide open (Visibility = High) and the menu is 100% Bespoke (Variety = High), but untrained staff & frozen beef are causing customer complaints!',
+        targetsText: 'Goal: Keep Variety & Visibility at 3, achieve Customer Satisfaction >= 90%, and Defect Rate <= 2.5%.',
+        setup: { demandVolume: 300, varietyLevel: 3, visibilityLevel: 3, custModel: 3, materialGrade: 1, staffSkill: 1, layoutType: 2, servicePolicy: 1 },
+        onLoad: () => applyFlowPreset('parallel'),
+        checkWin: (m) => state.varietyLevel === 3 && state.visibilityLevel === 3 && m.csat >= 90 && m.defectRate <= 2.5
+      },
+      quality_crisis: {
+        icon: '⚠️',
+        title: 'Crisis 3: Defective Burgers & Warranty Blowout (Control & Warranties)',
+        desc: 'Watch the red defective burgers escaping through the QC Pass and looping back to the Warranty Claim desk! Defect claims are over 11%.',
+        targetsText: 'Goal: Reduce Warranty Defect Rate to <= 1.8%, achieve Customer Satisfaction >= 88%, and Profit >= $1,700.',
+        setup: { infoSystem: 1, staffSkill: 1, taskDesign: 1, monitoringLevel: 1, controlLevel: 1, improvementLevel: 1, warrantyPolicy: 3 },
+        onLoad: () => applyFlowPreset('parallel'),
+        checkWin: (m) => m.defectRate <= 1.8 && m.csat >= 88 && m.dailyProfit >= 1700
+      },
+      speed_record: {
+        icon: '⚡',
+        title: 'Crisis 4: 11-Minute Critical Path Challenge (CPA & Bottlenecks)',
+        desc: 'Both the Grill (10m) and Fryer (9m) paths are holding up total order completion! Shorten the Critical Path tasks and upgrade Tech/Task Design.',
+        targetsText: 'Goal: Reduce Order Lead Time to <= 11.0 mins while keeping Defect Rate <= 3.0%.',
+        setup: { taskB: 10, taskC: 5, taskD: 9, techLevel: 1, taskDesign: 1, improvementLevel: 1 },
+        onLoad: () => applyFlowPreset('parallel'),
+        checkWin: (m) => m.leadTime <= 11.0 && m.defectRate <= 3.0
+      }
+    };
+
+    // ==================== CORE METRICS ENGINE ====================
+    function calculateMetrics() {
+      const flowInfo = analyzeCustomFlowGraph();
+      const rawCPA = flowInfo.rawCPA;
+
+      let speedMod = flowInfo.motionPenalty;
+      if (state.varietyLevel === 3) speedMod += 1.5;
+      if (state.varietyLevel === 1) speedMod -= 0.8;
+      if (state.techLevel === 2) speedMod -= 1.0;
+      if (state.techLevel === 3) speedMod -= 2.2;
+      if (state.taskDesign === 1) speedMod += 1.5;
+      if (state.taskDesign === 3) speedMod -= 0.8;
+      if (state.improvementLevel === 3) speedMod -= 0.7;
+
+      let layoutFit = 0;
+      if (state.layoutType === 2 && state.varietyLevel <= 2) layoutFit = 1;
+      else if (state.layoutType === 1 && state.varietyLevel === 3) layoutFit = 1;
+      else if (state.layoutType === 3 && state.demandVolume <= 250 && state.varietyLevel === 3) layoutFit = 1;
+      else if (state.layoutType === 3 && state.demandVolume > 350) layoutFit = -2;
+
+      if (layoutFit === 1) speedMod -= 0.6;
+      if (layoutFit === -2) speedMod += 2.5;
+
+      const leadTime = Math.max(6.0, +(rawCPA + speedMod).toFixed(1));
+
+      const baseStaffCap = state.staffCount * (state.staffSkill === 1 ? 48 : state.staffSkill === 2 ? 62 : 75);
+      const facilityCap = state.facilityGrade === 1 ? 340 : state.facilityGrade === 2 ? 560 : 850;
+      const techCapBonus = state.techLevel === 1 ? 0.9 : state.techLevel === 2 ? 1.05 : 1.22;
+      const variationPenalty = state.variationLevel === 1 ? 1.0 : state.variationLevel === 2 ? 0.92 : 0.78;
+      const layoutCapMod = layoutFit === -2 ? 0.75 : layoutFit === 1 ? 1.08 : 0.96;
+      // Serial slow flow also chokes daily throughput capacity
+      const flowCapMod = rawCPA > 20 ? 0.72 : 1.0;
+
+      const effectiveCapacity = Math.round(Math.min(baseStaffCap, facilityCap) * techCapBonus * variationPenalty * layoutCapMod * flowCapMod);
+      const unitsSold = Math.min(state.demandVolume, effectiveCapacity);
+      const unmetDemand = Math.max(0, state.demandVolume - effectiveCapacity);
+
+      let defectRate = 5.5;
+      if (state.materialGrade === 1) defectRate += 1.6;
+      if (state.materialGrade === 3) defectRate -= 1.0;
+      if (state.infoSystem === 1) defectRate += 2.4;
+      if (state.infoSystem === 3) defectRate -= 1.1;
+      if (state.staffSkill === 1) defectRate += 2.2;
+      if (state.staffSkill === 3) defectRate -= 1.2;
+      if (state.varietyLevel === 3) defectRate += 1.2;
+      if (state.taskDesign === 1) defectRate += 1.8;
+      if (state.taskDesign === 3) defectRate -= 0.8;
+      if (state.monitoringLevel === 2) defectRate -= 0.6;
+      if (state.monitoringLevel === 3) defectRate -= 1.2;
+      if (state.controlLevel === 1) defectRate += 2.5;
+      if (state.controlLevel === 2) defectRate -= 1.2;
+      if (state.controlLevel === 3) defectRate -= 2.2;
+      if (state.improvementLevel === 2) defectRate -= 0.6;
+      if (state.improvementLevel === 3) defectRate -= 1.4;
+
+      // Penalties if student disconnected stations or bypassed QC in their flow!
+      if (!flowInfo.qcConnected) defectRate += 6.5;
+      if (flowInfo.disconnectedStations.length > 0) defectRate += flowInfo.disconnectedStations.length * 3.0;
+
+      defectRate = Math.max(0.4, Math.min(25.0, +defectRate.toFixed(1)));
+      const defectUnits = Math.round(unitsSold * (defectRate / 100));
+
+      const matCosts = { 1: 3.20, 2: 4.60, 3: 6.80 };
+      const volumeDiscount = state.demandVolume >= 550 ? 0.88 : state.demandVolume >= 350 ? 0.95 : 1.0;
+      const materialCostPerUnit = matCosts[state.materialGrade] * volumeDiscount;
+
+      const wagePerStaff = state.staffSkill === 1 ? 140 : state.staffSkill === 2 ? 175 : 220;
+      const dailyLaborCost = state.staffCount * wagePerStaff;
+      const facilityCost = state.facilityGrade === 1 ? 250 : state.facilityGrade === 2 ? 500 : 900;
+      const techCost = state.techLevel === 1 ? 0 : state.techLevel === 2 ? 180 : 420;
+      const infoCost = state.infoSystem === 1 ? 20 : state.infoSystem === 2 ? 75 : 150;
+      const mciCost = (state.monitoringLevel * 30) + (state.controlLevel * 35) + (state.improvementLevel * 40);
+      const serviceFixedCost = state.servicePolicy === 1 ? 0 : state.servicePolicy === 2 ? 100 : 240;
+
+      const warrantyCostPerDefect = state.warrantyPolicy === 1 ? 5.50 : state.warrantyPolicy === 2 ? 8.50 : 16.00;
+      const dailyWarrantyCost = Math.round(defectUnits * warrantyCostPerDefect);
+
+      const totalOperatingCost = (unitsSold * materialCostPerUnit) + dailyLaborCost + facilityCost + techCost + infoCost + mciCost + serviceFixedCost + dailyWarrantyCost;
+      const unitCost = unitsSold > 0 ? +(totalOperatingCost / unitsSold).toFixed(2) : 0;
+
+      let unitPrice = 15.00;
+      if (state.materialGrade === 3) unitPrice += 2.50;
+      if (state.custModel === 2) unitPrice += 1.00;
+      if (state.custModel === 3) unitPrice += 2.50;
+      if (state.varietyLevel === 3) unitPrice += 1.00;
+      if (state.servicePolicy === 3) unitPrice += 1.00;
+
+      const dailyRevenue = unitsSold * unitPrice;
+      const dailyProfit = Math.round(dailyRevenue - totalOperatingCost);
+
+      let csat = 78;
+      if (state.materialGrade === 3) csat += 8;
+      if (state.materialGrade === 1) csat -= 10;
+      if (state.custModel === 3) csat += 5;
+      if (state.varietyLevel === 3) csat += 4;
+      if (leadTime <= 12) csat += 8;
+      else if (leadTime > 16) csat -= Math.round((leadTime - 16) * 3.5);
+      if (unmetDemand > 0) csat -= Math.min(20, Math.round(unmetDemand / 12));
+      csat -= Math.round(defectRate * 2.2);
+
+      if (state.visibilityLevel === 3) {
+        if (state.staffSkill === 3 && state.materialGrade >= 2) csat += 7;
+        if (state.staffSkill === 1) csat -= 9;
+      }
+      if (state.servicePolicy === 2) csat += 5;
+      if (state.servicePolicy === 3) csat += 10;
+      if (state.warrantyPolicy === 2) csat += 3;
+      if (state.warrantyPolicy === 3) csat += 7;
+
+      csat = Math.max(10, Math.min(99, Math.round(csat)));
+
+      return {
+        flowInfo,
+        rawCPA,
+        leadTime, effectiveCapacity, unitsSold, unmetDemand,
+        defectRate, defectUnits, dailyWarrantyCost,
+        unitCost, unitPrice, dailyProfit, csat, layoutFit
+      };
+    }
+
+    // ==================== INTERACTIVE CANVAS & POINTER EVENTS ====================
+    const canvas = document.getElementById('opsCanvas');
+    const ctx = canvas.getContext('2d');
+    let simPaused = false;
+    let simSpeed = 1.0;
+    let particles = [];
+    let customerFeedbacks = [];
+    let tickCount = 0;
+
+    function setCanvasTool(toolName) {
+      canvasTool = toolName;
+      connectSourceKey = null;
+      const moveBtn = document.getElementById('toolBtn-move');
+      const connBtn = document.getElementById('toolBtn-connect');
+      const hint = document.getElementById('flowToolHint');
+
+      if (toolName === 'move') {
+        moveBtn.className = 'text-xs font-bold px-2.5 py-1.5 rounded-lg bg-orange-500 text-white shadow-sm transition flex items-center gap-1';
+        connBtn.className = 'text-xs font-semibold px-2.5 py-1.5 rounded-lg border border-[var(--border)] hover:bg-[var(--secondary)] transition flex items-center gap-1';
+        canvas.className = 'w-full h-auto block cursor-grab';
+        hint.innerHTML = `<span>💡 <strong>Drag Mode Active:</strong> Click and drag any workstation (A to G) on the kitchen floorplan below to design your physical layout!</span><span class="font-mono text-xs shrink-0 ml-2" id="flowDistancePenalty">Motion Waste: +${cachedMetrics ? cachedMetrics.flowInfo.motionPenalty : 0.4}m</span>`;
+      } else {
+        connBtn.className = 'text-xs font-bold px-2.5 py-1.5 rounded-lg bg-sky-500 text-white shadow-sm transition flex items-center gap-1';
+        moveBtn.className = 'text-xs font-semibold px-2.5 py-1.5 rounded-lg border border-[var(--border)] hover:bg-[var(--secondary)] transition flex items-center gap-1';
+        canvas.className = 'w-full h-auto block cursor-crosshair';
+        hint.innerHTML = `<span>🔗 <strong>Sequence Arrow Tool Active:</strong> Click a <strong>SOURCE station</strong>, then click a <strong>DESTINATION station</strong> to add or remove a flow arrow!</span><span class="font-mono text-xs shrink-0 ml-2">Click 2 stations</span>`;
+      }
+    }
+
+    function getCanvasMousePos(evt) {
+      const rect = canvas.getBoundingClientRect();
+      const scaleX = canvas.width / rect.width;
+      const scaleY = canvas.height / rect.height;
+      const clientX = evt.touches ? evt.touches[0].clientX : evt.clientX;
+      const clientY = evt.touches ? evt.touches[0].clientY : evt.clientY;
+      return {
+        x: (clientX - rect.left) * scaleX,
+        y: (clientY - rect.top) * scaleY
+      };
+    }
+
+    function findStationAt(x, y) {
+      for (const key of Object.keys(stationMeta)) {
+        const c = stationCoords[key];
+        const m = stationMeta[key];
+        if (x >= c.x && x <= c.x + m.w && y >= c.y && y <= c.y + m.h) {
+          return key;
+        }
+      }
+      return null;
+    }
+
+    canvas.addEventListener('mousedown', onPointerDown);
+    canvas.addEventListener('mousemove', onPointerMove);
+    window.addEventListener('mouseup', onPointerUp);
+    canvas.addEventListener('touchstart', (e) => { e.preventDefault(); onPointerDown(e); }, { passive: false });
+    canvas.addEventListener('touchmove', (e) => { e.preventDefault(); onPointerMove(e); }, { passive: false });
+    window.addEventListener('touchend', onPointerUp);
+
+    function onPointerDown(evt) {
+      const pos = getCanvasMousePos(evt);
+      const hitKey = findStationAt(pos.x, pos.y);
+      if (!hitKey) {
+        connectSourceKey = null;
+        return;
+      }
+
+      if (canvasTool === 'move') {
+        draggingStationKey = hitKey;
+        dragOffsetX = pos.x - stationCoords[hitKey].x;
+        dragOffsetY = pos.y - stationCoords[hitKey].y;
+      } else if (canvasTool === 'connect') {
+        if (!connectSourceKey) {
+          connectSourceKey = hitKey;
+        } else if (connectSourceKey === hitKey) {
+          connectSourceKey = null;
+        } else {
+          toggleDirectedEdge(connectSourceKey, hitKey);
+          connectSourceKey = null;
+        }
+      }
+    }
+
+    function onPointerMove(evt) {
+      if (!draggingStationKey) return;
+      const pos = getCanvasMousePos(evt);
+      const m = stationMeta[draggingStationKey];
+      // Constrain station inside the Transformation Floor zone (x: 196 to 730, y: 40 to 360)
+      stationCoords[draggingStationKey].x = Math.max(198, Math.min(730 - m.w, pos.x - dragOffsetX));
+      stationCoords[draggingStationKey].y = Math.max(42, Math.min(365 - m.h, pos.y - dragOffsetY));
+      renderAll();
+    }
+
+    function onPointerUp() {
+      draggingStationKey = null;
+    }
+
+    function toggleDirectedEdge(fromKey, toKey) {
+      const existingIdx = customEdges.findIndex(e => e.from === fromKey && e.to === toKey);
+      if (existingIdx >= 0) {
+        customEdges.splice(existingIdx, 1);
+      } else {
+        // Remove reverse edge if exists to prevent 2-node infinite loop
+        const revIdx = customEdges.findIndex(e => e.from === toKey && e.to === fromKey);
+        if (revIdx >= 0) customEdges.splice(revIdx, 1);
+        customEdges.push({ from: fromKey, to: toKey });
+      }
+      renderAll();
+    }
+
+    function removeEdgeByIndex(idx) {
+      customEdges.splice(idx, 1);
+      renderAll();
+    }
+
+    // ==================== PARTICLE ANIMATION ALONG STUDENT'S CUSTOM EDGES ====================
+    function spawnOrderParticle() {
+      const m = cachedMetrics || calculateMetrics();
+      const colors = state.varietyLevel === 1
+        ? ['#fb923c']
+        : state.varietyLevel === 2
+          ? ['#fb923c', '#38bdf8', '#a78bfa']
+          : ['#fb923c', '#38bdf8', '#a78bfa', '#f472b6', '#34d399', '#facc15'];
+
+      const isDefective = Math.random() * 100 < m.defectRate;
+
+      particles.push({
+        fromNode: 'INPUT',
+        toNode: 'pos',
+        progress: 0,
+        color: colors[Math.floor(Math.random() * colors.length)],
+        isDefective: isDefective,
+        caughtByQC: false,
+        hops: 0
+      });
+    }
+
+    function drawRoundedRect(x, y, w, h, r, fill, stroke, strokeWidth = 1.5) {
+      ctx.beginPath();
+      ctx.roundRect(x, y, w, h, r);
+      if (fill) {
+        ctx.fillStyle = fill;
+        ctx.fill();
+      }
+      if (stroke) {
+        ctx.strokeStyle = stroke;
+        ctx.lineWidth = strokeWidth;
+        ctx.stroke();
+      }
+    }
+
+    function drawArrowhead(fromX, fromY, toX, toY, color) {
+      const angle = Math.atan2(toY - fromY, toX - fromX);
+      const midX = (fromX + toX) / 2;
+      const midY = (fromY + toY) / 2;
+      const headLen = 8;
+      ctx.beginPath();
+      ctx.moveTo(midX, midY);
+      ctx.lineTo(midX - headLen * Math.cos(angle - Math.PI / 6), midY - headLen * Math.sin(angle - Math.PI / 6));
+      ctx.lineTo(midX - headLen * Math.cos(angle + Math.PI / 6), midY - headLen * Math.sin(angle + Math.PI / 6));
+      ctx.closePath();
+      ctx.fillStyle = color;
+      ctx.fill();
+    }
+
+    function renderCanvasFrame() {
+      if (!cachedMetrics) cachedMetrics = calculateMetrics();
+      const m = cachedMetrics;
+
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // 1. THREE ZONE BACKGROUNDS
+      drawRoundedRect(10, 12, 172, 376, 12, 'rgba(249, 115, 22, 0.06)', 'rgba(249, 115, 22, 0.28)');
+      ctx.fillStyle = '#fb923c';
+      ctx.font = 'bold 11px sans-serif';
+      ctx.fillText('1. INPUTS ZONE', 24, 32);
+
+      drawRoundedRect(192, 12, 540, 376, 12, 'rgba(56, 189, 248, 0.05)', 'rgba(56, 189, 248, 0.25)');
+      ctx.fillStyle = '#38bdf8';
+      ctx.fillText('2. TRANSFORMATION FLOOR (DRAG STATIONS & WIRE ARROWS)', 206, 32);
+
+      drawRoundedRect(745, 12, 165, 376, 12, 'rgba(16, 185, 129, 0.06)', 'rgba(16, 185, 129, 0.28)');
+      ctx.fillStyle = '#34d399';
+      ctx.fillText('3. OUTPUTS ZONE', 758, 32);
+
+      // 2. INPUTS BOXES
+      const matNames = { 1: 'Frozen Bulk Beef', 2: 'Fresh Local Angus', 3: 'Artisan Wagyu' };
+      drawRoundedRect(22, 48, 148, 66, 8, '#0f172a', '#f97316');
+      ctx.fillStyle = '#fdba74';
+      ctx.font = 'bold 11px sans-serif';
+      ctx.fillText('🥩 Materials (Transformed)', 30, 66);
+      ctx.fillStyle = '#cbd5e1';
+      ctx.font = '11px sans-serif';
+      ctx.fillText(matNames[state.materialGrade], 30, 84);
+      ctx.fillStyle = '#94a3b8';
+      ctx.fillText(`Vol: ${state.demandVolume}/day`, 30, 100);
+
+      const infoNames = { 1: 'Paper Dockets', 2: 'Digital KDS Sync', 3: 'AI Forecast + Allergy' };
+      drawRoundedRect(22, 128, 148, 64, 8, '#0f172a', '#38bdf8');
+      ctx.fillStyle = '#7dd3fc';
+      ctx.font = 'bold 11px sans-serif';
+      ctx.fillText('📊 Information (Transformed)', 30, 146);
+      ctx.fillStyle = '#cbd5e1';
+      ctx.font = '11px sans-serif';
+      ctx.fillText(infoNames[state.infoSystem], 30, 164);
+
+      const custNames = { 1: 'Set Menu Orders', 2: 'Custom Add-Ons', 3: '100% Bespoke Diet' };
+      drawRoundedRect(22, 206, 148, 64, 8, '#0f172a', '#facc15');
+      ctx.fillStyle = '#fde047';
+      ctx.font = 'bold 11px sans-serif';
+      ctx.fillText('🙋 Customers (Transformed)', 30, 224);
+      ctx.fillStyle = '#cbd5e1';
+      ctx.font = '11px sans-serif';
+      ctx.fillText(custNames[state.custModel], 30, 242);
+
+      drawRoundedRect(22, 284, 148, 88, 8, '#064e3b', '#10b981');
+      ctx.fillStyle = '#6ee7b7';
+      ctx.font = 'bold 11px sans-serif';
+      ctx.fillText('⚙️ Transforming Inputs', 30, 302);
+      ctx.fillStyle = '#ecfdf5';
+      ctx.font = '11px sans-serif';
+      ctx.fillText(`👩‍🍳 HR: ${state.staffCount} Staff (Skill Lv.${state.staffSkill})`, 30, 320);
+      const facShort = { 1: 'Single Grill Plant', 2: 'Dual-Line Kitchen', 3: 'Smart Mega-Plant' };
+      ctx.fillText(`🏭 ${facShort[state.facilityGrade]}`, 30, 338);
+      ctx.fillText(`🤖 Tech Lv.${state.techLevel}`, 30, 355);
+
+      // 3. DRAW STUDENT'S CUSTOM SEQUENCE ARROWS
+      customEdges.forEach(e => {
+        const c1 = stationCoords[e.from];
+        const c2 = stationCoords[e.to];
+        const m1 = stationMeta[e.from];
+        const m2 = stationMeta[e.to];
+        const x1 = c1.x + m1.w / 2;
+        const y1 = c1.y + m1.h / 2;
+        const x2 = c2.x + m2.w / 2;
+        const y2 = c2.y + m2.h / 2;
+
+        const isCrit = m.flowInfo.critEdges.has(`${e.from}->${e.to}`);
+        ctx.beginPath();
+        ctx.moveTo(x1, y1);
+        ctx.lineTo(x2, y2);
+        ctx.strokeStyle = isCrit ? 'rgba(239, 68, 68, 0.85)' : 'rgba(148, 163, 184, 0.5)';
+        ctx.lineWidth = isCrit ? 4 : 2.2;
+        if (isCrit) {
+          ctx.setLineDash([8, 4]);
+          ctx.lineDashOffset = -(tickCount * 0.6);
+        } else {
+          ctx.setLineDash([4, 4]);
+          ctx.lineDashOffset = 0;
+        }
+        ctx.stroke();
+        ctx.setLineDash([]);
+
+        drawArrowhead(x1, y1, x2, y2, isCrit ? '#ef4444' : '#94a3b8');
+      });
+
+      // 4. DRAW DRAGGABLE WORKSTATIONS
+      Object.keys(stationMeta).forEach(key => {
+        const meta = stationMeta[key];
+        const coord = stationCoords[key];
+        const dur = getTaskDuration(key);
+        const isCritNode = m.flowInfo.critNodes.has(key);
+        const isDisconnected = m.flowInfo.disconnectedStations.includes(key);
+        const isSelectedSource = connectSourceKey === key;
+
+        const isBottleneck = (key === 'grill' && (m.unmetDemand > 0 || dur >= 8)) ||
+                             (key === 'fryer' && dur >= 9);
+
+        let strokeCol = isSelectedSource ? '#38bdf8' : isDisconnected ? '#ef4444' : isCritNode ? '#f97316' : meta.color;
+        let bgCol = isSelectedSource ? '#0c4a6e' : isDisconnected ? '#450a0a' : isBottleneck ? '#3b0712' : '#0f172a';
+
+        drawRoundedRect(coord.x, coord.y, meta.w, meta.h, 10, bgCol, strokeCol, isSelectedSource ? 3 : isCritNode ? 2.4 : 1.6);
+
+        ctx.fillStyle = '#f8fafc';
+        ctx.font = 'bold 11px sans-serif';
+        ctx.fillText(`${meta.code}: ${meta.name} (${dur}m)`, coord.x + 7, coord.y + 19);
+
+        ctx.font = '10px sans-serif';
+        ctx.fillStyle = isDisconnected ? '#fca5a5' : '#94a3b8';
+        const finTime = m.flowInfo.earliestFinish[key];
+        ctx.fillText(isDisconnected ? '⚠️ Disconnected!' : `Done @ ${finTime}m ${isCritNode ? '🔥CPA' : ''}`, coord.x + 7, coord.y + 37);
+
+        if (isBottleneck && !isDisconnected) {
+          drawRoundedRect(coord.x + meta.w - 62, coord.y - 9, 60, 15, 4, '#ef4444', null);
+          ctx.fillStyle = '#ffffff';
+          ctx.font = 'bold 8.5px sans-serif';
+          ctx.fillText('BOTTLENECK', coord.x + meta.w - 58, coord.y + 1);
+        }
+      });
+
+      // 5. DRAW TRANSFORMING HUMAN RESOURCES (CHEF AVATARS)
+      const stationKeys = Object.keys(stationMeta);
+      for (let i = 0; i < state.staffCount; i++) {
+        const sk = stationKeys[i % stationKeys.length];
+        const c = stationCoords[sk];
+        const offset = i >= stationKeys.length ? 45 : 15;
+        ctx.beginPath();
+        ctx.arc(c.x + offset, c.y - 8, 6.5, 0, Math.PI * 2);
+        ctx.fillStyle = state.staffSkill === 3 ? '#10b981' : state.staffSkill === 2 ? '#38bdf8' : '#94a3b8';
+        ctx.fill();
+        ctx.strokeStyle = '#0f172a';
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+      }
+
+      // 6. VISIBILITY WALL
+      ctx.beginPath();
+      ctx.moveTo(738, 42);
+      ctx.lineTo(738, 375);
+      if (state.visibilityLevel === 1) {
+        ctx.strokeStyle = '#475569';
+        ctx.lineWidth = 6;
+        ctx.stroke();
+      } else if (state.visibilityLevel === 2) {
+        ctx.strokeStyle = '#38bdf8';
+        ctx.lineWidth = 3;
+        ctx.setLineDash([10, 8]);
+        ctx.stroke();
+        ctx.setLineDash([]);
+      } else {
+        ctx.strokeStyle = 'rgba(250, 204, 21, 0.45)';
+        ctx.lineWidth = 2;
+        ctx.setLineDash([3, 10]);
+        ctx.stroke();
+        ctx.setLineDash([]);
+      }
+
+      // 7. OUTPUTS ZONE
+      drawRoundedRect(755, 50, 145, 165, 10, '#0f172a', '#10b981');
+      ctx.fillStyle = '#6ee7b7';
+      ctx.font = 'bold 11px sans-serif';
+      ctx.fillText('🤝 Customer Delivery', 765, 70);
+      ctx.fillStyle = '#cbd5e1';
+      ctx.font = '11px sans-serif';
+      const srvNames = { 1: 'Counter Pickup', 2: 'Table Check-In', 3: 'VIP Concierge' };
+      ctx.fillText(srvNames[state.servicePolicy], 765, 88);
+      ctx.fillStyle = '#facc15';
+      ctx.font = 'bold 12px sans-serif';
+      ctx.fillText(`CSAT: ${m.csat}% ${m.csat >= 85 ? '😍' : m.csat >= 70 ? '🙂' : '😡'}`, 765, 110);
+
+      customerFeedbacks.forEach(cf => {
+        ctx.fillStyle = cf.color;
+        ctx.font = 'bold 12px sans-serif';
+        ctx.fillText(cf.text, cf.x, cf.y);
+        if (!simPaused) cf.y -= 0.4 * simSpeed;
+        cf.life -= 1;
+      });
+      customerFeedbacks = customerFeedbacks.filter(cf => cf.life > 0);
+
+      drawRoundedRect(755, 235, 145, 135, 10, '#2e0812', '#f43f5e');
+      ctx.fillStyle = '#fda4af';
+      ctx.font = 'bold 11px sans-serif';
+      ctx.fillText('🛡️ Warranty Claims', 765, 255);
+      ctx.fillStyle = '#fecdd3';
+      ctx.font = '11px sans-serif';
+      ctx.fillText(`Defects: ${m.defectRate}% (${m.defectUnits}/d)`, 765, 275);
+      ctx.fillText(`Cost: $${m.dailyWarrantyCost}/day`, 765, 293);
+      ctx.fillStyle = '#f87171';
+      ctx.font = '10px sans-serif';
+      ctx.fillText(' Loops back to fix Control!', 765, 352);
+
+      // 8. ANIMATE PARTICLES ALONG CUSTOM STUDENT FLOW
+      if (!simPaused) {
+        tickCount++;
+        const surgeFactor = (state.variationLevel === 3 && (tickCount % 180 < 75)) ? 2.0 : 1.0;
+        const spawnInterval = Math.max(8, Math.round(48 - (state.demandVolume / 22) * surgeFactor));
+        if (tickCount % Math.max(4, Math.round(spawnInterval / simSpeed)) === 0) {
+          spawnOrderParticle();
+        }
+      }
+
+      const stepSpeed = (0.022 * simSpeed) * (15 / m.leadTime);
+
+      for (let i = particles.length - 1; i >= 0; i--) {
+        const p = particles[i];
+        if (!simPaused) p.progress += stepSpeed;
+
+        let startPt, endPt;
+        if (p.fromNode === 'INPUT') {
+          startPt = { x: 168, y: 160 };
+          const c = stationCoords[p.toNode];
+          const meta = stationMeta[p.toNode];
+          endPt = { x: c.x + meta.w / 2, y: c.y + meta.h / 2 };
+        } else if (p.toNode === 'OUTPUT') {
+          const c = stationCoords[p.fromNode];
+          const meta = stationMeta[p.fromNode];
+          startPt = { x: c.x + meta.w / 2, y: c.y + meta.h / 2 };
+          endPt = p.isDefective ? { x: 825, y: 315 } : { x: 825, y: 155 };
+        } else {
+          const c1 = stationCoords[p.fromNode];
+          const m1 = stationMeta[p.fromNode];
+          const c2 = stationCoords[p.toNode];
+          const m2 = stationMeta[p.toNode];
+          startPt = { x: c1.x + m1.w / 2, y: c1.y + m1.h / 2 };
+          endPt = { x: c2.x + m2.w / 2, y: c2.y + m2.h / 2 };
+        }
+
+        if (p.progress >= 1) {
+          p.progress = 0;
+          p.hops++;
+          if (p.toNode === 'OUTPUT' || p.hops > 10) {
+            if (p.isDefective) {
+              customerFeedbacks.push({ x: 780 + Math.random() * 55, y: 325, text: '⚠️ Claim!', color: '#fb7185', life: 45 });
+            } else {
+              customerFeedbacks.push({ x: 780 + Math.random() * 55, y: 165, text: p.caughtByQC ? '🛠️ QC Fixed!' : '🍔 +$16', color: '#34d399', life: 45 });
+            }
+            particles.splice(i, 1);
+            continue;
+          }
+
+          // Check if current station is QC ('qc') to intercept defects
+          if (p.toNode === 'qc' && p.isDefective) {
+            const catchChance = state.controlLevel === 3 ? 0.78 : state.controlLevel === 2 ? 0.45 : 0.05;
+            if (Math.random() < catchChance) {
+              p.isDefective = false;
+              p.caughtByQC = true;
+            }
+          }
+
+          // Pick next outgoing edge from p.toNode
+          const outgoing = customEdges.filter(e => e.from === p.toNode);
+          p.fromNode = p.toNode;
+          if (outgoing.length > 0) {
+            const chosen = outgoing[Math.floor(Math.random() * outgoing.length)];
+            p.toNode = chosen.to;
+          } else {
+            p.toNode = 'OUTPUT';
+          }
+        }
+
+        const curX = startPt.x + (endPt.x - startPt.x) * p.progress;
+        const curY = startPt.y + (endPt.y - startPt.y) * p.progress;
+
+        ctx.beginPath();
+        ctx.arc(curX, curY, 6, 0, Math.PI * 2);
+        ctx.fillStyle = p.isDefective && p.hops >= 2 ? '#ef4444' : p.color;
+        ctx.fill();
+        ctx.strokeStyle = '#ffffff';
+        ctx.lineWidth = 1.2;
+        ctx.stroke();
+      }
+
+      requestAnimationFrame(renderCanvasFrame);
+    }
+
+    // ==================== UI SYNC & GANTT RENDERER ====================
+    function renderAll() {
+      const m = calculateMetrics();
+      cachedMetrics = m;
+
+      document.getElementById('kpiVolume').textContent = `${m.effectiveCapacity} / ${state.demandVolume}`;
+      const volPct = Math.min(100, Math.round((m.effectiveCapacity / state.demandVolume) * 85));
+      const barVol = document.getElementById('barVolume');
+      barVol.style.width = `${volPct}%`;
+      if (m.unmetDemand > 0) {
+        barVol.className = 'bg-rose-500 h-full transition-all duration-300';
+        document.getElementById('kpiVolumeSub').textContent = `Bottleneck: -${m.unmetDemand} lost/day!`;
+      } else {
+        barVol.className = 'bg-emerald-500 h-full transition-all duration-300';
+        document.getElementById('kpiVolumeSub').textContent = `Surplus capacity (+${m.effectiveCapacity - state.demandVolume})`;
+      }
+
+      document.getElementById('kpiLeadTime').textContent = m.leadTime.toFixed(1);
+      document.getElementById('barLeadTime').style.width = `${Math.min(100, Math.round((m.leadTime / 28) * 100))}%`;
+      const chainCodes = m.flowInfo.chainOrder.map(k => stationMeta[k].code).join(' → ');
+      document.getElementById('kpiLeadSub').textContent = `CPA: ${chainCodes} (${m.rawCPA}m)`;
+
+      document.getElementById('kpiDefects').textContent = m.defectRate.toFixed(1);
+      document.getElementById('barDefects').style.width = `${Math.min(100, m.defectRate * 6)}%`;
+      document.getElementById('kpiDefectCost').textContent = `Warranty Cost: $${m.dailyWarrantyCost}/day`;
+
+      document.getElementById('kpiCsat').textContent = m.csat;
+      document.getElementById('barCsat').style.width = `${m.csat}%`;
+      document.getElementById('kpiCsatSub').textContent = m.csat >= 85 ? 'High repeat business' : m.csat >= 70 ? 'Moderate loyalty' : 'Churn risk!';
+
+      document.getElementById('kpiUnitCost').textContent = m.unitCost.toFixed(2);
+      document.getElementById('kpiUnitPrice').textContent = m.unitPrice.toFixed(2);
+      const profitEl = document.getElementById('kpiProfit');
+      profitEl.textContent = (m.dailyProfit >= 0 ? '$' : '-$') + Math.abs(m.dailyProfit).toLocaleString();
+      profitEl.className = `text-base font-bold ${m.dailyProfit >= 1500 ? 'text-emerald-400' : m.dailyProfit >= 0 ? 'text-amber-400' : 'text-rose-400'}`;
+
+      // Callout Strip under Canvas
+      const seqEl = document.getElementById('visCalloutSeq');
+      if (m.flowInfo.disconnectedStations.length > 0) {
+        seqEl.textContent = `⚠️ ${m.flowInfo.disconnectedStations.length} Station(s) Unplugged!`;
+        seqEl.className = 'font-bold text-rose-400';
+      } else if (!m.flowInfo.qcConnected) {
+        seqEl.textContent = '⚠️ QC Station Bypassed!';
+        seqEl.className = 'font-bold text-amber-400';
+      } else if (m.rawCPA >= 22) {
+        seqEl.textContent = '🐢 Slow Serial Sequence';
+        seqEl.className = 'font-bold text-amber-400';
+      } else {
+        seqEl.textContent = '✅ Valid Parallel Sequence';
+        seqEl.className = 'font-bold text-emerald-400';
+      }
+
+      document.getElementById('visCalloutBottleneck').textContent = `${chainCodes} (${m.rawCPA}m CPA)`;
+      document.getElementById('visCalloutWall').textContent = `+${m.flowInfo.motionPenalty}m Walking Waste`;
+      const distPenEl = document.getElementById('flowDistancePenalty');
+      if (distPenEl) distPenEl.textContent = `Motion Waste: +${m.flowInfo.motionPenalty}m`;
+
+      highlightButtonGroup('btnMat-', state.materialGrade, 3);
+      highlightButtonGroup('btnInfo-', state.infoSystem, 3);
+      highlightButtonGroup('btnCust-', state.custModel, 3);
+      highlightButtonGroup('btnSkill-', state.staffSkill, 3);
+      highlightButtonGroup('btnFac-', state.facilityGrade, 3);
+      highlightButtonGroup('btnLay-', state.layoutType, 3);
+      highlightButtonGroup('btnTech-', state.techLevel, 3);
+      highlightButtonGroup('btnTask-', state.taskDesign, 3);
+      highlightButtonGroup('btnMon-', state.monitoringLevel, 3);
+      highlightButtonGroup('btnCtrl-', state.controlLevel, 3);
+      highlightButtonGroup('btnImp-', state.improvementLevel, 3);
+      highlightButtonGroup('btnSrv-', state.servicePolicy, 3);
+      highlightButtonGroup('btnWar-', state.warrantyPolicy, 3);
+
+      document.getElementById('sliderStaffCount').value = state.staffCount;
+      document.getElementById('lblStaffCount').textContent = state.staffCount;
+      document.getElementById('sliderVolume').value = state.demandVolume;
+      document.getElementById('lblDemandVolume').textContent = state.demandVolume;
+      document.getElementById('sliderVariety').value = state.varietyLevel;
+      document.getElementById('sliderVariation').value = state.variationLevel;
+      document.getElementById('sliderVisibility').value = state.visibilityLevel;
+
+      const varLabels = { 1: 'Low (3 Set Burgers)', 2: 'Medium (12 Items)', 3: 'High (40+ Custom)' };
+      const demLabels = { 1: 'Steady Demand', 2: 'Moderate Peaks', 3: 'Extreme Footy Surge' };
+      const visLabels = { 1: 'Low (Dark Kitchen)', 2: 'Open Counter', 3: 'Live Theatre Grill' };
+      document.getElementById('lblVarietyLevel').textContent = varLabels[state.varietyLevel];
+      document.getElementById('lblVariation').textContent = demLabels[state.variationLevel];
+      document.getElementById('lblVisibility').textContent = visLabels[state.visibilityLevel];
+
+      const scalePct = Math.round(((state.demandVolume - 100) / 700) * 100);
+      document.getElementById('barDiagScale').style.width = `${scalePct}%`;
+      document.getElementById('diagScale').textContent = scalePct > 65 ? 'High' : scalePct > 35 ? 'Moderate' : 'Low';
+      document.getElementById('barDiagComplex').style.width = `${state.varietyLevel * 32}%`;
+      document.getElementById('diagComplex').textContent = state.varietyLevel === 1 ? 'Low' : state.varietyLevel === 2 ? 'Medium' : 'High';
+      document.getElementById('barDiagRush').style.width = `${state.variationLevel * 32}%`;
+      document.getElementById('diagRushRisk').textContent = state.variationLevel === 1 ? 'Low' : state.variationLevel === 2 ? 'Manageable' : 'High Surge!';
+      document.getElementById('barDiagVis').style.width = `${state.visibilityLevel * 32}%`;
+      document.getElementById('diagVisImpact').textContent = state.visibilityLevel === 1 ? 'Low' : state.visibilityLevel === 2 ? 'Moderate' : 'High Theatre';
+
+      renderCPADiagram(m);
+
+      document.getElementById('outDefectCount').textContent = `${m.defectUnits}/day`;
+      document.getElementById('outWarrantyCost').textContent = `$${m.dailyWarrantyCost}/day`;
+
+      checkChallengeProgress(m);
+    }
+
+    function renderCPADiagram(m) {
+      document.getElementById('sliderTaskB').value = state.taskB;
+      document.getElementById('sliderTaskC').value = state.taskC;
+      document.getElementById('sliderTaskD').value = state.taskD;
+      document.getElementById('valTaskB').textContent = `${state.taskB}m`;
+      document.getElementById('valTaskC').textContent = `${state.taskC}m`;
+      document.getElementById('valTaskD').textContent = `${state.taskD}m`;
+      document.getElementById('cpaTotalDisplay').textContent = m.rawCPA;
+
+      // Render Active Edges Chips
+      const edgeListEl = document.getElementById('activeEdgesList');
+      edgeListEl.innerHTML = customEdges.map((e, idx) => {
+        const c1 = stationMeta[e.from].code;
+        const c2 = stationMeta[e.to].code;
+        const isCrit = m.flowInfo.critEdges.has(`${e.from}->${e.to}`);
+        return `<button onclick="removeEdgeByIndex(${idx})" class="text-xs px-2 py-1 rounded-md border ${isCrit ? 'border-rose-500 bg-rose-500/15 text-rose-300 font-bold' : 'border-[var(--border)] bg-[var(--card)] text-[var(--muted-foreground)]'} hover:border-rose-400 transition" title="Click to remove connection">${c1} &rarr; ${c2} ✕</button>`;
+      }).join('');
+
+      // Sequence Audit Feedback
+      const auditEl = document.getElementById('flowAuditBox');
+      if (m.flowInfo.disconnectedStations.length > 0) {
+        const names = m.flowInfo.disconnectedStations.map(k => `${stationMeta[k].code} (${stationMeta[k].name})`).join(', ');
+        auditEl.className = 'mt-2.5 p-2 rounded-lg bg-rose-500/15 border border-rose-500/40 text-xs text-rose-300';
+        auditEl.innerHTML = `⚠️ <strong>Sequence Error:</strong> Station(s) <strong>${names}</strong> are disconnected from POS Order (A)! Use the 🔗 tool to connect them, or defects will spike!`;
+      } else if (!m.flowInfo.qcConnected) {
+        auditEl.className = 'mt-2.5 p-2 rounded-lg bg-amber-500/15 border border-amber-500/40 text-xs text-amber-300';
+        auditEl.innerHTML = `⚠️ <strong>Quality Control Warning:</strong> Orders are bypassing <strong>G: QC &amp; Pack</strong>! Without a final inspection step, warranty claims increase by +6.5%.`;
+      } else {
+        auditEl.className = 'mt-2.5 p-2 rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-xs text-emerald-300';
+        auditEl.innerHTML = `✅ <strong>Sequence Audit:</strong> All 7 stations are properly sequenced! Total Critical Path duration is <strong>${m.rawCPA} minutes</strong>.`;
+      }
+
+      // Critical Path Chain Breakdown
+      const chainText = m.flowInfo.chainOrder.map(k => `${stationMeta[k].code}(${getTaskDuration(k)}m)`).join(' → ') + ` = ${m.rawCPA}m`;
+      document.getElementById('critPathChainText').textContent = chainText;
+
+      const totalSumOfTasks = state.taskA + state.taskB + state.taskC + state.taskD + state.taskE + state.taskF + state.taskG;
+      const savedMins = Math.max(0, totalSumOfTasks - m.rawCPA);
+      document.getElementById('parallelSavingText').innerHTML = savedMins > 0
+        ? `Your parallel branches save <strong>${savedMins} minutes</strong> per order compared to a ${totalSumOfTasks}m single-file line!`
+        : `⚠️ <strong>0 minutes saved!</strong> All tasks are running in a single serial line (${totalSumOfTasks}m). Connect B, C, and D in parallel from A!`;
+
+      // Render Live Gantt Bars for all 7 Stations
+      const ganttContainer = document.getElementById('ganttBarsContainer');
+      const maxScale = Math.max(20, m.rawCPA + 2);
+      let ganttHtml = `
+        <div class="flex justify-between text-xs font-mono text-[var(--muted-foreground)] border-b border-[var(--border)] pb-1">
+          <span>0m</span>
+          <span>${Math.round(maxScale * 0.25)}m</span>
+          <span>${Math.round(maxScale * 0.5)}m</span>
+          <span>${Math.round(maxScale * 0.75)}m</span>
+          <span>${maxScale}m</span>
+        </div>`;
+
+      Object.keys(stationMeta).forEach(key => {
+        const meta = stationMeta[key];
+        const es = m.flowInfo.earliestStart[key];
+        const ef = m.flowInfo.earliestFinish[key];
+        const dur = getTaskDuration(key);
+        const isCrit = m.flowInfo.critNodes.has(key);
+        const isDisc = m.flowInfo.disconnectedStations.includes(key);
+        const leftPct = Math.min(95, (es / maxScale) * 100);
+        const widthPct = Math.max(4, Math.min(100 - leftPct, (dur / maxScale) * 100));
+
+        ganttHtml += `
+          <div>
+            <div class="flex justify-between text-xs mb-0.5">
+              <span class="font-medium">${meta.code}: ${meta.name} ${isCrit ? '🔥' : ''}</span>
+              <span class="font-mono ${isDisc ? 'text-rose-400' : isCrit ? 'text-rose-400 font-bold' : 'text-sky-400'}">
+                ${isDisc ? 'Unplugged' : `${es}m – ${ef}m`}
+              </span>
+            </div>
+            <div class="w-full h-3.5 bg-[var(--card)] rounded overflow-hidden">
+              <div class="h-full rounded transition-all ${isDisc ? 'bg-slate-700' : isCrit ? 'bg-rose-500' : 'bg-sky-500'}" style="margin-left:${leftPct}%;width:${widthPct}%"></div>
+            </div>
+          </div>`;
+      });
+      ganttContainer.innerHTML = ganttHtml;
+    }
+
+    function highlightButtonGroup(prefix, activeVal, count) {
+      for (let i = 1; i <= count; i++) {
+        const btn = document.getElementById(prefix + i);
+        if (!btn) continue;
+        btn.className = (i === activeVal)
+          ? 'text-xs py-1.5 px-2 rounded-lg border border-orange-500 bg-orange-500/15 text-orange-400 font-bold transition'
+          : 'text-xs py-1.5 px-2 rounded-lg border border-[var(--border)] font-medium hover:bg-[var(--secondary)] transition';
+      }
+    }
+
+    function setInput(key, val) {
+      state[key] = val;
+      renderAll();
+    }
+
+    function updateCPA() {
+      state.taskB = parseInt(document.getElementById('sliderTaskB').value);
+      state.taskC = parseInt(document.getElementById('sliderTaskC').value);
+      state.taskD = parseInt(document.getElementById('sliderTaskD').value);
+      renderAll();
+    }
+
+    function toggleSimPause() {
+      simPaused = !simPaused;
+      const btn = document.getElementById('btnPauseSim');
+      btn.textContent = simPaused ? '▶️ Resume' : '⏸ Pause';
+    }
+
+    function setSimSpeed(spd) {
+      simSpeed = spd;
+    }
+
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.add('hidden'));
+      document.getElementById('panel-' + tabId).classList.remove('hidden');
+      document.querySelectorAll('.tab-btn').forEach(b => {
+        b.className = 'tab-btn flex-1 min-w-[130px] text-xs font-semibold py-2 px-3 rounded-lg transition text-[var(--muted-foreground)] hover:text-[var(--foreground)]';
+      });
+      document.getElementById('tabBtn-' + tabId).className = 'tab-btn flex-1 min-w-[130px] text-xs font-semibold py-2 px-3 rounded-lg transition bg-orange-500 text-white shadow-sm';
+    }
+
+    function loadScenario(scenKey) {
+      currentScenario = scenKey;
+      state = { ...defaultState };
+      setLayoutPreset(state.layoutType);
+      applyFlowPreset('parallel');
+      const banner = document.getElementById('challengeBanner');
+      if (scenKey === 'sandbox') {
+        banner.classList.add('hidden');
+      } else {
+        const s = scenarios[scenKey];
+        Object.assign(state, s.setup);
+        if (s.onLoad) s.onLoad();
+        banner.classList.remove('hidden');
+        document.getElementById('challengeIcon').textContent = s.icon;
+        document.getElementById('challengeTitle').textContent = s.title;
+        document.getElementById('challengeDesc').textContent = s.desc;
+        document.getElementById('challengeTargets').textContent = s.targetsText;
+      }
+      renderAll();
+    }
+
+    function checkChallengeProgress(m) {
+      if (currentScenario === 'sandbox') return;
+      const won = scenarios[currentScenario].checkWin(m);
+      document.getElementById('challengeBadge').textContent = won ? 'Solved!' : 'Active';
+      document.getElementById('challengeSuccessBox').classList.toggle('hidden', !won);
+    }
+
+    function resetToDefaults() {
+      document.getElementById('scenarioSelect').value = 'sandbox';
+      loadScenario('sandbox');
+    }
+
+    // ==================== QUIZ ====================
+    const quizQuestions = [
+      {
+        topic: 'SEQUENCING & SCHEDULING (FLOW DESIGN)',
+        q: 'When you switch the Flow Builder from "Single-Line Serial Flow (27m)" to "Parallel CPA Flow (15m)", why does total lead time drop by 12 minutes?',
+        options: [
+          'Because Gantt charts and CPA allow independent tasks (Grill, Bun Prep, Fryers) to be scheduled simultaneously in parallel.',
+          'Because workers are no longer needed in the kitchen.',
+          'Because quality control is removed.',
+          'Because raw materials are frozen.'
+        ],
+        correct: 0,
+        explanation: 'Correct! Scheduling tasks in parallel rather than waiting in a single sequential queue dramatically reduces total order completion time.'
+      },
+      {
+        topic: 'INPUTS (TRANSFORMED VS TRANSFORMING)',
+        q: 'In the visual floorplan above, which items are Transformed Resources (changed into outputs) versus Transforming Resources (carry out the work)?',
+        options: [
+          'Beef patties, POS order data, and customers are Transformed; Kitchen staff and grills are Transforming.',
+          'Kitchen staff are Transformed; Beef patties and customers are Transforming.',
+          'Both grills and wagyu beef are Transforming resources.',
+          'Warranties are Inputs.'
+        ],
+        correct: 0,
+        explanation: 'Correct! Materials, Information, and Customers (M.I.C.) are Transformed Resources; Human Resources and Facilities are Transforming Resources.'
+      },
+      {
+        topic: 'PROCESS LAYOUT VS PRODUCT LAYOUT',
+        q: 'When you arrange workstations into a sequential assembly line (Product Layout), what type of production is it best suited for?',
+        options: [
+          'Low volume, high variety bespoke catering.',
+          'High volume, standardized mass production where tasks follow a fixed sequence.',
+          'Building a bridge or ship in one fixed spot.',
+          'Eliminating all human resources.'
+        ],
+        correct: 1,
+        explanation: 'Spot on! A Product Layout arranges workstations sequentially along an assembly line to maximize efficiency for high-volume standardized goods.'
+      },
+      {
+        topic: 'CRITICAL PATH ANALYSIS (CPA)',
+        q: 'Look at the animated red Critical Path. If Grill (Path 1) takes 15m and Bun Prep (Path 2) takes 11m, why does speeding up Bun Prep by 2 minutes save ZERO minutes overall?',
+        options: [
+          'Because the Critical Path is the longest path (15m); burger assembly must still wait for the grill patty to finish.',
+          'Because Gantt charts do not allow parallel tasks.',
+          'Because Bun Prep is an output, not a transformation process.',
+          'It actually saves 2 minutes on every order.'
+        ],
+        correct: 0,
+        explanation: 'Exactly! The Critical Path is the longest path through the network diagram, establishing the minimum time needed to complete the entire order.'
+      },
+      {
+        topic: 'OUTPUTS (WARRANTIES & CONTROL)',
+        q: 'What happens in the simulation when you bypass "G: QC & Pack" in the Flow Builder?',
+        options: [
+          'Defective burgers escape to customers uninspected, causing Warranty Claims to spike and Customer Satisfaction to fall.',
+          'Customer satisfaction increases to 100%.',
+          'Material costs drop to $0.',
+          'The Critical Path becomes 100 minutes.'
+        ],
+        correct: 0,
+        explanation: 'Correct! Without Control (quality inspection), defective outputs reach customers, driving up costly warranty claims and damaging brand reputation.'
+      }
+    ];
+
+    let currentQuizIdx = 0;
+    let quizScore = 0;
+    let answeredQuestions = new Set();
+
+    function renderQuiz() {
+      const item = quizQuestions[currentQuizIdx];
+      document.getElementById('quizProgress').textContent = `Question ${currentQuizIdx + 1} of ${quizQuestions.length}`;
+      document.getElementById('quizTopicTag').textContent = item.topic;
+      document.getElementById('quizQuestionText').textContent = item.q;
+      const optsDiv = document.getElementById('quizOptions');
+      optsDiv.innerHTML = '';
+      document.getElementById('quizFeedback').classList.add('hidden');
+
+      item.options.forEach((optText, idx) => {
+        const btn = document.createElement('button');
+        btn.className = 'w-full text-left text-xs p-2 rounded-lg border border-[var(--border)] bg-[var(--card)] hover:border-orange-500 transition';
+        btn.textContent = `${String.fromCharCode(65 + idx)}. ${optText}`;
+        btn.onclick = () => {
+          const fb = document.getElementById('quizFeedback');
+          fb.classList.remove('hidden');
+          if (idx === item.correct) {
+            if (!answeredQuestions.has(currentQuizIdx)) {
+              quizScore++;
+              answeredQuestions.add(currentQuizIdx);
+              document.getElementById('quizScoreBadge').textContent = `Score: ${quizScore} / ${quizQuestions.length}`;
+            }
+            fb.className = 'mt-2.5 p-2.5 rounded-lg text-xs bg-emerald-500/15 border border-emerald-500/40 text-emerald-300';
+            fb.textContent = '✅ ' + item.explanation;
+          } else {
+            fb.className = 'mt-2.5 p-2.5 rounded-lg text-xs bg-rose-500/15 border border-rose-500/40 text-rose-300';
+            fb.textContent = '❌ ' + item.explanation;
+          }
+        };
+        optsDiv.appendChild(btn);
+      });
+    }
+
+    function nextQuizQuestion() {
+      currentQuizIdx = (currentQuizIdx + 1) % quizQuestions.length;
+      renderQuiz();
+    }
+    function prevQuizQuestion() {
+      currentQuizIdx = (currentQuizIdx - 1 + quizQuestions.length) % quizQuestions.length;
+      renderQuiz();
+    }
+
+    // Initialize
+    setLayoutPreset(2);
+    applyFlowPreset('parallel');
+    renderQuiz();
+    for (let i = 0; i < 6; i++) spawnOrderParticle();
+    requestAnimationFrame(renderCanvasFrame);
+  </script>
+</body>
+</html>
