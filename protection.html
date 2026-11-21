@@ -1,0 +1,1102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-T56TBQ81V1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-T56TBQ81V1');
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HSC Economics — Quotas, Tariff Quotas & Tariffs Interactive Diagrams | DATATRENDS</title>
+<meta name="description" content="Interactive HSC Economics moving diagrams demonstrating Import Quotas, Tariff Quotas, and Tariffs — explore World Price, Domestic Equilibrium, Quota Limits (High, Medium, Low, No Imports), and Demand/Supply shifts.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Outfit:wght@600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #04020e;
+  --bg-card: rgba(15, 23, 42, 0.75);
+  --bg-panel: rgba(9, 13, 28, 0.85);
+  --border: rgba(255, 255, 255, 0.09);
+  --border-hover: rgba(255, 255, 255, 0.22);
+  --text-primary: #f8fafc;
+  --text-secondary: #cbd5e1;
+  --text-muted: #94a3b8;
+  --primary: #818cf8;
+  --secondary: #c084fc;
+  --blue: #38bdf8;
+  --green: #34d399;
+  --amber: #fbbf24;
+  --orange: #fb923c;
+  --red: #f87171;
+  --radius-sm: 10px;
+  --radius-md: 16px;
+  --radius-lg: 22px;
+  --radius-full: 9999px;
+  --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Inter', sans-serif;
+  background: var(--bg);
+  color: var(--text-primary);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+a { text-decoration: none; color: inherit; }
+
+/* Animated ambient orbs */
+.bg-orbs { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+.orb { position: absolute; border-radius: 50%; filter: blur(95px); opacity: 0.13; animation: orbFloat 18s ease-in-out infinite; }
+.orb-1 { width: 620px; height: 620px; background: radial-gradient(circle, #3b82f6, transparent); top: -200px; left: -180px; }
+.orb-2 { width: 540px; height: 540px; background: radial-gradient(circle, #8b5cf6, transparent); top: 35%; right: -180px; animation-delay: -6s; }
+.orb-3 { width: 460px; height: 460px; background: radial-gradient(circle, #10b981, transparent); bottom: -120px; left: 25%; animation-delay: -12s; }
+@keyframes orbFloat {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(35px, -25px) scale(1.04); }
+  66% { transform: translate(-25px, 20px) scale(0.97); }
+}
+
+.wrapper { position: relative; z-index: 1; }
+.container { max-width: 1220px; margin: 0 auto; padding: 0 1.25rem; }
+
+/* Navigation */
+.nav {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 1rem 2rem; border-bottom: 1px solid var(--border);
+  backdrop-filter: blur(14px); background: rgba(4, 2, 14, 0.85);
+  position: sticky; top: 0; z-index: 100; flex-wrap: wrap; gap: 0.75rem;
+}
+.nav-logo {
+  font-family: 'Outfit', sans-serif; font-size: 1.25rem; font-weight: 900;
+  background: linear-gradient(135deg, #818cf8, #c084fc, #38bdf8);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  letter-spacing: 0.04em;
+}
+.nav-links { display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; }
+.nav-pill {
+  padding: 0.4rem 0.9rem; border-radius: var(--radius-full);
+  font-size: 0.8rem; font-weight: 700; color: var(--text-secondary);
+  border: 1px solid var(--border); transition: var(--transition);
+}
+.nav-pill:hover { background: rgba(255, 255, 255, 0.07); color: #fff; border-color: var(--border-hover); }
+.nav-pill.active { background: rgba(56, 189, 248, 0.14); color: #38bdf8; border-color: rgba(56, 189, 248, 0.35); }
+
+/* Hero */
+.hero { text-align: center; padding: 3rem 1.25rem 2rem; }
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  background: rgba(56, 189, 248, 0.12); border: 1px solid rgba(56, 189, 248, 0.3);
+  border-radius: var(--radius-full); padding: 0.35rem 1rem;
+  font-size: 0.76rem; font-weight: 800; color: #38bdf8;
+  letter-spacing: 0.04em; margin-bottom: 1rem; text-transform: uppercase;
+}
+.hero-title {
+  font-family: 'Outfit', sans-serif; font-size: clamp(2rem, 4.5vw, 3.2rem);
+  font-weight: 900; line-height: 1.1; letter-spacing: -0.02em; margin-bottom: 0.75rem;
+}
+.grad-title {
+  background: linear-gradient(135deg, #38bdf8 0%, #818cf8 50%, #c084fc 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+}
+.hero-sub {
+  font-size: 0.98rem; color: var(--text-secondary);
+  max-width: 760px; margin: 0 auto 1.5rem; line-height: 1.6;
+}
+
+/* Jump Tabs */
+.jump-tabs {
+  display: inline-flex; gap: 0.5rem; padding: 0.35rem;
+  background: rgba(15, 23, 42, 0.8); border: 1px solid var(--border);
+  border-radius: var(--radius-full); flex-wrap: wrap; justify-content: center;
+}
+.jump-tab {
+  padding: 0.5rem 1.2rem; border-radius: var(--radius-full);
+  font-size: 0.82rem; font-weight: 700; color: var(--text-secondary);
+  transition: var(--transition); cursor: pointer;
+}
+.jump-tab:hover { color: #fff; background: rgba(255,255,255,0.06); }
+.jump-tab.tab-blue { background: rgba(59, 130, 246, 0.2); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.4); }
+.jump-tab.tab-purple { background: rgba(139, 92, 246, 0.2); color: #c084fc; border: 1px solid rgba(139, 92, 246, 0.4); }
+
+/* Diagram Section Card */
+.diagram-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  margin-bottom: 2.25rem;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(12px);
+}
+.card-header {
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
+  gap: 1rem; padding-bottom: 1rem; margin-bottom: 1.25rem;
+  border-bottom: 1px solid var(--border);
+}
+.badge-pill {
+  display: inline-block; padding: 0.2rem 0.65rem; border-radius: 6px;
+  font-size: 0.72rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em;
+}
+.badge-blue { background: rgba(59, 130, 246, 0.18); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.35); }
+.badge-purple { background: rgba(139, 92, 246, 0.18); color: #c084fc; border: 1px solid rgba(139, 92, 246, 0.35); }
+
+.card-title-row { display: flex; align-items: center; gap: 0.65rem; flex-wrap: wrap; }
+.card-title-row h2 { font-family: 'Outfit', sans-serif; font-size: 1.35rem; font-weight: 800; color: #fff; }
+.card-subtitle { font-size: 0.84rem; color: var(--text-muted); margin-top: 0.25rem; }
+
+/* Preset & Animate Controls */
+.btn-group { display: flex; align-items: center; gap: 0.4rem; flex-wrap: wrap; }
+.ctrl-btn {
+  padding: 0.42rem 0.85rem; border-radius: 9px; font-size: 0.78rem; font-weight: 700;
+  border: 1px solid var(--border); background: rgba(255, 255, 255, 0.04);
+  color: var(--text-secondary); cursor: pointer; transition: var(--transition);
+  font-family: 'Inter', sans-serif;
+}
+.ctrl-btn:hover { background: rgba(255, 255, 255, 0.1); color: #fff; border-color: var(--border-hover); }
+.ctrl-btn-play-blue {
+  background: linear-gradient(135deg, #2563eb, #3b82f6); color: #fff;
+  border-color: rgba(96, 165, 250, 0.5); box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35);
+}
+.ctrl-btn-play-blue:hover { background: linear-gradient(135deg, #1d4ed8, #2563eb); }
+.ctrl-btn-play-purple {
+  background: linear-gradient(135deg, #7c3aed, #8b5cf6); color: #fff;
+  border-color: rgba(192, 132, 252, 0.5); box-shadow: 0 4px 14px rgba(124, 58, 237, 0.35);
+}
+.ctrl-btn-play-purple:hover { background: linear-gradient(135deg, #6d28d9, #7c3aed); }
+
+/* 2-Column Interactive Grid */
+.sim-grid {
+  display: grid; grid-template-columns: 7fr 5fr; gap: 1.25rem; align-items: center;
+}
+@media (max-width: 900px) {
+  .sim-grid { grid-template-columns: 1fr; }
+}
+
+.svg-box {
+  background: var(--bg-panel); border: 1px solid var(--border);
+  border-radius: var(--radius-md); padding: 0.75rem;
+}
+.svg-box svg { width: 100%; height: auto; display: block; user-select: none; }
+
+.controls-col { display: flex; flex-direction: column; gap: 0.85rem; }
+.panel-box {
+  background: var(--bg-panel); border: 1px solid var(--border);
+  border-radius: var(--radius-md); padding: 0.95rem 1.1rem;
+}
+.slider-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.45rem; gap: 0.5rem; }
+.slider-label { font-size: 0.82rem; font-weight: 700; color: #f1f5f9; }
+.status-tag {
+  padding: 0.2rem 0.6rem; border-radius: 6px; font-size: 0.74rem; font-weight: 800;
+}
+
+input[type="range"] {
+  width: 100%; cursor: pointer; height: 6px; border-radius: 6px;
+}
+.range-blue { accent-color: #3b82f6; }
+.range-purple { accent-color: #8b5cf6; }
+.range-green { accent-color: #10b981; }
+
+.slider-ticks {
+  display: flex; justify-content: space-between; font-size: 0.72rem;
+  color: var(--text-muted); margin-top: 0.35rem;
+}
+
+.metrics-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.65rem; }
+.metric-box {
+  background: var(--bg-panel); border: 1px solid var(--border);
+  border-radius: 12px; padding: 0.75rem 0.9rem;
+}
+.metric-lbl { font-size: 0.74rem; color: var(--text-muted); font-weight: 600; }
+.metric-val-row { display: flex; align-items: baseline; gap: 0.45rem; margin-top: 0.25rem; flex-wrap: wrap; }
+.metric-big { font-family: 'Outfit', sans-serif; font-size: 1.2rem; font-weight: 800; }
+.metric-sub { font-size: 0.74rem; color: var(--text-muted); font-weight: 600; }
+
+.analysis-box {
+  background: var(--bg-panel); border: 1px solid var(--border);
+  border-radius: var(--radius-md); padding: 0.95rem 1.1rem; font-size: 0.82rem;
+}
+.analysis-head {
+  display: flex; justify-content: space-between; align-items: center;
+  font-weight: 700; margin-bottom: 0.45rem; flex-wrap: wrap; gap: 0.4rem;
+}
+.analysis-text { color: var(--text-secondary); line-height: 1.55; }
+.legend-row {
+  display: flex; flex-wrap: wrap; gap: 0.85rem; margin-top: 0.65rem;
+  padding-top: 0.55rem; border-top: 1px solid var(--border); font-size: 0.75rem; color: var(--text-secondary);
+}
+.legend-item { display: flex; align-items: center; gap: 0.35rem; }
+.swatch { width: 11px; height: 11px; border-radius: 3px; display: inline-block; }
+
+/* Summary Table Section */
+.table-wrap { overflow-x: auto; }
+table.hsc-table {
+  width: 100%; border-collapse: collapse; font-size: 0.85rem; text-align: left;
+}
+table.hsc-table th, table.hsc-table td {
+  padding: 0.85rem 1rem; border-bottom: 1px solid var(--border);
+}
+table.hsc-table th {
+  font-family: 'Outfit', sans-serif; font-weight: 800; color: #fff;
+  background: rgba(255, 255, 255, 0.03);
+}
+table.hsc-table td { color: var(--text-secondary); line-height: 1.5; }
+
+.footer {
+  border-top: 1px solid var(--border); padding: 2.5rem 1.25rem;
+  text-align: center; margin-top: 3rem; color: var(--text-muted); font-size: 0.82rem;
+}
+</style>
+</head>
+<body>
+
+<div class="bg-orbs">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+</div>
+
+<div class="wrapper">
+  <!-- TOP NAV -->
+  <nav class="nav">
+    <a href="index.html" class="nav-logo">DATATRENDS</a>
+    <div class="nav-links">
+      <a href="index.html" class="nav-pill">🏠 Main Portal</a>
+      <a href="econtoos.html" class="nav-pill">⚡ EconTools Suite</a>
+      <a href="#quota-section" class="nav-pill active">📊 1. Quotas &amp; Tariff Quotas</a>
+      <a href="#tariff-section" class="nav-pill">🛡️ 2. Tariffs &amp; Shifts</a>
+      <a href="simulations.html" class="nav-pill">🎮 Live Classroom Sims</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <header class="hero">
+    <div class="hero-badge">🎓 NESA HSC Economics • Topic 2: Protection</div>
+    <h1 class="hero-title">
+      Interactive <span class="grad-title">Quotas &amp; Tariffs</span> Moving Diagrams
+    </h1>
+    <p class="hero-sub">
+      Explore how <strong>Import Quotas</strong>, <strong>Tariff Quotas</strong>, and <strong>Tariffs</strong> affect domestic supply, domestic demand, world vs. domestic prices, government revenue, and deadweight welfare loss.
+    </p>
+    <div class="jump-tabs">
+      <a href="#quota-section" class="jump-tab tab-blue">Diagram 1: Import Quota &amp; Quota Limits</a>
+      <a href="#tariff-section" class="jump-tab tab-purple">Diagram 2: Tariffs &amp; Demand/Supply Shifts</a>
+      <a href="#comparison-section" class="jump-tab">HSC 5-Effect Comparison Table</a>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <!-- =================================================================
+         DIAGRAM 1: IMPORT QUOTA & TARIFF-QUOTA MOVING DIAGRAM
+         ================================================================= -->
+    <section id="quota-section" class="diagram-card">
+      <div class="card-header">
+        <div>
+          <div class="card-title-row">
+            <span class="badge-pill badge-blue">Diagram 1 • Quotas</span>
+            <h2>Import Quota &amp; Tariff-Quota Diagram (Changing Quota Limit)</h2>
+          </div>
+          <p class="card-subtitle">
+            Watch how changing the Quota Limit (<strong>High &rarr; Medium &rarr; Low &rarr; No Imports</strong>) shifts effective supply (S + Quota) and drives Domestic Price (P<sub>Q</sub>) above World Price (P<sub>W</sub>).
+          </p>
+        </div>
+        <div class="btn-group">
+          <button id="playBtn" onclick="togglePlay()" class="ctrl-btn ctrl-btn-play-blue">
+            <span id="playIcon">▶</span> <span id="playLabel">Animate Quota</span>
+          </button>
+          <button onclick="setPreset('free')" class="ctrl-btn">Free Trade</button>
+          <button onclick="setPreset('high')" class="ctrl-btn">High Quota</button>
+          <button onclick="setPreset('medium')" class="ctrl-btn">Med Quota</button>
+          <button onclick="setPreset('low')" class="ctrl-btn">Low Quota</button>
+          <button onclick="setPreset('none')" class="ctrl-btn">No Imports (0)</button>
+        </div>
+      </div>
+
+      <div class="sim-grid">
+        <!-- SVG Graph -->
+        <div class="svg-box">
+          <svg id="quotaSvg" viewBox="0 0 460 315">
+            <!-- Grid lines -->
+            <g stroke="rgba(255,255,255,0.07)" stroke-width="1" stroke-dasharray="3,3">
+              <line x1="55" y1="50" x2="430" y2="50" />
+              <line x1="55" y1="100" x2="430" y2="100" />
+              <line x1="55" y1="150" x2="430" y2="150" />
+              <line x1="55" y1="200" x2="430" y2="200" />
+            </g>
+
+            <!-- Shaded Welfare Areas -->
+            <polygon id="areaRedist" points="" fill="rgba(16, 185, 129, 0.22)" stroke="rgba(16, 185, 129, 0.65)" stroke-width="1" />
+            <rect id="areaQuotaRent" x="0" y="0" width="0" height="0" fill="rgba(245, 158, 11, 0.25)" stroke="rgba(245, 158, 11, 0.75)" stroke-width="1.2" />
+            <polygon id="areaDwlProd" points="" fill="rgba(239, 68, 68, 0.24)" />
+            <polygon id="areaDwlCons" points="" fill="rgba(239, 68, 68, 0.24)" />
+
+            <!-- World Price Line (Pw) -->
+            <line x1="55" y1="210" x2="430" y2="210" stroke="#94a3b8" stroke-width="1.75" stroke-dasharray="5,4" />
+            <text x="48" y="214" text-anchor="end" font-size="12" font-weight="700" fill="#94a3b8">P<tspan dy="3" font-size="10">W</tspan></text>
+            <text x="425" y="204" text-anchor="end" font-size="12" fill="#94a3b8">World Price (S<tspan dy="2" font-size="10">W</tspan><tspan dy="-2">)</tspan></text>
+
+            <!-- Domestic Equilibrium Price (Pe) reference -->
+            <line x1="55" y1="130" x2="235" y2="130" stroke="#64748b" stroke-width="1" stroke-dasharray="2,3" />
+            <text x="48" y="134" text-anchor="end" font-size="12" fill="#94a3b8">P<tspan dy="3" font-size="10">E</tspan></text>
+
+            <!-- Domestic Demand (D) and Domestic Supply (S) -->
+            <line x1="95" y1="18" x2="390" y2="254" stroke="#38bdf8" stroke-width="2.6" />
+            <text x="394" y="254" font-size="12" font-weight="700" fill="#38bdf8">D<tspan dy="3" font-size="10">dom</tspan></text>
+
+            <line x1="95" y1="242" x2="375" y2="18" stroke="#34d399" stroke-width="2.6" />
+            <text x="379" y="22" font-size="12" font-weight="700" fill="#34d399">S<tspan dy="3" font-size="10">dom</tspan></text>
+
+            <!-- S + Quota Curve (Shifted Supply Curve by Quota Volume) -->
+            <line id="sQuotaLine" x1="195" y1="242" x2="425" y2="58" stroke="#fbbf24" stroke-width="2.2" stroke-dasharray="4,3" />
+            <text id="sQuotaLabel" x="420" y="52" text-anchor="end" font-size="12" font-weight="700" fill="#fbbf24">S + Quota</text>
+
+            <!-- Quota Price Line (Pq) -->
+            <line id="pqLine" x1="55" y1="170" x2="430" y2="170" stroke="#f87171" stroke-width="2.4" />
+            <text id="pqLabel" x="48" y="174" text-anchor="end" font-size="12" font-weight="700" fill="#f87171">P<tspan dy="3" font-size="10">Q</tspan></text>
+
+            <!-- Free trade vertical drop lines Q1, Q2 -->
+            <line x1="135" y1="210" x2="135" y2="265" stroke="#64748b" stroke-width="1" stroke-dasharray="2,2" />
+            <text x="135" y="280" text-anchor="middle" font-size="12" fill="#94a3b8">Q<tspan dy="3" font-size="10">1</tspan></text>
+
+            <line x1="335" y1="210" x2="335" y2="265" stroke="#64748b" stroke-width="1" stroke-dasharray="2,2" />
+            <text x="335" y="280" text-anchor="middle" font-size="12" fill="#94a3b8">Q<tspan dy="3" font-size="10">2</tspan></text>
+
+            <!-- Quota vertical drop lines Q3, Q4 -->
+            <line id="q3Line" x1="185" y1="170" x2="185" y2="265" stroke="#f87171" stroke-width="1.5" stroke-dasharray="3,2" />
+            <text id="q3Label" x="185" y="280" text-anchor="middle" font-size="12" font-weight="700" fill="#f87171">Q<tspan dy="3" font-size="10">3</tspan></text>
+
+            <line id="q4Line" x1="285" y1="170" x2="285" y2="265" stroke="#f87171" stroke-width="1.5" stroke-dasharray="3,2" />
+            <text id="q4Label" x="285" y="280" text-anchor="middle" font-size="12" font-weight="700" fill="#f87171">Q<tspan dy="3" font-size="10">4</tspan></text>
+
+            <!-- Quota Bracket between Q3 and Q4 -->
+            <g id="quotaBracketGroup">
+              <line id="quotaBracket" x1="185" y1="296" x2="285" y2="296" stroke="#fbbf24" stroke-width="2.5" />
+              <line id="quotaTickL" x1="185" y1="291" x2="185" y2="301" stroke="#fbbf24" stroke-width="2" />
+              <line id="quotaTickR" x1="285" y1="291" x2="285" y2="301" stroke="#fbbf24" stroke-width="2" />
+              <text id="quotaBracketText" x="235" y="310" text-anchor="middle" font-size="12" font-weight="700" fill="#fbbf24">Quota Imports</text>
+            </g>
+
+            <!-- Equilibrium Point E -->
+            <circle cx="235" cy="130" r="3.5" fill="#94a3b8" />
+            <text x="235" y="120" text-anchor="middle" font-size="12" font-weight="600" fill="#94a3b8">E (No Imports)</text>
+
+            <!-- Active Intersection Points on S and D at Pq -->
+            <circle id="ptS" cx="185" cy="170" r="4.5" fill="#34d399" stroke="#fff" stroke-width="1.5" />
+            <circle id="ptD" cx="285" cy="170" r="4.5" fill="#38bdf8" stroke="#fff" stroke-width="1.5" />
+
+            <!-- Axes -->
+            <line x1="55" y1="12" x2="55" y2="265" stroke="#e2e8f0" stroke-width="2" />
+            <line x1="55" y1="265" x2="435" y2="265" stroke="#e2e8f0" stroke-width="2" />
+            <text x="14" y="24" font-size="12" font-weight="700" fill="#e2e8f0">Price ($)</text>
+            <text x="435" y="258" text-anchor="end" font-size="12" font-weight="700" fill="#e2e8f0">Quantity</text>
+            <text x="48" y="275" text-anchor="end" font-size="12" fill="#94a3b8">0</text>
+          </svg>
+        </div>
+
+        <!-- Right Controls & Readouts -->
+        <div class="controls-col">
+          <div class="panel-box">
+            <div class="slider-header">
+              <label for="quotaSlider" class="slider-label">Allowed Import Quota Limit (Q<sub>3</sub>Q<sub>4</sub>):</label>
+              <span id="stateBadge" class="status-tag" style="background:rgba(245,158,11,0.2);color:#fbbf24;">Medium Quota</span>
+            </div>
+            <input id="quotaSlider" type="range" min="0" max="200" step="2" value="100" oninput="onSliderInput(this.value)" class="range-blue" />
+            <div class="slider-ticks">
+              <span>0 (No Imports)</span>
+              <span>Low (50)</span>
+              <span>Med (100)</span>
+              <span>High (150)</span>
+              <span>Free Trade (200)</span>
+            </div>
+          </div>
+
+          <div class="metrics-grid">
+            <div class="metric-box">
+              <div class="metric-lbl">Domestic Quota Price (P<sub>Q</sub>)</div>
+              <div class="metric-val-row">
+                <span id="valPrice" class="metric-big" style="color:#f87171;">$40.00</span>
+                <span class="metric-sub">(World P<sub>W</sub> = $20)</span>
+              </div>
+            </div>
+            <div class="metric-box">
+              <div class="metric-lbl">Import Volume (Q<sub>4</sub> &minus; Q<sub>3</sub>)</div>
+              <div class="metric-val-row">
+                <span id="valImports" class="metric-big" style="color:#fbbf24;">100 units</span>
+                <span id="valImportPct" class="metric-sub">(-50% vs Free)</span>
+              </div>
+            </div>
+            <div class="metric-box">
+              <div class="metric-lbl">Domestic Supply (0 &rarr; Q<sub>3</sub>)</div>
+              <div class="metric-val-row">
+                <span id="valDomSupply" class="metric-big" style="color:#34d399;">100 units</span>
+                <span id="valSupplyGain" class="metric-sub" style="color:#34d399;">+50 expansion</span>
+              </div>
+            </div>
+            <div class="metric-box">
+              <div class="metric-lbl">Domestic Demand (0 &rarr; Q<sub>4</sub>)</div>
+              <div class="metric-val-row">
+                <span id="valDomDemand" class="metric-big" style="color:#38bdf8;">200 units</span>
+                <span id="valDemandLoss" class="metric-sub" style="color:#f87171;">-50 contraction</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="analysis-box">
+            <div class="analysis-head">
+              <span>HSC Economic Analysis:</span>
+              <span id="valQuotaRent" style="color:#fbbf24;">Quota Rent / Tariff-Quota Rev: $2,000</span>
+            </div>
+            <p id="explanationText" class="analysis-text">
+              Tightening the quota to a <strong>Medium Limit (100 units)</strong> creates an import shortage at P<sub>W</sub>, pushing domestic price up to <strong>$40</strong>. Domestic output expands (Q<sub>1</sub> &rarr; Q<sub>3</sub>) and consumption contracts (Q<sub>2</sub> &rarr; Q<sub>4</sub>).
+            </p>
+            <div class="legend-row">
+              <span class="legend-item"><span class="swatch" style="background:rgba(16,185,129,0.45);border:1px solid #10b981;"></span>Producer Surplus Gain</span>
+              <span class="legend-item"><span class="swatch" style="background:rgba(245,158,11,0.45);border:1px solid #f59e0b;"></span>Quota Rent / Tariff-Quota Rev</span>
+              <span class="legend-item"><span class="swatch" style="background:rgba(239,68,68,0.45);border:1px solid #ef4444;"></span>Deadweight Loss</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =================================================================
+         DIAGRAM 2: TARIFF & DEMAND/SUPPLY SHIFTS MOVING DIAGRAM
+         ================================================================= -->
+    <section id="tariff-section" class="diagram-card">
+      <div class="card-header">
+        <div>
+          <div class="card-title-row">
+            <span class="badge-pill badge-purple">Diagram 2 • Tariffs</span>
+            <h2>Tariff Diagram (Changes in Tariffs &amp; Shifts in Demand / Supply)</h2>
+          </div>
+          <p class="card-subtitle">
+            Adjust the <strong>Tariff Per Unit (T)</strong> or shift <strong>Domestic Demand (D)</strong> and <strong>Domestic Supply (S)</strong> to see impacts on price (P<sub>T</sub>), imports (Q<sub>3</sub>Q<sub>4</sub>), and Government Revenue (ABCD).
+          </p>
+        </div>
+        <div class="btn-group">
+          <button id="playTariffBtn" onclick="toggleTariffPlay()" class="ctrl-btn ctrl-btn-play-purple">
+            <span id="playTariffIcon">▶</span> <span id="playTariffLabel">Animate Tariff</span>
+          </button>
+          <button onclick="setTariffPreset(0)" class="ctrl-btn">No Tariff ($0)</button>
+          <button onclick="setTariffPreset(10)" class="ctrl-btn">Low ($10)</button>
+          <button onclick="setTariffPreset(20)" class="ctrl-btn">Med ($20)</button>
+          <button onclick="setTariffPreset(30)" class="ctrl-btn">High ($30)</button>
+          <button onclick="setTariffPreset(40)" class="ctrl-btn">Prohibitive ($40)</button>
+        </div>
+      </div>
+
+      <div class="sim-grid">
+        <!-- SVG Graph -->
+        <div class="svg-box">
+          <svg id="tariffSvg" viewBox="0 0 460 315">
+            <!-- Grid lines -->
+            <g stroke="rgba(255,255,255,0.07)" stroke-width="1" stroke-dasharray="3,3">
+              <line x1="55" y1="50" x2="430" y2="50" />
+              <line x1="55" y1="100" x2="430" y2="100" />
+              <line x1="55" y1="150" x2="430" y2="150" />
+              <line x1="55" y1="200" x2="430" y2="200" />
+            </g>
+
+            <!-- Shaded Economic Welfare Areas -->
+            <polygon id="tAreaRedist" points="" fill="rgba(16, 185, 129, 0.22)" stroke="rgba(16, 185, 129, 0.65)" stroke-width="1" />
+            <rect id="tAreaRev" x="0" y="0" width="0" height="0" fill="rgba(139, 92, 246, 0.30)" stroke="rgba(167, 139, 250, 0.85)" stroke-width="1.2" />
+            <polygon id="tAreaDwlProd" points="" fill="rgba(239, 68, 68, 0.24)" />
+            <polygon id="tAreaDwlCons" points="" fill="rgba(239, 68, 68, 0.24)" />
+
+            <!-- Original Baseline D0 and S0 (ghost reference lines when shifted) -->
+            <line x1="95" y1="18" x2="390" y2="254" stroke="#38bdf8" stroke-width="1" stroke-dasharray="3,3" opacity="0.3" />
+            <line x1="95" y1="242" x2="375" y2="18" stroke="#34d399" stroke-width="1" stroke-dasharray="3,3" opacity="0.3" />
+
+            <!-- World Price Line (Pw) -->
+            <line x1="55" y1="210" x2="430" y2="210" stroke="#94a3b8" stroke-width="1.75" stroke-dasharray="5,4" />
+            <text x="48" y="214" text-anchor="end" font-size="12" font-weight="700" fill="#94a3b8">P<tspan dy="3" font-size="10">W</tspan></text>
+            <text x="425" y="204" text-anchor="end" font-size="12" fill="#94a3b8">S<tspan dy="2" font-size="10">World</tspan></text>
+
+            <!-- Active Domestic Demand (D) and Domestic Supply (S) -->
+            <line id="tDemandLine" x1="95" y1="18" x2="390" y2="254" stroke="#38bdf8" stroke-width="2.6" />
+            <text id="tDemandLabel" x="394" y="254" font-size="12" font-weight="700" fill="#38bdf8">D</text>
+
+            <line id="tSupplyLine" x1="95" y1="242" x2="375" y2="18" stroke="#34d399" stroke-width="2.6" />
+            <text id="tSupplyLabel" x="379" y="22" font-size="12" font-weight="700" fill="#34d399">S</text>
+
+            <!-- Tariff Price Line (Pt = Pw + Tariff) -->
+            <line id="ptLine" x1="55" y1="170" x2="430" y2="170" stroke="#c084fc" stroke-width="2.4" />
+            <text id="ptLabel" x="48" y="174" text-anchor="end" font-size="12" font-weight="700" fill="#c084fc">P<tspan dy="3" font-size="10">T</tspan></text>
+            <text id="ptRightLabel" x="425" y="164" text-anchor="end" font-size="12" font-weight="700" fill="#c084fc">S<tspan dy="2" font-size="10">W</tspan><tspan dy="-2"> + Tariff</tspan></text>
+
+            <!-- Tariff Vertical Arrow on left -->
+            <line id="tariffArrow" x1="72" y1="210" x2="72" y2="170" stroke="#c084fc" stroke-width="2.2" />
+            <text id="tariffArrowText" x="77" y="194" font-size="12" font-weight="700" fill="#c084fc">T</text>
+
+            <!-- Free Trade Drop Lines Q1, Q2 -->
+            <line id="tQ1Line" x1="135" y1="210" x2="135" y2="265" stroke="#64748b" stroke-width="1" stroke-dasharray="2,2" />
+            <text id="tQ1Label" x="135" y="280" text-anchor="middle" font-size="12" fill="#94a3b8">Q<tspan dy="3" font-size="10">1</tspan></text>
+
+            <line id="tQ2Line" x1="335" y1="210" x2="335" y2="265" stroke="#64748b" stroke-width="1" stroke-dasharray="2,2" />
+            <text id="tQ2Label" x="335" y="280" text-anchor="middle" font-size="12" fill="#94a3b8">Q<tspan dy="3" font-size="10">2</tspan></text>
+
+            <!-- Post-Tariff Drop Lines Q3, Q4 -->
+            <line id="tQ3Line" x1="185" y1="170" x2="185" y2="265" stroke="#c084fc" stroke-width="1.5" stroke-dasharray="3,2" />
+            <text id="tQ3Label" x="185" y="280" text-anchor="middle" font-size="12" font-weight="700" fill="#c084fc">Q<tspan dy="3" font-size="10">3</tspan></text>
+
+            <line id="tQ4Line" x1="285" y1="170" x2="285" y2="265" stroke="#c084fc" stroke-width="1.5" stroke-dasharray="3,2" />
+            <text id="tQ4Label" x="285" y="280" text-anchor="middle" font-size="12" font-weight="700" fill="#c084fc">Q<tspan dy="3" font-size="10">4</tspan></text>
+
+            <!-- ABCD labels for Government Revenue Box -->
+            <text id="lblA" x="182" y="165" text-anchor="end" font-size="12" font-weight="700" fill="#c084fc">A</text>
+            <text id="lblB" x="288" y="165" text-anchor="start" font-size="12" font-weight="700" fill="#c084fc">B</text>
+            <text id="lblC" x="182" y="222" text-anchor="end" font-size="12" font-weight="600" fill="#94a3b8">C</text>
+            <text id="lblD" x="288" y="222" text-anchor="start" font-size="12" font-weight="600" fill="#94a3b8">D</text>
+
+            <!-- Imports Bracket Q3 to Q4 -->
+            <g id="tImportBracketGroup">
+              <line id="tImportBracket" x1="185" y1="296" x2="285" y2="296" stroke="#c084fc" stroke-width="2.5" />
+              <text id="tImportText" x="235" y="310" text-anchor="middle" font-size="12" font-weight="700" fill="#c084fc">Imports after Tariff</text>
+            </g>
+
+            <!-- Intersection points A and B -->
+            <circle id="tPtA" cx="185" cy="170" r="4.5" fill="#34d399" stroke="#fff" stroke-width="1.5" />
+            <circle id="tPtB" cx="285" cy="170" r="4.5" fill="#38bdf8" stroke="#fff" stroke-width="1.5" />
+
+            <!-- Axes -->
+            <line x1="55" y1="12" x2="55" y2="265" stroke="#e2e8f0" stroke-width="2" />
+            <line x1="55" y1="265" x2="435" y2="265" stroke="#e2e8f0" stroke-width="2" />
+            <text x="14" y="24" font-size="12" font-weight="700" fill="#e2e8f0">Price ($)</text>
+            <text x="435" y="258" text-anchor="end" font-size="12" font-weight="700" fill="#e2e8f0">Quantity</text>
+            <text x="48" y="275" text-anchor="end" font-size="12" fill="#94a3b8">0</text>
+          </svg>
+        </div>
+
+        <!-- Right Controls & Readouts -->
+        <div class="controls-col">
+          <div class="panel-box">
+            <div class="slider-header">
+              <label for="tariffSlider" class="slider-label">Tariff Per Unit (T):</label>
+              <span id="tariffBadge" class="status-tag" style="background:rgba(139,92,246,0.2);color:#c084fc;">Medium Tariff ($20)</span>
+            </div>
+            <input id="tariffSlider" type="range" min="0" max="40" step="1" value="20" oninput="onTariffInput()" class="range-purple" />
+            <div class="slider-ticks">
+              <span>$0 (Free Trade)</span>
+              <span>$10</span>
+              <span>$20</span>
+              <span>$30</span>
+              <span>$40 (No Imports)</span>
+            </div>
+
+            <!-- Demand & Supply Curve Shifts -->
+            <div style="margin-top:0.85rem;padding-top:0.75rem;border-top:1px solid var(--border);display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;">
+              <div>
+                <div style="display:flex;justify-content:space-between;font-size:0.75rem;margin-bottom:0.25rem;">
+                  <span style="font-weight:700;color:#38bdf8;">Shift Demand (D):</span>
+                  <span id="dShiftVal" style="color:var(--text-muted);">0</span>
+                </div>
+                <input id="dShiftSlider" type="range" min="-30" max="30" step="5" value="0" oninput="onTariffInput()" class="range-blue" />
+              </div>
+              <div>
+                <div style="display:flex;justify-content:space-between;font-size:0.75rem;margin-bottom:0.25rem;">
+                  <span style="font-weight:700;color:#34d399;">Shift Supply (S):</span>
+                  <span id="sShiftVal" style="color:var(--text-muted);">0</span>
+                </div>
+                <input id="sShiftSlider" type="range" min="-30" max="30" step="5" value="0" oninput="onTariffInput()" class="range-green" />
+              </div>
+            </div>
+          </div>
+
+          <div class="metrics-grid">
+            <div class="metric-box">
+              <div class="metric-lbl">Tariff Price (P<sub>T</sub> = P<sub>W</sub> + T)</div>
+              <div class="metric-val-row">
+                <span id="tValPrice" class="metric-big" style="color:#c084fc;">$40.00</span>
+                <span id="tValTax" class="metric-sub">(+$20 tariff)</span>
+              </div>
+            </div>
+            <div class="metric-box">
+              <div class="metric-lbl">Govt Revenue (Box ABCD)</div>
+              <div class="metric-val-row">
+                <span id="tValRev" class="metric-big" style="color:#c084fc;">$2,000</span>
+                <span id="tValImports" class="metric-sub">(100 imp)</span>
+              </div>
+            </div>
+            <div class="metric-box">
+              <div class="metric-lbl">Quantity Supplied (Q<sub>3</sub>)</div>
+              <div class="metric-val-row">
+                <span id="tValQs" class="metric-big" style="color:#34d399;">100 units</span>
+                <span id="tValQsDiff" class="metric-sub" style="color:#34d399;">+50 expansion</span>
+              </div>
+            </div>
+            <div class="metric-box">
+              <div class="metric-lbl">Quantity Demanded (Q<sub>4</sub>)</div>
+              <div class="metric-val-row">
+                <span id="tValQd" class="metric-big" style="color:#38bdf8;">200 units</span>
+                <span id="tValQdDiff" class="metric-sub" style="color:#f87171;">-50 contraction</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="analysis-box">
+            <div class="analysis-head">
+              <span>HSC Tariff Effects on D &amp; S:</span>
+              <span id="tValDwl" style="color:#f87171;">Deadweight Loss: $1,000</span>
+            </div>
+            <p id="tExplanation" class="analysis-text">
+              A <strong>$20 tariff</strong> raises price to <strong>$40</strong>, causing an expansion along S (Q<sub>1</sub> &rarr; Q<sub>3</sub> = 100) and contraction along D (Q<sub>2</sub> &rarr; Q<sub>4</sub> = 200). Govt revenue <strong>ABCD = $2,000</strong>.
+            </p>
+            <div class="legend-row">
+              <span class="legend-item"><span class="swatch" style="background:rgba(16,185,129,0.45);border:1px solid #10b981;"></span>Producer Surplus Gain</span>
+              <span class="legend-item"><span class="swatch" style="background:rgba(139,92,246,0.45);border:1px solid #a78bfa;"></span>Govt Tariff Revenue (ABCD)</span>
+              <span class="legend-item"><span class="swatch" style="background:rgba(239,68,68,0.45);border:1px solid #ef4444;"></span>Deadweight Loss</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =================================================================
+         HSC ECONOMICS SUMMARY COMPARISON TABLE
+         ================================================================= -->
+    <section id="comparison-section" class="diagram-card">
+      <div class="card-header" style="margin-bottom:0.75rem;">
+        <div>
+          <div class="card-title-row">
+            <span class="badge-pill badge-blue">HSC Exam Revision</span>
+            <h2>5 Economic Effects of Quotas vs. Tariff Quotas vs. Tariffs</h2>
+          </div>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table class="hsc-table">
+          <thead>
+            <tr>
+              <th>Economic Effect</th>
+              <th>Import Quota (P<sub>W</sub> &rarr; P<sub>Q</sub>)</th>
+              <th>Tariff Quota</th>
+              <th>Import Tariff (P<sub>W</sub> &rarr; P<sub>T</sub>)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>1. Protection (Supply) Effect</strong></td>
+              <td>Domestic supply expands along S from 0Q<sub>1</sub> to 0Q<sub>3</sub>.</td>
+              <td>Domestic supply expands as above-quota tariff raises domestic price.</td>
+              <td>Domestic supply expands along S from 0Q<sub>1</sub> to 0Q<sub>3</sub>.</td>
+            </tr>
+            <tr>
+              <td><strong>2. Consumption (Demand) Effect</strong></td>
+              <td>Domestic demand contracts along D from 0Q<sub>2</sub> to 0Q<sub>4</sub> due to higher price P<sub>Q</sub>.</td>
+              <td>Domestic demand contracts as consumers face higher retail prices.</td>
+              <td>Domestic demand contracts along D from 0Q<sub>2</sub> to 0Q<sub>4</sub> due to higher price P<sub>T</sub>.</td>
+            </tr>
+            <tr>
+              <td><strong>3. Import Volume Effect</strong></td>
+              <td><strong>Guaranteed cap</strong> on import volume (fixed at Q<sub>3</sub>Q<sub>4</sub>); price adjusts to clear market.</td>
+              <td>Imports up to quota pay standard rate; imports above quota pay higher punitive tariff.</td>
+              <td>Import volume falls indirectly (Q<sub>1</sub>Q<sub>2</sub> &rarr; Q<sub>3</sub>Q<sub>4</sub>) depending on price elasticity of D &amp; S.</td>
+            </tr>
+            <tr>
+              <td><strong>4. Redistribution Effect</strong></td>
+              <td>Consumer surplus is transferred to domestic producers (green trapezium).</td>
+              <td>Consumer surplus is transferred to domestic producers and government.</td>
+              <td>Consumer surplus is transferred to domestic producers (green trapezium).</td>
+            </tr>
+            <tr>
+              <td><strong>5. Revenue Effect</strong></td>
+              <td><strong>No government revenue</strong> (goes to import licence holders as <em>Quota Rent</em> unless auctioned).</td>
+              <td>Generates <strong>government tariff revenue</strong> on imports (combining quota cap + revenue).</td>
+              <td>Government collects <strong>Tariff Revenue</strong> equal to box <strong>ABCD</strong> (Tariff &times; Q<sub>3</sub>Q<sub>4</sub>).</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <div>&copy; 2026 <strong>DATATRENDS Australia</strong> (datatrends.com.au) &bull; HSC Economics Interactive Suite</div>
+  </footer>
+</div>
+
+<script>
+  // =========================================================================
+  // DIAGRAM 1: QUOTA LOGIC
+  // =========================================================================
+  let animTimer = null;
+  const sequence = [150, 100, 50, 0, 200]; // High -> Medium -> Low -> No Imports -> Free Trade
+  let seqIdx = 0;
+
+  function updateQuota(quotaVal) {
+    const M = Number(quotaVal);
+    document.getElementById('quotaSlider').value = M;
+
+    const yQ = 130 + 0.4 * M;
+    const xQ3 = 235 - 0.5 * M;
+    const xQ4 = 235 + 0.5 * M;
+
+    const q3Units = Math.round(150 - 0.5 * M);
+    const q4Units = Math.round(150 + 0.5 * M);
+    const priceDollar = 60 - 0.2 * M;
+    const quotaRent = Math.round((priceDollar - 20) * M);
+
+    const pqLine = document.getElementById('pqLine');
+    const pqLabel = document.getElementById('pqLabel');
+    pqLine.setAttribute('y1', yQ);
+    pqLine.setAttribute('y2', yQ);
+    pqLabel.setAttribute('y', yQ + 4);
+
+    const q3Line = document.getElementById('q3Line');
+    const q3Label = document.getElementById('q3Label');
+    q3Line.setAttribute('x1', xQ3);
+    q3Line.setAttribute('x2', xQ3);
+    q3Line.setAttribute('y1', yQ);
+    q3Label.setAttribute('x', xQ3);
+
+    const q4Line = document.getElementById('q4Line');
+    const q4Label = document.getElementById('q4Label');
+    q4Line.setAttribute('x1', xQ4);
+    q4Line.setAttribute('x2', xQ4);
+    q4Line.setAttribute('y1', yQ);
+    q4Label.setAttribute('x', xQ4);
+
+    document.getElementById('ptS').setAttribute('cx', xQ3);
+    document.getElementById('ptS').setAttribute('cy', yQ);
+    document.getElementById('ptD').setAttribute('cx', xQ4);
+    document.getElementById('ptD').setAttribute('cy', yQ);
+
+    const sQuotaLine = document.getElementById('sQuotaLine');
+    const sQuotaLabel = document.getElementById('sQuotaLabel');
+    const sx1 = 95 + M;
+    const sy1 = 242;
+    const sx2 = Math.min(430, 375 + M);
+    const sy2 = 242 - 0.8 * (sx2 - sx1);
+    sQuotaLine.setAttribute('x1', sx1);
+    sQuotaLine.setAttribute('y1', sy1);
+    sQuotaLine.setAttribute('x2', sx2);
+    sQuotaLine.setAttribute('y2', sy2);
+    sQuotaLabel.setAttribute('x', sx2);
+    sQuotaLabel.setAttribute('y', Math.max(24, sy2 - 6));
+
+    document.getElementById('areaRedist').setAttribute('points', `55,210 135,210 ${xQ3},${yQ} 55,${yQ}`);
+    const rectRent = document.getElementById('areaQuotaRent');
+    rectRent.setAttribute('x', xQ3);
+    rectRent.setAttribute('y', yQ);
+    rectRent.setAttribute('width', Math.max(0, xQ4 - xQ3));
+    rectRent.setAttribute('height', Math.max(0, 210 - yQ));
+
+    document.getElementById('areaDwlProd').setAttribute('points', `135,210 ${xQ3},210 ${xQ3},${yQ}`);
+    document.getElementById('areaDwlCons').setAttribute('points', `${xQ4},210 335,210 ${xQ4},${yQ}`);
+
+    const bracketGroup = document.getElementById('quotaBracketGroup');
+    if (M <= 4) {
+      bracketGroup.style.opacity = '0.3';
+      document.getElementById('quotaBracketText').textContent = '0 Imports (Autarky)';
+    } else {
+      bracketGroup.style.opacity = '1';
+      document.getElementById('quotaBracket').setAttribute('x1', xQ3);
+      document.getElementById('quotaBracket').setAttribute('x2', xQ4);
+      document.getElementById('quotaTickL').setAttribute('x1', xQ3);
+      document.getElementById('quotaTickL').setAttribute('x2', xQ3);
+      document.getElementById('quotaTickR').setAttribute('x1', xQ4);
+      document.getElementById('quotaTickR').setAttribute('x2', xQ4);
+      document.getElementById('quotaBracketText').textContent = `Quota = ${M} units`;
+    }
+
+    document.getElementById('valPrice').textContent = `$${priceDollar.toFixed(2)}`;
+    document.getElementById('valImports').textContent = `${M} units`;
+    const pctChange = Math.round(((M - 200) / 200) * 100);
+    document.getElementById('valImportPct').textContent = M === 200 ? '(Free Trade)' : `(${pctChange}% vs Free)`;
+    document.getElementById('valDomSupply').textContent = `${q3Units} units`;
+    document.getElementById('valSupplyGain').textContent = `+${q3Units - 50} expansion`;
+    document.getElementById('valDomDemand').textContent = `${q4Units} units`;
+    document.getElementById('valDemandLoss').textContent = `-${250 - q4Units} contraction`;
+    document.getElementById('valQuotaRent').textContent = `Quota Rent / Tariff-Quota Rev: $${quotaRent.toLocaleString()}`;
+
+    const badge = document.getElementById('stateBadge');
+    const exp = document.getElementById('explanationText');
+    if (M >= 190) {
+      badge.textContent = 'Free Trade (No Quota)';
+      badge.style.background = 'rgba(148,163,184,0.2)';
+      badge.style.color = '#cbd5e1';
+      exp.innerHTML = 'At <strong>World Price (P<sub>W</sub> = $20)</strong> with no quota restriction, domestic firms supply Q<sub>1</sub> (50) and consumers demand Q<sub>2</sub> (250), resulting in <strong>200 units of imports</strong> and no deadweight loss.';
+    } else if (M >= 125) {
+      badge.textContent = 'High Quota (Lenient)';
+      badge.style.background = 'rgba(56,189,248,0.2)';
+      badge.style.color = '#38bdf8';
+      exp.innerHTML = `A <strong>High Quota (${M} units)</strong> allows a generous volume of imports. Domestic price rises slightly above P<sub>W</sub> to <strong>$${priceDollar.toFixed(0)}</strong>, giving mild protection to domestic producers (Q<sub>1</sub> &rarr; Q<sub>3</sub>).`;
+    } else if (M >= 75) {
+      badge.textContent = 'Medium Quota';
+      badge.style.background = 'rgba(245,158,11,0.2)';
+      badge.style.color = '#fbbf24';
+      exp.innerHTML = `Tightening the quota to a <strong>Medium Limit (${M} units)</strong> creates a larger import shortage, pushing domestic price up to <strong>$${priceDollar.toFixed(0)}</strong>. Domestic supply expands to ${q3Units} and demand contracts to ${q4Units}.`;
+    } else if (M > 0) {
+      badge.textContent = 'Low Quota (Strict)';
+      badge.style.background = 'rgba(251,146,60,0.2)';
+      badge.style.color = '#fb923c';
+      exp.innerHTML = `A strict <strong>Low Quota (${M} units)</strong> severely restricts imports. Domestic price surges to <strong>$${priceDollar.toFixed(0)}</strong>, causing large deadweight efficiency losses (red triangles) and high consumer burden.`;
+    } else {
+      badge.textContent = 'No Imports (Zero Quota)';
+      badge.style.background = 'rgba(248,113,113,0.2)';
+      badge.style.color = '#f87171';
+      exp.innerHTML = 'With a <strong>Zero Quota (Complete Embargo / Autarky)</strong>, imports are eliminated (Q<sub>3</sub> = Q<sub>4</sub> = Q<sub>E</sub> = 150). Price reaches the domestic equilibrium <strong>P<sub>E</sub> = $60</strong> where D<sub>dom</sub> = S<sub>dom</sub>.';
+    }
+  }
+
+  function onSliderInput(val) {
+    stopPlay();
+    updateQuota(val);
+  }
+
+  function setPreset(mode) {
+    stopPlay();
+    const map = { free: 200, high: 150, medium: 100, low: 50, none: 0 };
+    animateToValue(map[mode]);
+  }
+
+  let tweenFrame = null;
+  function animateToValue(target) {
+    if (tweenFrame) cancelAnimationFrame(tweenFrame);
+    const start = Number(document.getElementById('quotaSlider').value);
+    const diff = target - start;
+    const duration = 450;
+    const t0 = performance.now();
+
+    function step(now) {
+      const p = Math.min(1, (now - t0) / duration);
+      const ease = 1 - Math.pow(1 - p, 3);
+      const cur = Math.round((start + diff * ease) / 2) * 2;
+      updateQuota(cur);
+      if (p < 1) tweenFrame = requestAnimationFrame(step);
+    }
+    tweenFrame = requestAnimationFrame(step);
+  }
+
+  function togglePlay() {
+    if (animTimer) {
+      stopPlay();
+    } else {
+      document.getElementById('playIcon').textContent = '⏸';
+      document.getElementById('playLabel').textContent = 'Pause';
+      seqIdx = 0;
+      animateToValue(sequence[seqIdx]);
+      animTimer = setInterval(() => {
+        seqIdx = (seqIdx + 1) % sequence.length;
+        animateToValue(sequence[seqIdx]);
+      }, 1800);
+    }
+  }
+
+  function stopPlay() {
+    if (animTimer) {
+      clearInterval(animTimer);
+      animTimer = null;
+    }
+    document.getElementById('playIcon').textContent = '▶';
+    document.getElementById('playLabel').textContent = 'Animate Quota';
+  }
+
+  // =========================================================================
+  // DIAGRAM 2: TARIFF LOGIC
+  // =========================================================================
+  let tariffAnimTimer = null;
+  const tSeq = [0, 10, 20, 30, 40];
+  let tSeqIdx = 0;
+
+  function renderTariff() {
+    const T = Number(document.getElementById('tariffSlider').value);
+    const dShift = Number(document.getElementById('dShiftSlider').value);
+    const sShift = Number(document.getElementById('sShiftSlider').value);
+
+    document.getElementById('dShiftVal').textContent = dShift > 0 ? `+${dShift}` : `${dShift}`;
+    document.getElementById('sShiftVal').textContent = sShift > 0 ? `+${sShift}` : `${sShift}`;
+
+    const maxVerticalGap = Math.max(0, (200 + dShift - sShift) / 2.5);
+    const yE = 210 - maxVerticalGap;
+    const rawYT = 210 - 2 * T;
+    const yT = Math.max(yE, rawYT);
+
+    const dLine = document.getElementById('tDemandLine');
+    const dLabel = document.getElementById('tDemandLabel');
+    dLine.setAttribute('x1', 95 + dShift);
+    dLine.setAttribute('x2', 390 + dShift);
+    dLabel.setAttribute('x', 394 + dShift);
+
+    const sLine = document.getElementById('tSupplyLine');
+    const sLabel = document.getElementById('tSupplyLabel');
+    sLine.setAttribute('x1', 95 + sShift);
+    sLine.setAttribute('x2', 375 + sShift);
+    sLabel.setAttribute('x', 379 + sShift);
+
+    const xQ1 = 135 + sShift;
+    const xQ2 = 335 + dShift;
+    const xQ3 = 135 + sShift + (210 - yT) * 1.25;
+    const xQ4 = 335 + dShift - (210 - yT) * 1.25;
+
+    document.getElementById('ptLine').setAttribute('y1', yT);
+    document.getElementById('ptLine').setAttribute('y2', yT);
+    document.getElementById('ptLabel').setAttribute('y', yT + 4);
+    document.getElementById('ptRightLabel').setAttribute('y', yT - 6);
+
+    document.getElementById('tariffArrow').setAttribute('y2', yT);
+    document.getElementById('tariffArrowText').setAttribute('y', (210 + yT) / 2 + 4);
+    document.getElementById('tariffArrowText').style.opacity = T > 2 ? '1' : '0';
+
+    document.getElementById('tQ1Line').setAttribute('x1', xQ1);
+    document.getElementById('tQ1Line').setAttribute('x2', xQ1);
+    document.getElementById('tQ1Label').setAttribute('x', xQ1);
+
+    document.getElementById('tQ2Line').setAttribute('x1', xQ2);
+    document.getElementById('tQ2Line').setAttribute('x2', xQ2);
+    document.getElementById('tQ2Label').setAttribute('x', xQ2);
+
+    document.getElementById('tQ3Line').setAttribute('x1', xQ3);
+    document.getElementById('tQ3Line').setAttribute('x2', xQ3);
+    document.getElementById('tQ3Line').setAttribute('y1', yT);
+    document.getElementById('tQ3Label').setAttribute('x', xQ3);
+
+    document.getElementById('tQ4Line').setAttribute('x1', xQ4);
+    document.getElementById('tQ4Line').setAttribute('x2', xQ4);
+    document.getElementById('tQ4Line').setAttribute('y1', yT);
+    document.getElementById('tQ4Label').setAttribute('x', xQ4);
+
+    document.getElementById('tPtA').setAttribute('cx', xQ3);
+    document.getElementById('tPtA').setAttribute('cy', yT);
+    document.getElementById('tPtB').setAttribute('cx', xQ4);
+    document.getElementById('tPtB').setAttribute('cy', yT);
+
+    const showABCD = (xQ4 - xQ3 > 8) && (210 - yT > 6);
+    ['lblA', 'lblB', 'lblC', 'lblD'].forEach(id => {
+      document.getElementById(id).style.opacity = showABCD ? '1' : '0';
+    });
+    document.getElementById('lblA').setAttribute('x', xQ3 - 4);
+    document.getElementById('lblA').setAttribute('y', yT - 5);
+    document.getElementById('lblB').setAttribute('x', xQ4 + 4);
+    document.getElementById('lblB').setAttribute('y', yT - 5);
+    document.getElementById('lblC').setAttribute('x', xQ3 - 4);
+    document.getElementById('lblD').setAttribute('x', xQ4 + 4);
+
+    document.getElementById('tAreaRedist').setAttribute('points', `55,210 ${xQ1},210 ${xQ3},${yT} 55,${yT}`);
+    const revRect = document.getElementById('tAreaRev');
+    revRect.setAttribute('x', xQ3);
+    revRect.setAttribute('y', yT);
+    revRect.setAttribute('width', Math.max(0, xQ4 - xQ3));
+    revRect.setAttribute('height', Math.max(0, 210 - yT));
+
+    document.getElementById('tAreaDwlProd').setAttribute('points', `${xQ1},210 ${xQ3},210 ${xQ3},${yT}`);
+    document.getElementById('tAreaDwlCons').setAttribute('points', `${xQ4},210 ${xQ2},210 ${xQ4},${yT}`);
+
+    const impUnits = Math.max(0, Math.round(xQ4 - xQ3));
+    const impGroup = document.getElementById('tImportBracketGroup');
+    if (impUnits <= 2) {
+      impGroup.style.opacity = '0.3';
+      document.getElementById('tImportText').textContent = '0 Imports (Prohibitive Tariff)';
+    } else {
+      impGroup.style.opacity = '1';
+      document.getElementById('tImportBracket').setAttribute('x1', xQ3);
+      document.getElementById('tImportBracket').setAttribute('x2', xQ4);
+      document.getElementById('tImportText').setAttribute('x', (xQ3 + xQ4) / 2);
+      document.getElementById('tImportText').textContent = `Imports = ${impUnits} units`;
+    }
+
+    const effTariff = (210 - yT) / 2;
+    const effPrice = 20 + effTariff;
+    const q1Units = Math.round(xQ1 - 85);
+    const q2Units = Math.round(xQ2 - 85);
+    const q3Units = Math.round(xQ3 - 85);
+    const q4Units = Math.round(xQ4 - 85);
+    const govtRev = Math.round(effTariff * impUnits);
+    const dwl = Math.round(0.5 * effTariff * ((q3Units - q1Units) + (q2Units - q4Units)));
+
+    document.getElementById('tValPrice').textContent = `$${effPrice.toFixed(2)}`;
+    document.getElementById('tValTax').textContent = `(+$${effTariff.toFixed(0)} tariff)`;
+    document.getElementById('tValRev').textContent = `$${govtRev.toLocaleString()}`;
+    document.getElementById('tValImports').textContent = `(${impUnits} imp)`;
+    document.getElementById('tValQs').textContent = `${q3Units} units`;
+    document.getElementById('tValQsDiff').textContent = `+${q3Units - q1Units} expansion`;
+    document.getElementById('tValQd').textContent = `${q4Units} units`;
+    document.getElementById('tValQdDiff').textContent = `-${q2Units - q4Units} contraction`;
+    document.getElementById('tValDwl').textContent = `Deadweight Loss: $${dwl.toLocaleString()}`;
+
+    const badge = document.getElementById('tariffBadge');
+    const exp = document.getElementById('tExplanation');
+    if (T === 0) {
+      badge.textContent = 'Free Trade ($0 Tariff)';
+      badge.style.background = 'rgba(148,163,184,0.2)';
+      badge.style.color = '#cbd5e1';
+      exp.innerHTML = `With <strong>no tariff ($0)</strong>, domestic price equals World Price (P<sub>W</sub> = $20). Domestic supply is Q<sub>1</sub> (${q1Units}) and demand is Q<sub>2</sub> (${q2Units}), with <strong>${impUnits} units imported</strong> and zero deadweight loss.`;
+    } else if (impUnits === 0) {
+      badge.textContent = `Prohibitive Tariff ($${T})`;
+      badge.style.background = 'rgba(248,113,113,0.2)';
+      badge.style.color = '#f87171';
+      exp.innerHTML = `A <strong>Prohibitive Tariff ($${T})</strong> pushes P<sub>T</sub> to domestic equilibrium (P<sub>E</sub>). Imports fall to <strong>zero</strong>, so <strong>Government Tariff Revenue falls to $0</strong> while deadweight loss is maximised.`;
+    } else {
+      const lvl = T <= 12 ? 'Low' : T <= 25 ? 'Medium' : 'High';
+      badge.textContent = `${lvl} Tariff ($${T})`;
+      badge.style.background = 'rgba(139,92,246,0.2)';
+      badge.style.color = '#c084fc';
+      exp.innerHTML = `A <strong>$${T} tariff</strong> raises price to <strong>$${effPrice.toFixed(0)}</strong>, causing an expansion along S (Q<sub>1</sub> &rarr; Q<sub>3</sub> = ${q3Units}) and contraction along D (Q<sub>2</sub> &rarr; Q<sub>4</sub> = ${q4Units}). Govt revenue <strong>ABCD = $${govtRev.toLocaleString()}</strong>.`;
+    }
+  }
+
+  function onTariffInput() {
+    stopTariffPlay();
+    renderTariff();
+  }
+
+  let tTween = null;
+  function setTariffPreset(targetT) {
+    stopTariffPlay();
+    animateTariffTo(targetT);
+  }
+
+  function animateTariffTo(targetT) {
+    if (tTween) cancelAnimationFrame(tTween);
+    const start = Number(document.getElementById('tariffSlider').value);
+    const diff = targetT - start;
+    const duration = 420;
+    const t0 = performance.now();
+
+    function step(now) {
+      const p = Math.min(1, (now - t0) / duration);
+      const ease = 1 - Math.pow(1 - p, 3);
+      document.getElementById('tariffSlider').value = Math.round(start + diff * ease);
+      renderTariff();
+      if (p < 1) tTween = requestAnimationFrame(step);
+    }
+    tTween = requestAnimationFrame(step);
+  }
+
+  function toggleTariffPlay() {
+    if (tariffAnimTimer) {
+      stopTariffPlay();
+    } else {
+      document.getElementById('playTariffIcon').textContent = '⏸';
+      document.getElementById('playTariffLabel').textContent = 'Pause';
+      tSeqIdx = 0;
+      animateTariffTo(tSeq[tSeqIdx]);
+      tariffAnimTimer = setInterval(() => {
+        tSeqIdx = (tSeqIdx + 1) % tSeq.length;
+        animateTariffTo(tSeq[tSeqIdx]);
+      }, 1700);
+    }
+  }
+
+  function stopTariffPlay() {
+    if (tariffAnimTimer) {
+      clearInterval(tariffAnimTimer);
+      tariffAnimTimer = null;
+    }
+    document.getElementById('playTariffIcon').textContent = '▶';
+    document.getElementById('playTariffLabel').textContent = 'Animate Tariff';
+  }
+
+  // Initial render
+  updateQuota(100);
+  renderTariff();
+</script>
+</body>
+</html>

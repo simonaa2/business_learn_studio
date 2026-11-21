@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Year 12 HSC Business Studies — Operations Simulation Lab Worksheet | DataTrends</title>
+  <style>
+    @page {
+      size: A4;
+      margin: 14mm;
+    }
+    * { box-sizing: border-box; }
+    body {
+      font-family: "Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+      color: #0f172a;
+      background: #f8fafc;
+      margin: 0;
+      padding: 24px;
+      line-height: 1.45;
+      font-size: 13px;
+    }
+    .page-container {
+      max-width: 850px;
+      margin: 0 auto;
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      border-radius: 12px;
+      padding: 28px 32px;
+      box-shadow: 0 4px 16px rgba(15, 23, 42, 0.06);
+    }
+    .no-print-bar {
+      max-width: 850px;
+      margin: 0 auto 16px auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #0f172a;
+      color: #ffffff;
+      padding: 10px 18px;
+      border-radius: 10px;
+    }
+    .btn {
+      display: inline-block;
+      padding: 7px 14px;
+      border-radius: 6px;
+      font-weight: 700;
+      font-size: 12px;
+      text-decoration: none;
+      cursor: pointer;
+      border: none;
+    }
+    .btn-primary { background: #f97316; color: #ffffff; }
+    .btn-secondary { background: #334155; color: #f8fafc; }
+    .header-banner {
+      border-bottom: 3px solid #f97316;
+      padding-bottom: 12px;
+      margin-bottom: 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 16px;
+    }
+    h1 {
+      margin: 0 0 4px 0;
+      font-size: 20px;
+      color: #0f172a;
+    }
+    .subtitle {
+      font-size: 12px;
+      color: #475569;
+      font-weight: 600;
+    }
+    .url-box {
+      background: #fff7ed;
+      border: 2px solid #f97316;
+      border-radius: 8px;
+      padding: 10px 14px;
+      margin-bottom: 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .url-box a {
+      color: #c2410c;
+      font-weight: 800;
+      font-size: 14px;
+      font-family: ui-monospace, Consolas, monospace;
+      text-decoration: underline;
+    }
+    .student-info {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 16px;
+      background: #f1f5f9;
+      padding: 10px 14px;
+      border-radius: 8px;
+      font-weight: 600;
+    }
+    h2 {
+      font-size: 14px;
+      background: #0f172a;
+      color: #ffffff;
+      padding: 6px 12px;
+      border-radius: 6px;
+      margin: 18px 0 10px 0;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+    h3 {
+      font-size: 13px;
+      color: #c2410c;
+      margin: 10px 0 6px 0;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 8px 0 12px 0;
+      font-size: 12px;
+    }
+    th, td {
+      border: 1px solid #94a3b8;
+      padding: 7px 9px;
+      text-align: left;
+    }
+    th {
+      background: #e2e8f0;
+      font-weight: 700;
+      color: #0f172a;
+    }
+    .write-line {
+      border-bottom: 1px dashed #64748b;
+      min-height: 22px;
+      margin: 6px 0;
+    }
+    .write-box {
+      border: 1px solid #cbd5e1;
+      background: #f8fafc;
+      border-radius: 6px;
+      min-height: 46px;
+      padding: 6px 10px;
+      margin: 6px 0 10px 0;
+      color: #64748b;
+      font-style: italic;
+    }
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .pill {
+      display: inline-block;
+      background: #e0f2fe;
+      color: #0369a1;
+      border: 1px solid #7dd3fc;
+      padding: 1px 6px;
+      border-radius: 4px;
+      font-weight: 700;
+      font-size: 11px;
+    }
+    .page-break {
+      page-break-before: always;
+    }
+    @media print {
+      body { background: #ffffff; padding: 0; }
+      .page-container { border: none; box-shadow: none; padding: 0; max-width: 100%; }
+      .no-print-bar { display: none !important; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="no-print-bar">
+    <div>
+      <strong>📄 Year 12 HSC Business Studies — Operations Simulation Lab Worksheet</strong>
+    </div>
+    <div style="display:flex; gap:8px;">
+      <a href="operations-sim.html" class="btn btn-secondary">&larr; Back to Live Simulation</a>
+      <a href="operations-sim-worksheet.pdf" download class="btn btn-secondary">⬇️ Download PDF</a>
+      <button onclick="window.print()" class="btn btn-primary">🖨️ Print / Save as PDF</button>
+    </div>
+  </div>
+
+  <div class="page-container">
+    <div class="header-banner">
+      <div>
+        <div class="subtitle">NSW YEAR 12 HSC BUSINESS STUDIES &bull; TOPIC 1: OPERATIONS PROCESSES</div>
+        <h1>Interactive Operations &amp; Flow Designer — Student Lab Worksheet</h1>
+        <div style="font-size:12px; color:#475569;">Bespoke Burger Co. &bull; Inputs, 4Vs, Sequencing &amp; Scheduling (CPA/Gantt), M-C-I KPI Dashboard &amp; Outputs</div>
+      </div>
+      <div style="text-align:right; font-size:11px; color:#475569; shrink:0;">
+        <strong>DataTrends Learning</strong><br>
+        Syllabus Section: Operations Processes
+      </div>
+    </div>
+
+    <div class="url-box">
+      <div>
+        <strong>🌐 Launch Simulation Website:</strong>
+        <a href="https://www.datatrends.com.au/operations-sim.html" target="_blank">https://www.datatrends.com.au/operations-sim.html</a>
+      </div>
+      <div style="font-size:11px; color:#7c2d12; font-weight:600;">
+        Test every setting in the live simulator to complete the tables below!
+      </div>
+    </div>
+
+    <div class="student-info">
+      <div>Student Name: _______________________________</div>
+      <div>Class: ______________</div>
+      <div>Date: ______________</div>
+    </div>
+
+    <!-- PART 1 -->
+    <h2>Part 1: Sequencing &amp; Scheduling — Flow Designer, CPA &amp; Gantt Chart (Tab 1)</h2>
+    <p style="margin:4px 0 8px 0;">
+      <strong>Instructions:</strong> Open <a href="https://www.datatrends.com.au/operations-sim.html">https://www.datatrends.com.au/operations-sim.html</a> and click <strong>🔄 Reset</strong>. Above the animated kitchen floorplan, click each of the three <strong>Flow Presets</strong> and record the live figures from the KPI Scoreboard and <strong>Tab 1</strong>:
+    </p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Flow Preset Tested in Simulator</th>
+          <th>Active Critical Path Chain &amp; CPA (mins)</th>
+          <th>Order Lead Time (mins)</th>
+          <th>Effective Capacity (/day)</th>
+          <th>Warranty Defect Rate (%)</th>
+          <th>Daily Net Profit ($)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>1. ⚡ Parallel CPA Flow (Default)</strong></td>
+          <td><code>A &rarr; B &rarr; E &rarr; G</code> (____ m)</td>
+          <td>______ mins</td>
+          <td>______ / 400</td>
+          <td>______ %</td>
+          <td>$_________</td>
+        </tr>
+        <tr>
+          <td><strong>2. 🐢 Single-Line Serial Flow</strong></td>
+          <td><code>A&rarr;B&rarr;C&rarr;D&rarr;E&rarr;F&rarr;G</code> (____ m)</td>
+          <td>______ mins</td>
+          <td>______ / 400</td>
+          <td>______ %</td>
+          <td>$_________</td>
+        </tr>
+        <tr>
+          <td><strong>3. ⚠️ Bypassed Fryer/QC (Flawed)</strong></td>
+          <td><code>A &rarr; B &rarr; E</code> (____ m)</td>
+          <td>______ mins</td>
+          <td>______ / 400</td>
+          <td>______ %</td>
+          <td>$_________</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Experiment 1B: Testing Slack Time vs. Critical Path Bottlenecks</h3>
+    <ol style="margin:4px 0 8px 18px; padding:0;">
+      <li style="margin-bottom:6px;">
+        Click <strong>🔄 Reset</strong> (so Parallel CPA Flow is active: <code>B: Grill = 8m</code>, <code>C: Toast Bun = 4m</code>, <code>D: Fry Chips = 6m</code>). In <strong>Tab 1</strong>, drag the slider for <strong>C: Toast Bun</strong> from <code>4m</code> up to <code>7m</code>.
+        <br><strong>Question:</strong> Does the Calculated CPA (15 mins) change? Explain why using the terms <em>Critical Path</em> and <em>Slack Time</em> by referring to the blue vs. red bars on the Live Gantt Chart:
+        <div class="write-box">Write your observation and HSC explanation here...</div>
+      </li>
+      <li style="margin-bottom:6px;">
+        Leave <code>B: Grill</code> at <code>8m</code>, and drag <strong>D: Fry Chips</strong> up to <code>12m</code>. Watch the pulsing red dashed line on the kitchen floorplan.
+        <br><strong>Question:</strong> Which station sequence is now the pulsing red <strong>Critical Path</strong>, and what is the new <strong>Calculated CPA</strong>?
+        <div class="write-line">New Critical Path Sequence: ________________________________________ = _______ mins</div>
+      </li>
+      <li>
+        Click <strong>🔗 Draw / Toggle Sequence Arrow</strong> above the floorplan. Design your own custom sequence or disconnect Station G (QC &amp; Pack). What warning appears in the <strong>Sequence Audit</strong> box?
+        <div class="write-line">Sequence Audit Result: ____________________________________________________________________</div>
+      </li>
+    </ol>
+
+    <!-- PART 2 -->
+    <h2>Part 2: Inputs — Transformed vs. Transforming Resources Lab (Tab 2)</h2>
+    <p style="margin:4px 0 6px 0;">
+      <strong>Instructions:</strong> Click <strong>🔄 Reset</strong> and open <strong>Tab 2 (Inputs)</strong>. Set <em>Transformed Resources</em> to maximum (<strong>Artisan Wagyu $6.80</strong>, <strong>AI Forecast</strong>, <strong>100% Bespoke Diet</strong>), then set <em>Transforming Resources</em> to minimum (<strong>3 Staff</strong>, <strong>Untrained Casuals</strong>, <strong>Cramped Single-Grill</strong>).
+    </p>
+    <div class="two-col" style="margin-bottom:6px;">
+      <div style="background:#f1f5f9; padding:8px 12px; border-radius:6px;">
+        <strong>Recorded Simulation Readout:</strong><br>
+        &bull; Effective Capacity: <code>_______ / 400</code> (Lost: <code>_______/day</code>)<br>
+        &bull; Customer Satisfaction (CSAT): <code>_______ %</code> &nbsp;|&nbsp; Profit: <code>$_______</code>
+      </div>
+      <div style="background:#f1f5f9; padding:8px 12px; border-radius:6px;">
+        <strong>Fix the Bottleneck in Tab 2:</strong><br>
+        Upgrade HR &amp; Facilities until Capacity &ge; 400/day.<br>
+        &bull; Optimal Staff &amp; Plant: <code>______________________</code>
+      </div>
+    </div>
+    <div>
+      <strong>HSC Short Answer:</strong> Using your simulation results, distinguish between <em>transformed resources</em> and <em>transforming resources</em> and explain why premium ingredients alone cannot satisfy customer demand.
+      <div class="write-box"></div>
+    </div>
+
+    <!-- PAGE 2 -->
+    <div class="page-break"></div>
+
+    <!-- PART 3 -->
+    <h2>Part 3: The 4Vs — Volume, Variety, Variation in Demand &amp; Visibility (Tab 3)</h2>
+    <div class="two-col">
+      <div>
+        <h3>Experiment 3A: Footy Surge (Volume &amp; Variation)</h3>
+        <p style="margin:0 0 6px 0;">
+          In <strong>Tab 3</strong>, drag <strong>1. Volume</strong> to <code>650/day</code> and <strong>3. Variation in Demand</strong> to <code>3 (Extreme Footy Surge)</code>.
+        </p>
+        <p style="margin:0 0 6px 0;">
+          1. Effective Capacity drops from <code>391/d</code> to: <code>________ / 650</code><br>
+          2. Unmet Demand (lost orders/day): <code>________ / day</code><br>
+          3. Adjust HR, Plant &amp; Tech so Capacity &ge; 650/d:<br>
+          &nbsp;&nbsp;&bull; Winning Config: <code>__________________________</code><br>
+          &nbsp;&nbsp;&bull; Resulting Daily Profit: <code>$____________</code>
+        </p>
+      </div>
+      <div>
+        <h3>Experiment 3B: Open Theatre Wall (Visibility)</h3>
+        <p style="margin:0 0 6px 0;">
+          Click <strong>🔄 Reset</strong>. In <strong>Tab 3</strong>, set <strong>4. Visibility</strong> to <code>3 (Live Theatre Grill)</code> so the divider wall opens on the canvas. Test <strong>HR Training</strong> in Tab 2:
+        </p>
+        <p style="margin:0 0 6px 0;">
+          &bull; <strong>Test 1 (Untrained Casuals + Visibility 3):</strong><br>
+          &nbsp;&nbsp;CSAT = <code>______ %</code> &nbsp;|&nbsp; Defect Rate = <code>______ %</code><br>
+          &bull; <strong>Test 2 (Certified Grill Masters + Visibility 3):</strong><br>
+          &nbsp;&nbsp;CSAT = <code>______ %</code> &nbsp;|&nbsp; Defect Rate = <code>______ %</code>
+        </p>
+      </div>
+    </div>
+
+    <!-- PART 4 -->
+    <h2>Part 4: Layout, Technology &amp; Physical Workstation Dragging (Tab 4 &amp; Canvas)</h2>
+    <p style="margin:4px 0 6px 0;">
+      1. Select <strong>✋ Move Stations (Drag)</strong> above the floorplan and drag stations B, C, D, E, F far apart to the edges of the floorplan. Record the new <strong>Motion Waste</strong>: <code>+______ mins</code> and <strong>Order Lead Time</strong>: <code>______ mins</code>.<br>
+      2. In <strong>Tab 4</strong>, test all three <strong>📐 Process Layout</strong> presets. Which layout achieves the best fit for:
+      <br>&nbsp;&nbsp;&bull; High Volume (650/d), Low Variety (Set Menu): <code>____________________________________</code>
+      <br>&nbsp;&nbsp;&bull; High Variety (Bespoke Menu), Moderate Volume: <code>____________________________________</code>
+    </p>
+
+    <!-- PART 5 -->
+    <h2>Part 5: Monitoring, Control &amp; Improvement (M-C-I) KPI Dashboard Lab (Tab 5)</h2>
+    <p style="margin:4px 0 8px 0;">
+      <strong>Instructions:</strong> Open <strong>Tab 5: 📊 M-C-I Dashboard (KPI &rarr; Control &rarr; Improve)</strong> at <a href="https://www.datatrends.com.au/operations-sim.html">https://www.datatrends.com.au/operations-sim.html</a>.
+    </p>
+
+    <h3>Experiment 5A: Stage 1 Monitoring (Planned KPI Targets vs. Actual Performance)</h3>
+    <p style="margin:0 0 6px 0;">
+      Click <strong>🔄 Reset</strong>, open <strong>Tab 5</strong>, and switch <strong>Planned KPI Target Strictness</strong> (top-right of Tab 5) from <em>HSC Benchmark</em> to <strong>Six Sigma World-Class</strong>. Record how many KPIs are on target:
+      <br>&bull; Under <strong>HSC Benchmark Targets</strong>: <code>___ / 6 On Target</code> &nbsp;&nbsp;|&nbsp;&nbsp; Under <strong>Six Sigma World-Class Targets</strong>: <code>___ / 6 On Target</code> (<code>___ KPI Breaches</code>)
+    </p>
+
+    <h3>Experiment 5B: Stage 2 Control (Taking Managerial Corrective Action)</h3>
+    <p style="margin:0 0 6px 0;">
+      Select <strong>⚠️ Crisis 3: Defective Burgers &amp; Warranty Blowout</strong> from the top Scenario Bar, then open <strong>Tab 5</strong>. Record the initial metrics below, then click <strong>🛡️ Fix Quality KPI: Auto-Reject QC + Grill Master Training</strong> in Stage 2 (Control) and record the result:
+    </p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>KPI / Operational Metric</th>
+          <th>Before Corrective Action (Crisis 3)</th>
+          <th>After Clicking "🛡️ Fix Quality KPI"</th>
+          <th>Improvement / Variance Closed (&Delta;)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Warranty Defect Rate (%)</strong></td>
+          <td>13.8%</td>
+          <td>______ %</td>
+          <td>-______ %</td>
+        </tr>
+        <tr>
+          <td><strong>Daily Warranty Cost ($/day)</strong></td>
+          <td>$880 / day</td>
+          <td>$______ / day</td>
+          <td>-$______ / day</td>
+        </tr>
+        <tr>
+          <td><strong>Customer Satisfaction (CSAT)</strong></td>
+          <td>55%</td>
+          <td>______ %</td>
+          <td>+______ %</td>
+        </tr>
+        <tr>
+          <td><strong>Daily Net Profit ($/day)</strong></td>
+          <td>$905 / day</td>
+          <td>$______ / day</td>
+          <td>+$______ / day</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Experiment 5C: Stage 3 Continuous Improvement (Kaizen &amp; The 5 HSC Pillars)</h3>
+    <p style="margin:0 0 6px 0;">
+      Click <strong>🔄 Reset</strong>, open <strong>Tab 5</strong>, and inspect <strong>Stage 3: Improvement</strong> on the right. Click <strong>🚀 Run Kaizen Bottleneck Sprint (-1m)</strong> <strong>twice</strong> and record the impact:
+      <br>&bull; Initial Bottleneck Station: <code>________________</code> &rarr; After 2 Kaizen Sprints: <code>________________</code>
+      <br>&bull; Order Lead Time: <code>13.8m</code> &rarr; <code>______ m</code> &nbsp;|&nbsp; First-Pass Yield: <code>96.9%</code> &rarr; <code>______ %</code> &nbsp;|&nbsp; Calculated CPA: <code>15m</code> &rarr; <code>______ m</code>
+    </p>
+
+    <!-- PART 6 -->
+    <h2>Part 6: Outputs &amp; Live Auto-Checked Lab Missions (Tab 6)</h2>
+    <p style="margin:4px 0 6px 0;">
+      Open <strong>Tab 6 (🧪 Student Lab Missions &amp; Outputs)</strong> on <a href="https://www.datatrends.com.au/operations-sim.html">https://www.datatrends.com.au/operations-sim.html</a>:
+      <br>1. Complete the <strong>6 Live Auto-Checked Lab Missions</strong> (left panel) and the <strong>12 Experimental Simulation-Testing Questions</strong> (right panel).
+      <br>2. <strong>Final Score Achieved:</strong> &nbsp; Live Lab Missions Verified: <code>____ / 6</code> &nbsp;&nbsp;|&nbsp;&nbsp; Experimental Quiz Score: <code>____ / 12</code>
+    </p>
+  </div>
+
+</body>
+</html>
